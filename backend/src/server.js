@@ -1,9 +1,10 @@
-import "dotenv/config";
+import { carregarAmbiente } from './config/ambiente.js';
 
-import app from "./app.js";
+const config = carregarAmbiente('.env');
 
-const port = Number(process.env.PORT || 8080);
+const { app } = await import('./app.js');
+const porta = config.porta || 3000;
 
-app.listen(port, () => {
-  console.log(`API running on port ${port}`);
+app.listen(porta, () => {
+    console.log(`Servidor rodando em http://localhost:${porta}`);
 });

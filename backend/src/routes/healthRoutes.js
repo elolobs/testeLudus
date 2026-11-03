@@ -1,9 +1,12 @@
-import { Router } from "express";
-
-import { healthCheck } from "../controllers/healthController.js";
+import { Router } from 'express';
+import { ProdutoController } from '../controllers/ProdutoController.js';
 
 const router = Router();
 
-router.get("/", healthCheck);
+router.get('/', ProdutoController.listar);
+router.get('/:id', ProdutoController.buscarPorId);
+router.post('/', ProdutoController.criar);
+router.put('/:id', ProdutoController.atualizar);
+router.delete('/:id', ProdutoController.excluir);
 
 export default router;
