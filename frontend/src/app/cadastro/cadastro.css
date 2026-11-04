@@ -9,6 +9,12 @@ h4 {
   font-family: "Unbounded", sans-serif;
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 .container {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -25,6 +31,7 @@ h4 {
 .rightSide {
   display: flex;
   align-items: center;
+  flex-direction: column;
   justify-content: center;
 }
 
@@ -32,15 +39,12 @@ h4 {
   position: relative;
   width: 100%;
   height: 100%;
-  /* Faz o contêiner da imagem preencher toda a altura do flex/grid */
 }
 
 .container-imagem img {
   width: 100%;
   height: 100%;
-  /* Faz a imagem preencher todo o contêiner */
   object-fit: cover;
-  /* Estica a imagem para preencher o espaço, cortando as sobras sem achatar */
   display: block;
 }
 
@@ -50,6 +54,67 @@ h4 {
   left: 50%;
   transform: translate(-50%, -50%);
   color: white;
-  font-size: 40px;
+  font-size: 45px;
   font-weight: bold;
+  white-space: nowrap;
+}
+
+.imgblur {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.24);
+  width: 100%;
+  height: 100%;
+}
+
+input {
+  font-size: 22px;
+  width: 400px;
+  height: 40px;
+  max-width: 500px;
+  border: 2px solid;
+}
+
+input:hover {
+  border: 2px solid #A49EC2;
+}
+
+input:focus {
+  border: 2px solid #A49EC2; 
+  outline: none;
+}
+
+.titleCad {
+  white-space: nowrap;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+label {
+  margin-top: 5px;
+  font-weight: 500;
+  font-size: 18px;
+}
+
+button {
+  background-color: #2D1E80;
+  border: none;
+  font-size: 23px;
+  color: white;
+  border-radius: 50px;
+  padding: 10px 45px;
+  margin: 15px auto 0 auto;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #A49EC2;
 }
