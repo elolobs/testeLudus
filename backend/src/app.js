@@ -1,11 +1,11 @@
-import cors from "cors";
 import express from "express";
+import cors from "cors";
 import helmet from "helmet";
 
 import { errorHandler } from "./middlewares/errorHandler.js";
 import healthRoutes from "./routes/healthRoutes.js";
 
-const app = express();
+export const app = express();
 
 app.use(helmet());
 app.use(
@@ -24,5 +24,3 @@ app.get("/", (request, response) => {
 app.use("/api/health", healthRoutes);
 
 app.use(errorHandler);
-
-export default app;
