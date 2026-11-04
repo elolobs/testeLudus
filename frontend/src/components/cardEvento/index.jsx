@@ -9,6 +9,7 @@ export default function CardEvento({
     local
 }) {
     return (
+
         <div className="card-evento">
           
             <div className="card-imagem-wrapper">
