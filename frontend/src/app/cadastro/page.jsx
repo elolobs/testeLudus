@@ -31,7 +31,7 @@ export default function Cadastro() {
                 </div>
                 <form action="" method="post">
                     <label htmlFor="nome">Nome</label>
-                    <input type="text" id="nome" placeholder=" Nome" required /><br />
+                    <input type="text" id="'nome" placeholder=" Nome" required /><br />
                     <label htmlFor="email">E-mail</label>
                     <input type="email" id="email" placeholder=" E-mail" required />
                     <br />
