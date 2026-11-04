@@ -8,4 +8,4 @@ const porta = process.env.BACKEND_PORT || 8080;
 
 app.listen(porta, () => {
     console.log(`Servidor rodando em http://localhost:${porta}`);
-}); 
+});
