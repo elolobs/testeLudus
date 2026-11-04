@@ -6,30 +6,25 @@ export default function Home() {
   return (
     <div className="page-container">
       <main className="home-main">
+      
         <section className="hero-section">
+        
           <div className="hero-content">
+    
             <span className="hero-kicker">O SEU PRÓXIMO MOMENTO COMEÇA AQUI</span>
             <h1 className="hero-title">
               Vive mais.<br />
               <span>Descobre agora.</span>
             </h1>
+
             <p className="hero-subtitle">
               Eventos, festivais e experiências que ficam contigo.
             </p>
-
-            <form className="hero-search-bar">
-              <div className="search-field">
-                <label>O QUE PROCURAS?</label>
-                <input type="text" placeholder="Festival, evento, artista..." />
-              </div>
-              <div className="search-field">
-                <label>ONDE?</label>
-                <input type="text" placeholder="Todo o Brasil" />
-              </div>
+           
               <button type="submit" className="btn-pesquisar">
-                Pesquisar ➔
+                Explorar 
               </button>
-            </form>
+           
           </div>
         </section>
 
