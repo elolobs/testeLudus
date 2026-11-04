@@ -1,68 +1,146 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import * as UsuarioModel from '../models/UsuarioModel.js';
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import * as UsuarioModel from "../models/UsuarioModel.js";
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const jwtSecret = process.env.JWT_SECRET || 'chave-padrao-desenvolvimento';
 
-export async function registrar({ nome, email, senha } = {}) {
-  const nomeLimpo = typeof nome === 'string' ? nome.trim() : '';
-  const emailLimpo = typeof email === 'string' ? email.trim().toLowerCase() : '';
+function validarCpf(valor) {
+  const cpf = typeof valor === "string" ? valor.replace(/\D/g, "") : "";
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return null;
 
-  if (nomeLimpo.length < 3) {
-    throw new TypeError('Nome deve ter no mínimo 3 caracteres.');
+  const calcularDigito = (base, pesoInicial) => {
+    const soma = [...base].reduce(
+      (total, digito, indice) => total + Number(digito) * (pesoInicial - indice),
+      0,
+    );
+    const resto = (soma * 10) % 11;
+    return resto === 10 ? 0 : resto;
+  };
+
+  if (
+    calcularDigito(cpf.slice(0, 9), 10) !== Number(cpf[9]) ||
+    calcularDigito(cpf.slice(0, 10), 11) !== Number(cpf[10])
+  ) {
+    return null;
   }
-  if (!REGEX_EMAIL.test(emailLimpo)) {
-    throw new TypeError('Informe um e-mail válido.');
+  return cpf;
+}
+
+function obterJwtSecret() {
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+    throw new Error("JWT_SECRET deve estar configurado com pelo menos 32 caracteres.");
+  }
+  return process.env.JWT_SECRET;
+}
+
+function erroCredenciais() {
+  const erro = new Error("Credenciais inválidas.");
+  erro.status = 401;
+  return erro;
+}
+
+export async function registrar({
+  nome_completo,
+  email,
+  senha,
+  cpf: cpfInformado,
+  telefone,
+  termo_lgpd_aceito,
+} = {}) {
+  const nomeLimpo =
+    typeof nome_completo === "string" ? nome_completo.trim() : "";
+  const emailLimpo =
+    typeof email === "string" ? email.trim().toLowerCase() : "";
+  const cpf = validarCpf(cpfInformado);
+  const telefoneLimpo =
+    typeof telefone === "string" && telefone.trim()
+      ? telefone.trim()
+      : null;
+
+  if (nomeLimpo.length < 3 || nomeLimpo.length > 120) {
+    throw new TypeError("Nome completo deve ter entre 3 e 120 caracteres.");
+  }
+  if (!REGEX_EMAIL.test(emailLimpo) || emailLimpo.length > 150) {
+    throw new TypeError("Informe um e-mail válido com até 150 caracteres.");
+  }
+  if (!cpf) {
+    throw new TypeError("Informe um CPF válido.");
+  }
+  if (telefoneLimpo && telefoneLimpo.length > 20) {
+    throw new TypeError("Telefone deve ter no máximo 20 caracteres.");
+  }
+  if (termo_lgpd_aceito !== true) {
+    throw new TypeError("É necessário aceitar o termo LGPD para se cadastrar.");
   }
   if (
-    typeof senha !== 'string' ||
+    typeof senha !== "string" ||
     senha.length < 8 ||
     !/[a-z]/.test(senha) ||
     !/[A-Z]/.test(senha) ||
     !/\d/.test(senha) ||
     !/[^A-Za-z0-9]/.test(senha)
   ) {
-    throw new TypeError('A senha deve ter no mínimo 8 caracteres, contendo maiúscula, minúscula, número e símbolo.');
+    throw new TypeError(
+      "A senha deve ter no mínimo 8 caracteres, contendo maiúscula, minúscula, número e símbolo.",
+    );
   }
 
-  const usuarioExistente = await UsuarioModel.buscarPorEmail(emailLimpo);
-  if (usuarioExistente) {
-    const erro = new Error('E-mail já cadastrado.');
+  if (
+    (await UsuarioModel.buscarPorEmail(emailLimpo)) ||
+    (await UsuarioModel.buscarPorCpf(cpf))
+  ) {
+    const erro = new Error("E-mail ou CPF já cadastrado.");
     erro.status = 409;
     throw erro;
   }
 
-  const senhaHash = await bcrypt.hash(senha, 10);
-  return await UsuarioModel.criar({
-    nome: nomeLimpo,
-    email: emailLimpo,
-    senhaHash,
-    perfil: 'usuario'
-  });
+  try {
+    return await UsuarioModel.criar({
+      nome_completo: nomeLimpo,
+      email: emailLimpo,
+      senhaHash: await bcrypt.hash(senha, 10),
+      cpf,
+      telefone: telefoneLimpo,
+    });
+  } catch (erro) {
+    if (erro.code === "ER_DUP_ENTRY") {
+      erro.status = 409;
+      erro.message = "E-mail ou CPF já cadastrado.";
+    }
+    throw erro;
+  }
 }
 
 export async function login({ email, senha } = {}) {
-  const emailLimpo = typeof email === 'string' ? email.trim().toLowerCase() : '';
-  const usuario = REGEX_EMAIL.test(emailLimpo) ? await UsuarioModel.buscarPorEmail(emailLimpo) : null;
-  const senhaValida = usuario ? await bcrypt.compare(senha || '', usuario.senha_hash) : false;
+  const emailLimpo =
+    typeof email === "string" ? email.trim().toLowerCase() : "";
+  const usuario = REGEX_EMAIL.test(emailLimpo)
+    ? await UsuarioModel.buscarPorEmail(emailLimpo)
+    : null;
+  const senhaValida =
+    usuario && usuario.ativo && typeof senha === "string"
+      ? await bcrypt.compare(senha, usuario.senha_hash)
+      : false;
 
   if (!usuario || !senhaValida) {
-    const erro = new Error('Credenciais inválidas.');
-    erro.status = 401;
-    throw erro;
+    throw erroCredenciais();
   }
 
   const token = jwt.sign(
-    { perfil: usuario.perfil },
-    jwtSecret,
-    { subject: String(usuario.id), expiresIn: '2h' }
+    { cargo: usuario.cargo },
+    obterJwtSecret(),
+    { subject: String(usuario.id), expiresIn: "2h" },
   );
 
   return {
     token,
-    tipo: 'Bearer',
-    expiraEm: '2h',
-    usuario: { id: usuario.id, nome: usuario.nome, perfil: usuario.perfil }
+    tipo: "Bearer",
+    expiraEm: "2h",
+    usuario: {
+      id: usuario.id,
+      nome_completo: usuario.nome_completo,
+      email: usuario.email,
+      cargo: usuario.cargo,
+    },
   };
 }

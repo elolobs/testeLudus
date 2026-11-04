@@ -1,6 +1,11 @@
 import jwt from 'jsonwebtoken';
 
-const jwtSecret = process.env.JWT_SECRET || 'chave-padrao-desenvolvimento';
+function obterJwtSecret() {
+  if (!process.env.JWT_SECRET || process.env.JWT_SECRET.length < 32) {
+    throw new Error('JWT_SECRET deve estar configurado com pelo menos 32 caracteres.');
+  }
+  return process.env.JWT_SECRET;
+}
 
 export function autenticar(req, res, next) {
   const headerAuth = req.headers.authorization;
@@ -11,11 +16,14 @@ export function autenticar(req, res, next) {
   }
 
   try {
-    const payload = jwt.verify(token, jwtSecret);
+    const payload = jwt.verify(token, obterJwtSecret());
     req.usuario = {
       id: Number(payload.sub),
-      perfil: payload.perfil
+      cargo: payload.cargo
     };
+    if (!Number.isInteger(req.usuario.id) || req.usuario.id <= 0) {
+      return res.status(401).json({ sucesso: false, erro: 'Token inválido ou expirado.' });
+    }
     return next();
   } catch {
     return res.status(401).json({ sucesso: false, erro: 'Token inválido ou expirado.' });
@@ -27,11 +35,11 @@ export function autorizarPerfis(...perfisPermitidos) {
     if (!req.usuario) {
       return res.status(401).json({ sucesso: false, erro: 'Autenticação necessária.' });
     }
-    if (!perfisPermitidos.includes(req.usuario.perfil)) {
+    if (!perfisPermitidos.includes(req.usuario.cargo)) {
       return res.status(403).json({ sucesso: false, erro: 'Você não tem permissão para acessar este recurso.' });
     }
     return next();
   };
 }
 
-export const autorizarAdmin = autorizarPerfis('admin');
+export const autorizarAdmin = autorizarPerfis('ADMIN');
