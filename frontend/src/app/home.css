@@ -1,22 +1,19 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-
 .page-container {
-  font-family: 'Montserrat', sans-serif;
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
   color: #333;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: 'Unbounded', sans-serif;
   color: #111;
 }
 
 button {
-  font-family: 'Montserrat', sans-serif;
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .hero-section {
@@ -29,7 +26,7 @@ button {
   top: 0;
   left: 0;
   width: 100%;
-  
+
   min-height: 100px;
 }
 
@@ -37,16 +34,18 @@ button {
   color: #7c3aed;
   font-weight: bold;
   font-size: 0.875rem;
-  font-family: 'Montserrat', sans-serif;
-  font-style: normal;
-
+  letter-spacing: 1.0;
+ 
+  
 }
 
 .hero-title {
   font-size: 3rem;
   margin: 16px 0;
   line-height: 1.2;
- 
+}
+.hero-title span {
+  color: #7c3aed;
 }
 
 .hero-subtitle {
@@ -81,10 +80,12 @@ button {
   padding: 8px;
   border: 1px solid #ddd;
   border-radius: 4px;
-  font-family: 'Montserrat', sans-serif;
+
 }
 
-.btn-pesquisar, .btn-compre, .btn-juntar {
+.btn-pesquisar,
+.btn-compre,
+.btn-juntar {
   background-color: #7c3aed;
   color: #fff;
   border: none;
@@ -94,7 +95,11 @@ button {
 }
 
 
-.featured-event-section, .experiences-section, .categories-section, .faq-section, .final-cta-section {
+.featured-event-section,
+.experiences-section,
+.categories-section,
+.faq-section,
+.final-cta-section {
   margin-bottom: 60px;
 }
 

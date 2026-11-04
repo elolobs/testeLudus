@@ -11,7 +11,7 @@ export default function Home() {
             <span className="hero-kicker">O SEU PRÓXIMO MOMENTO COMEÇA AQUI</span>
             <h1 className="hero-title">
               Vive mais.<br />
-              Descobre agora.
+              <span>Descobre agora.</span>
             </h1>
             <p className="hero-subtitle">
               Eventos, festivais e experiências que ficam contigo.
