@@ -1,3 +1,7 @@
+* {
+  font-family: "Montserrat", sans-serif;
+}
+
 .page-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -16,8 +20,9 @@ button {
   cursor: pointer;
 }
 
+
 .hero-section {
-  text-align: center;
+  text-align: left;
   padding: 60px 0;
   border-bottom: 1px solid #eaeaea;
   margin-bottom: 40px;
@@ -26,32 +31,38 @@ button {
   top: 0;
   left: 0;
   width: 100%;
-
+  
   min-height: 100px;
 }
 
 .hero-kicker {
-  color: #7c3aed;
+  color: #d8ceeb;
   font-weight: bold;
-  font-size: 0.875rem;
+  font-size: 0.775rem;
   letter-spacing: 1.0;
- 
-  
+  margin-left: 100px;
 }
 
+
+.hero-content{
+  margin-top: 100px;
+}
 .hero-title {
-  font-size: 3rem;
+  font-size: 5rem;
   margin: 16px 0;
   line-height: 1.2;
+  color: #eaeaea;
+  margin-left: 100px;
 }
 .hero-title span {
-  color: #7c3aed;
+  color: #9088c7;    
 }
 
 .hero-subtitle {
   font-size: 1.125rem;
-  color: #666;
+  color: #acaaaa;
   margin-bottom: 32px;
+  margin-left: 100px;
 }
 
 .hero-search-bar {
@@ -86,12 +97,25 @@ button {
 .btn-pesquisar,
 .btn-compre,
 .btn-juntar {
-  background-color: #7c3aed;
+  background-color: #714ab4;
   color: #fff;
   border: none;
   padding: 10px 24px;
   border-radius: 4px;
   font-weight: bold;
+}
+
+.btn-pesquisar{
+  width: 150px;
+  height: 70px;
+  margin-left: 100px;
+  align-self: left;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  font-weight: 10;
+  letter-spacing: 1.0;
+
+
 }
 
 
