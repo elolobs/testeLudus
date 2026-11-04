@@ -7,10 +7,11 @@ export default function Cadastro() {
         <div className="container">
 
             <div className="leftSide">
-                <div>
-                    <img src="#" alt="Foto Cadastro" />
-                    <h3>O seu próximo evento começa aqui</h3>
-                    <p>Subtitulo</p>
+                <div className="container-imagem">
+                    <img src="../img/fundocadastro.png" alt="Foto Cadastro" width={450} />
+                    <div className="texto-sobreposto">
+                        <h3>O seu próximo evento começa aqui</h3>
+                    </div>
                 </div>
             </div>
 
