@@ -15,7 +15,7 @@ export default function Login() {
                         <div className="imgblur">
                             <div className="texto-sobreposto">
                                 <h3>Conecte-se às suas<br /> melhores experiências.</h3>
-                            '</div>
+                            </div>
                         </div>
                     </div>
                 </div>
