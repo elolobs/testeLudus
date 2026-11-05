@@ -114,10 +114,36 @@ button {
   text-transform: uppercase;
   font-weight: 10;
   letter-spacing: 1.0;
+  padding-left: 20px;
 
 
 }
 
+.faq-item p{
+  color: #333;
+}
+
+.btn-juntar{
+  background-color: #f8f6f6;
+  color: #714ab4; 
+}
+
+.faq-intro h2 {
+  color: #714ab4; 
+}
+
+.faq-intro p{
+  color: #333;
+}
+
+.categories-header h2 {
+  color: #714ab4; 
+
+}
+
+.final-cta-section h2, p, button{
+  color:#eaeaea;
+}
 
 .featured-event-section,
 .experiences-section,
@@ -125,6 +151,20 @@ button {
 .faq-section,
 .final-cta-section {
   margin-bottom: 60px;
+}
+
+.categories-section{
+  
+  margin-top: 100px;
+}
+
+.experiences-section{
+  margin-top: 600px;
+}
+
+.experiences-section h2 {
+  color: #714ab4; 
+
 }
 
 .featured-event-content {
@@ -179,11 +219,19 @@ button {
 
 .btn-ver-todos {
   background: none;
-  border: 1px solid #7c3aed;
-  color: #7c3aed;
+  border: 1px solid #7947cf; 
+  color: #7947cf;
   padding: 8px 16px;
   border-radius: 4px;
+  font-weight: bold;
 }
+
+.btn-ver-todos :hover{
+  background-color: #7c3aed;
+  color: #fff;
+  transition: 3s;
+}
+
 
 .categories-list {
   list-style: none;
@@ -227,9 +275,28 @@ button {
 }
 
 .final-cta-section {
-  text-align: center;
-  background-color: #f9fafb;
-  padding: 60px 20px;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
+  width: 100vw; 
+  margin: 0; 
+  padding: 100px 80px; 
+  background: linear-gradient(#714ab4, #7c3aed, #3a0b8d );
+  text-align: center; 
+}
+
+.final-cta-section h2{
+  font-size: 3rem;
+  margin-bottom: 16px;
+}
+
+.page-container .final-cta-section {
+  width: 100vw; 
+  margin-left: calc(-50vw + 50%); 
+}
+
+.grid-eventos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 24px; 
+  width: 100%; 
+  max-width: 1200px; 
+  margin: 0 auto; 
 }

@@ -1,7 +1,14 @@
 import styles from "./home.css";
+import CardEvento from "@/components/cardEvento";
 
 export default function Home() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080/api";
+
+  const listaEventos = [
+    { id: 1, categoria: "MÚSICA", dia: "18", mes: "OUT", titulo: "Future Summit 2026", local: "São Paulo, SP", imagem: "/caminho-da-imagem1.jpg" },
+    { id: 2, categoria: "FESTIVAL", dia: "24", mes: "OUT", titulo: "Festival Aurora", local: "Parque Villa-Lobos, SP", imagem: "/caminho-da-imagem2.jpg" },
+    { id: 3, categoria: "EXPERIÊNCIA", dia: "02", mes: "NOV", titulo: "Ludus Experience", local: "Marina da Glória, RJ", imagem: "/caminho-da-imagem3.jpg" },
+];
 
   return (
     <div className="page-container">
@@ -28,43 +35,24 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="featured-event-section">
-          <button className="nav-arrow prev-arrow" aria-label="Anterior">❮</button>
-          <div className="featured-event-content">
-            <h2>Evento</h2>
-            <p>Descrição Do Evento</p>
-            <button className="btn-compre">Compre</button>
-          </div>
-          <button className="nav-arrow next-arrow" aria-label="Próximo">❯</button>
-        </section>
-
         <section className="experiences-section">
-          <h2>Experiências em destaque</h2>
+          <h2>Experiências em destaque</h2><br></br>
           <div className="carousel-container">
             <button className="nav-arrow prev-arrow" aria-label="Anterior">❮</button>
             
-            <div className="cards-wrapper">
-              <div className="experience-card">
-                <div className="card-image-placeholder"></div>
-                <h3>New product</h3>
-                <p>Descrição curta</p>
-              </div>
-              <div className="experience-card">
-                <div className="card-image-placeholder"></div>
-                <h3>Cool new blog</h3>
-                <p>Descrição curta</p>
-              </div>
-              <div className="experience-card">
-                <div className="card-image-placeholder"></div>
-                <h3>New product</h3>
-                <p>Descrição curta</p>
-              </div>
-              <div className="experience-card">
-                <div className="card-image-placeholder"></div>
-                <h3>New product</h3>
-                <p>Descrição curta</p>
-              </div>
-            </div>
+                <div className="grid-eventos">
+                                  {listaEventos.map((evento) => (
+                                      <CardEvento 
+                                          key={evento.id}
+                                          categoria={evento.categoria}
+                                          dia={evento.dia}
+                                          mes={evento.mes}
+                                          titulo={evento.titulo}
+                                          local={evento.local}
+                                          imagem={evento.imagem}
+                                      />
+                                  ))}
+                              </div>
 
             <button className="nav-arrow next-arrow" aria-label="Próximo">❯</button>
           </div>
@@ -73,7 +61,7 @@ export default function Home() {
         <section className="categories-section">
           <div className="categories-header">
             <h2>Explorar por categoria</h2>
-            <button className="btn-ver-todos">Ver todos eventos disponíveis</button>
+            <button className="btn-ver-todos">Ver todos</button>
           </div>
           
           <ul className="categories-list">
@@ -102,40 +90,40 @@ export default function Home() {
 
         <section className="faq-section">
           <div className="faq-intro">
-            <h2>Perguntas Frequentes</h2>
+            <h2>Perguntas Frequentes</h2> <br></br>
             <p>
-              Não achou sua dúvida? Entre em contato com nosso <a href="/suporte">suporte</a>
+              Não achou sua dúvida? Entre em contato com nosso <span><a href="/suporte">suporte</a></span>
             </p>
           </div>
           
           <div className="faq-accordion">
             <details className="faq-item">
-              <summary>Dúvida 1 <span className="faq-icon">⌄</span></summary>
-              <p>Resposta para a dúvida 1 vai aqui.</p>
+              <summary>Como recebo o meu bilhete?<span className="faq-icon">⌄</span></summary>
+              <p>Após a inscrição, o bilhete com QR Code aparece na tua área de ingressos e fica disponível no telemóvel.</p>
             </details>
             <details className="faq-item">
-              <summary>Dúvida 2 <span className="faq-icon">⌄</span></summary>
-              <p>Resposta para a dúvida 2 vai aqui.</p>
+              <summary>Preciso de imprimir o bilhete?<span className="faq-icon">⌄</span></summary>
+              <p>Não. Basta mostrar o QR Code no ecrã ao staff, que faz o check-in em segundos.</p>
             </details>
             <details className="faq-item">
-              <summary>Dúvida 3 <span className="faq-icon">⌄</span></summary>
-              <p>Resposta para a dúvida 3 vai aqui.</p>
+              <summary>O que é a lista de espera? <span className="faq-icon">⌄</span></summary>
+              <p>Quando um evento esgota, podes entrar na lista de espera e <br></br>recebes aviso assim que houver vagas ou devoluções.</p>
             </details>
             <details className="faq-item">
-              <summary>Dúvida 4 <span className="faq-icon">⌄</span></summary>
-              <p>Resposta para a dúvida 4 vai aqui.</p>
+              <summary>Os organizadores podem gerir vários eventos? <span className="faq-icon">⌄</span></summary>
+              <p>Sim. O dashboard do organizador permite criar, editar e acompanhar eventos,<br></br> gerir equipes e consultar relatórios financeiros.</p>
             </details>
             <details className="faq-item">
-              <summary>Dúvida 5 <span className="faq-icon">⌄</span></summary>
-              <p>Resposta para a dúvida 5 vai aqui.</p>
+              <summary>É necessário CPF para criar conta? <span className="faq-icon">⌄</span></summary>
+              <p>Sim, o registo exige nome, e-mail válido e CPF para garantir a segurança de participantes e organizadores.</p>
             </details>
           </div>
         </section>
 
         <section className="final-cta-section">
-          <h2>Pronto para seu próximo Evento?</h2>
-          <p>Junta-se ao Ludus e descubra novos eventos</p>
-          <button className="btn-juntar">Junta-se</button>
+          <h2>Pronto para seu <br></br>próximo Evento?</h2>
+          <p>Junta-se ao Ludus e descubra novos eventos</p> <br></br>
+          <button className="btn-juntar">Começar agora</button>
         </section>
       </main>
     </div>

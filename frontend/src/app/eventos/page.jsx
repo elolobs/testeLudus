@@ -11,7 +11,7 @@ export default function () {
 
     return (
         <main className="pagina-catalogo">
-            {/* Seção Hero: Título e Subtítulo */}
+        
             <section className="hero-section">
                 <span className="hero-kicker">CATÁLOGO DE EVENTOS</span>
                 <h1 className="hero-titulo">
@@ -21,7 +21,6 @@ export default function () {
                 <p className="hero-subtitulo">Explore festivais, shows, palestras, festas e muito mais.</p>
             </section>
 
-            {/* Seção de Filtros / Busca */}
             <section className="busca-section">
                 <form className="busca-form">
                     <div className="campo-busca">
@@ -47,7 +46,7 @@ export default function () {
                 </form>
             </section>
 
-            {/* Seção da Listagem de Eventos */}
+    
             <section className="lista-eventos-section">
                 <header className="lista-header">
                     <div>
@@ -62,7 +61,7 @@ export default function () {
                     </div>
                 </header>
 
-                {/* Grid dos Cards */}
+            
                 <div className="grid-eventos">
                     {listaEventos.map((evento) => (
                         <CardEvento 

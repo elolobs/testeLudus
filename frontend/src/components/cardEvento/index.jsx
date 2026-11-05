@@ -14,7 +14,6 @@ export default function CardEvento({
           
             <div className="card-imagem-wrapper">
                 <span className="tag-categoria">{categoria}</span>
-                <button className="btn-favoritar" aria-label="Favoritar">♡</button>
                 <img src={imagem} alt={`Imagem do evento ${titulo}`} className="imagem-evento" />
             </div>
 

@@ -12,24 +12,59 @@ h1, h2, h3 {
 }
 
 .hero-section {
-  text-align: center;
-  margin-bottom: 48px;
-}
-
-.hero-kicker {
-  color: #7c3aed;
-  font-size: 0.875rem;
-  font-weight: 700;
-  letter-spacing: 1px;
+  text-align: left;
+  padding: 60px 0;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 40px;
+  background: url("/img/fundohome.png") center / cover no-repeat;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  
+  min-height: 100px;
 }
 
 .hero-titulo {
-  font-size: 2.5rem;
+  font-size: 5rem;
   margin: 16px 0;
+  line-height: 1.2;
+  color: #eaeaea;
+  margin-left: 100px;
+}
+.hero-titulo span {
+  color: #9088c7;    
+}
+
+.hero-subtitulo {
+  font-size: 1.125rem;
+  color: #acaaaa;
+  margin-bottom: 32px;
+  margin-left: 100px;
+}
+
+.hero-content{
+  margin-top: 100px;
+}
+
+.hero-kicker {
+  color: #d8ceeb;
+  font-weight: bold;
+  font-size: 0.775rem;
+  letter-spacing: 1.0;
+  margin-left: 100px;
+}
+
+.hero-titulo {
+  font-size: 5rem;
+  margin: 16px 0;
+  line-height: 1.2;
+  color: #eaeaea;
+  margin-left: 100px;
 }
 
 .hero-titulo span {
-  color: #7c3aed;
+  color: #9088c7;    
 }
 
 .busca-form {
@@ -41,6 +76,7 @@ h1, h2, h3 {
   border-radius: 8px;
   margin-bottom: 48px;
   border: 1px solid #eaeaea;
+  margin-top: 450px;
 }
 
 .campo-busca {
@@ -97,6 +133,20 @@ h1, h2, h3 {
 
 .grid-eventos {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  gap: 24px; 
+  width: 100%; 
+  max-width: 1200px; 
+  margin: 0 auto; 
+}
+
+
+
+.ordenacao input,
+.ordenacao select {
+  font-family: 'Montserrat', sans-serif;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-left: 10px;
 }
