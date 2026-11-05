@@ -1,11 +1,13 @@
-import cors from "cors";
 import express from "express";
+import cors from "cors";
 import helmet from "helmet";
 
 import { errorHandler } from "./middlewares/errorHandler.js";
 import healthRoutes from "./routes/healthRoutes.js";
+import { authRouter } from "./routes/AuthRoutes.js";
+import recursoRoutes from "./routes/recursoRoutes.js";
 
-const app = express();
+export const app = express();
 
 app.use(helmet());
 app.use(
@@ -22,7 +24,7 @@ app.get("/", (request, response) => {
 });
 
 app.use("/api/health", healthRoutes);
+app.use("/api/auth", authRouter);
+app.use("/api", recursoRoutes);
 
 app.use(errorHandler);
-
-export default app;
