@@ -1,0 +1,125 @@
+* {
+    font-family: "Montserrat", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: "Unbounded", sans-serif;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+}
+
+.leftSide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 1px solid #ccc;
+}
+
+.rightSide {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.container-imagem {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.container-imagem img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.texto-sobreposto {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    font-size: 45px;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.imgblur {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.24);
+    width: 100%;
+    height: 100%;
+}
+
+input {
+    font-size: 22px;
+    width: 500px;
+    height: 40px;
+    max-width: 500px;
+    border: 2px solid;
+}
+
+input:hover {
+    border: 2px solid #A49EC2;
+}
+
+input:focus {
+    border: 2px solid #A49EC2;
+    outline: none;
+}
+
+.subCad {
+    white-space: nowrap;
+    font-size: 20px;
+    margin-top: 30px;
+}
+
+.Title {
+    white-space: nowrap;
+    margin-top: 100px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+label {
+    margin-top: 5px;
+    font-weight: 500;
+    font-size: 18px;
+}
+
+button {
+    background-color: #2D1E80;
+    border: none;
+    font-size: 23px;
+    color: white;
+    border-radius: 50px;
+    padding: 10px 45px;
+    margin: 15px auto 0 auto;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #A49EC2;
+}
