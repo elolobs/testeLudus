@@ -10,7 +10,7 @@ export default function Cadastro() {
 
             <div className="leftSide">
                 <div className="container-imagem">
-                    <img src="../img/fundocadastro.png" alt="Foto Cadastro" width={450} />
+                    <img src="../img/fundocadastro.png" alt="Foto Cadastro" />
 
                     <div className="imgblur">
                         <div className="texto-sobreposto">
@@ -31,7 +31,7 @@ export default function Cadastro() {
                 </div>
                 <form action="" method="post">
                     <label htmlFor="nome">Nome</label>
-                    <input type="text" id="'nome" placeholder=" Nome" required /><br />
+                    <input type="text" id="nome" placeholder=" Nome" required /><br />
                     <label htmlFor="email">E-mail</label>
                     <input type="email" id="email" placeholder=" E-mail" required />
                     <br />

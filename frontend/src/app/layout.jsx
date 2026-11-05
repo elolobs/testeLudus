@@ -1,6 +1,5 @@
 import "./globals.css";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 export const metadata = {
   title: "Ludus - Site de Eventos",
@@ -11,10 +10,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="pt-BR">
       <body>
-         <Header /> 
-        {children}
-        {/* <Footer /> */}
-        </body>
+        <LayoutWrapper>
+          {children}
+        </LayoutWrapper>
+      </body>
     </html>
   );
 }
