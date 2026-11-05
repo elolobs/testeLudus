@@ -2,7 +2,7 @@
 
 ## Configuração
 
-Copie `.env.example` para `.env` e ajuste as credenciais do MySQL. Configure
+Copie `.env.example` para `.env` e altere credenciais do MySQL. Configure
 `DB_HOST`, `DB_PORT`, `DB_USER`, `DB_PASSWORD` e `DB_NAME` para o banco que
 recebeu `database/init/banco.sql`. `JWT_SECRET` deve ter pelo menos 32
 caracteres e ser mantido em segredo.
