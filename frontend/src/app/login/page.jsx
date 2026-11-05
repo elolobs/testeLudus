@@ -27,7 +27,7 @@ export default function Login() {
             const data = await response.json();
             console.log("Login bem-sucedido:", data);
 
-            
+
 
         } catch (error) {
             console.error("Erro ao fazer login:", error);
@@ -52,6 +52,14 @@ export default function Login() {
                 </div>
 
                 <div className="rightSide">
+                    <div className="subCad">
+                        <h4>Bem-Vindo de volta</h4>
+                        <p>
+                            Entra no teu ritmo.
+                            <br />
+                            Acede aos teus eventos, ingressos e experiências.
+                        </p>
+                    </div>
                     <h1 className="Title">Seu Login</h1>
                     <form onSubmit={handleSubmit}>
                         <label htmlFor="email">E-mail</label>
@@ -79,14 +87,7 @@ export default function Login() {
                         <br />
                         <button type="submit">Fazer Login</button>
                         {errorMessage && <p className="error">{errorMessage}</p>}
-                        <div className="subCad">
-                            <h4>Bem-Vindo de volta</h4>
-                            <p>
-                                Entra no teu ritmo.
-                                <br />
-                                Acede aos teus eventos, ingressos e experiências.
-                            </p>
-                        </div>
+
                     </form>
                 </div>
 
