@@ -14,6 +14,8 @@ Inicie a API com `npm run dev` ou `npm start`.
 - `POST /api/auth/registrar`: recebe `nome_completo`, `email`, `senha`, `cpf`,
   `telefone` (opcional) e `termo_lgpd_aceito: true`. O cadastro cria usuários
   com cargo `USUARIO`; cargos privilegiados não podem ser escolhidos no cadastro.
+  O CPF pode ser fictício, mas deve conter exatamente 11 dígitos após remover
+  pontuação. Ele precisa ser único na base.
 - `POST /api/auth/login`: recebe `email` e `senha`; retorna um token Bearer.
 - Envie o token nas rotas autenticadas usando
   `Authorization: Bearer <token>`.

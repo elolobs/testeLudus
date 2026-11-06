@@ -4,26 +4,9 @@ import * as UsuarioModel from "../models/UsuarioModel.js";
 
 const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-function validarCpf(valor) {
+export function validarCpf(valor) {
   const cpf = typeof valor === "string" ? valor.replace(/\D/g, "") : "";
-  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return null;
-
-  const calcularDigito = (base, pesoInicial) => {
-    const soma = [...base].reduce(
-      (total, digito, indice) => total + Number(digito) * (pesoInicial - indice),
-      0,
-    );
-    const resto = (soma * 10) % 11;
-    return resto === 10 ? 0 : resto;
-  };
-
-  if (
-    calcularDigito(cpf.slice(0, 9), 10) !== Number(cpf[9]) ||
-    calcularDigito(cpf.slice(0, 10), 11) !== Number(cpf[10])
-  ) {
-    return null;
-  }
-  return cpf;
+  return /^\d{11}$/.test(cpf) ? cpf : null;
 }
 
 function obterJwtSecret() {
@@ -64,7 +47,7 @@ export async function registrar({
     throw new TypeError("Informe um e-mail válido com até 150 caracteres.");
   }
   if (!cpf) {
-    throw new TypeError("Informe um CPF válido.");
+    throw new TypeError("Informe um CPF fictício com exatamente 11 números.");
   }
   if (telefoneLimpo && telefoneLimpo.length > 20) {
     throw new TypeError("Telefone deve ter no máximo 20 caracteres.");

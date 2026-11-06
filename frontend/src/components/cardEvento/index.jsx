@@ -1,6 +1,8 @@
 import "./cardEvento.css"
+import Link from "next/link";
 
 export default function CardEvento({
+    id,
     imagem,
     categoria,
     dia,
@@ -33,7 +35,7 @@ export default function CardEvento({
             </div>
 
            
-            <button className="btn-ver-mais">Ver Mais</button>
+            <Link className="btn-ver-mais" href={`/eventos/${id}`}>Ver Mais</Link>
         </div>
     )
 }
