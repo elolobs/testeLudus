@@ -87,6 +87,7 @@ export default function Login() {
               {enviando ? "Entrando..." : "Fazer Login"}
             </button>
             {errorMessage && <p className="error" role="alert">{errorMessage}</p>}
+            <br/>
             <p>Ainda não tem conta? <Link href="/cadastro">Cadastre-se</Link></p>
           </form>
         </div>

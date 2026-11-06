@@ -91,7 +91,7 @@ export default function Cadastro() {
             type="text"
             id="cpf"
             name="cpf"
-            placeholder=" CPF fictício com 11 números"
+            placeholder=" CPF"
             inputMode="numeric"
             autoComplete="off"
             minLength={11}
