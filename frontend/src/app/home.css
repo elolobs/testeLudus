@@ -141,9 +141,16 @@ button {
 
 }
 
-.final-cta-section h2, p, button{
+.final-cta-section-h2{
   color:#eaeaea;
 }
+
+
+.final-cta-section-p{
+  color:#eaeaea;
+}
+
+
 
 .featured-event-section,
 .experiences-section,

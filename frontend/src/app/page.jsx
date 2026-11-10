@@ -141,8 +141,8 @@ export default function Home() {
         </section>
 
         <section className="final-cta-section">
-          <h2>Pronto para seu <br />próximo Evento?</h2>
-          <p>Junta-se ao Ludus e descubra novos eventos</p><br />
+          <h2 className="final-cta-section-h2">Pronto para seu <br />próximo Evento?</h2>
+          <p className="final-cta-section-p">Junta-se ao Ludus e descubra novos eventos</p><br />
           <Link className="btn-juntar" href="/cadastro">Começar agora</Link>
         </section>
       </main>
