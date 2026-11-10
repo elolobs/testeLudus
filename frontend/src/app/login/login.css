@@ -108,8 +108,7 @@ form {
     display: flex;
     flex-direction: column;
     gap: 5px;
-}
-
+} 
 label {
     margin-top: 5px;
     font-weight: 500;
