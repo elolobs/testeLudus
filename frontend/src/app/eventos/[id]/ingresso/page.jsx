@@ -55,7 +55,7 @@ export default function ContadorIngresso({
 
   const selecionarMetodo = (metodo) => {
     setMetodoPagamento(metodo);
-    setPasso("checkout"); // CORRIGIDO: de passo("checkout") para setPasso("checkout")
+    setPasso("checkout");
   };
 
   const handleFinalizarPedido = (e) => {
@@ -66,7 +66,6 @@ export default function ContadorIngresso({
       return;
     }
 
-    // CORRIGIDO: Sintaxe do OR para validar crédito e débito
     const ehCartao = metodoPagamento === "credito" || metodoPagamento === "debito";
     if (ehCartao && (!numeroCartao || !validade || !cvv)) {
       alert("Preencha os Dados do Cartão!");
@@ -87,9 +86,10 @@ export default function ContadorIngresso({
           {/* PIX */}
           <div className="item-ingresso">
             <div className="info-ingresso">
-              <span className="nome-ingresso">
-                PIX</span>
-              <span className="preco-ingresso"><i class="fa-brands fa-pix"></i> Aprovação Instantânea</span>
+              <span className="nome-ingresso">PIX</span>
+              <span className="preco-ingresso">
+                <i className="fa-brands fa-pix"></i> Aprovação Instantânea
+              </span>
             </div>
             <button
               type="button"
@@ -103,9 +103,10 @@ export default function ContadorIngresso({
           {/* CRÉDITO */}
           <div className="item-ingresso">
             <div className="info-ingresso">
-
               <span className="nome-ingresso">Cartão de Crédito</span>
-              <span className="preco-ingresso"><i class="fa-regular fa-credit-card"></i> Até 12x</span>
+              <span className="preco-ingresso">
+                <i className="fa-regular fa-credit-card"></i> Até 12x
+              </span>
             </div>
             <button
               type="button"
@@ -120,7 +121,9 @@ export default function ContadorIngresso({
           <div className="item-ingresso">
             <div className="info-ingresso">
               <span className="nome-ingresso">Cartão de Débito</span>
-              <span className="preco-ingresso"><i class="fa-solid fa-credit-card"></i> À vista</span>
+              <span className="preco-ingresso">
+                <i className="fa-solid fa-credit-card"></i> À vista
+              </span>
             </div>
             <button
               type="button"
@@ -168,86 +171,89 @@ export default function ContadorIngresso({
             {metodoPagamento === "pix" ? "Pagamento via PIX" : "Dados do Cartão"}
           </h1>
 
-          <form onSubmit={handleFinalizarPedido} className="form-checkout">
-            <div className="campo-form">
-              <label htmlFor="nome">Nome Completo:</label>
-              <input
-                id="nome"
-                type="text"
-                value={nome}
-                onChange={(e) => setNome(e.target.value)}
-                placeholder="Digite seu nome completo"
-                required
-              />
-            </div>
-
-            <div className="campo-form">
-              <label htmlFor="cpf">CPF:</label>
-              <input
-                id="cpf"
-                type="text"
-                value={cpf}
-                onChange={(e) => setCpf(e.target.value)}
-                placeholder="000.000.000-00"
-                required
-              />
-            </div>
-
-            {/* Exibe os campos de cartão tanto para crédito quanto para débito */}
-            {precisaDadosCartao && (
-              <>
+          <div className="item-ingresso">
+            <div className="info-ingresso">
+              <form onSubmit={handleFinalizarPedido} className="form-checkout">
                 <div className="campo-form">
-                  <label htmlFor="cartao">Número do Cartão:</label>
+                  <label htmlFor="nome">Nome Completo:</label>
                   <input
-                    id="cartao"
+                    id="nome"
                     type="text"
-                    value={numeroCartao}
-                    onChange={(e) => setNumeroCartao(e.target.value)}
-                    placeholder="0000 0000 0000 0000"
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    placeholder="Digite seu nome completo"
                     required
                   />
                 </div>
 
                 <div className="campo-form">
-                  <label htmlFor="validade">Validade:</label>
+                  <label htmlFor="cpf">CPF:</label>
                   <input
-                    id="validade"
+                    id="cpf"
                     type="text"
-                    value={validade}
-                    onChange={(e) => setValidade(e.target.value)}
-                    placeholder="MM/AA"
+                    value={cpf}
+                    onChange={(e) => setCpf(e.target.value)}
+                    placeholder="000.000.000-00"
                     required
                   />
                 </div>
 
-                <div className="campo-form">
-                  <label htmlFor="cvv">CVV:</label>
-                  <input
-                    id="cvv"
-                    type="text"
-                    value={cvv}
-                    onChange={(e) => setCvv(e.target.value)}
-                    placeholder="123"
-                    required
-                  />
-                </div>
-              </>
-            )}
+                {precisaDadosCartao && (
+                  <>
+                    <div className="campo-form">
+                      <label htmlFor="cartao">Número do Cartão:</label>
+                      <input
+                        id="cartao"
+                        type="text"
+                        value={numeroCartao}
+                        onChange={(e) => setNumeroCartao(e.target.value)}
+                        placeholder="0000 0000 0000 0000"
+                        required
+                      />
+                    </div>
 
-            <br />
-            <div className="acoes-checkout">
-              <button
-                type="button"
-                className="btn-select"
-                onClick={() => setPasso("pagamento")}
-              >
-                Voltar
-              </button>
-              <button type="submit" className="btn-select">
-                {metodoPagamento === "pix" ? "Gerar PIX" : "Pagar Agora"}
-              </button>
+                    <div className="campo-form">
+                      <label htmlFor="validade">Validade:</label>
+                      <input
+                        id="validade"
+                        type="text"
+                        value={validade}
+                        onChange={(e) => setValidade(e.target.value)}
+                        placeholder="MM/AA"
+                        required
+                      />
+                    </div>
+
+                    <div className="campo-form">
+                      <label htmlFor="cvv">CVV:</label>
+                      <input
+                        id="cvv"
+                        type="text"
+                        value={cvv}
+                        onChange={(e) => setCvv(e.target.value)}
+                        placeholder="123"
+                        required
+                      />
+                    </div>
+                  </>
+                )}
+
+                <br />
+                <div className="acoes-checkout">
+                  <button
+                    type="button"
+                    className="btn-select"
+                    onClick={() => setPasso("pagamento")}
+                  >
+                    Voltar
+                  </button>
+                  <button type="submit" className="btn-select">
+                    {metodoPagamento === "pix" ? "Gerar PIX" : "Pagar Agora"}
+                  </button>
+                </div>
+              </form>
             </div>
-          </form>
+          </div>
         </div>
 
         <div className="sidesright">
@@ -261,9 +267,6 @@ export default function ContadorIngresso({
             <p className="tax-text">Valor da taxa R$ Taxa</p>
             <p className="sub-text">Valor total: R$ Valor Total + Taxa</p>
             <br />
-            <button type="button" className="btn-select" onClick={irParaPagamento}>
-              Concluir
-            </button>
           </div>
         </div>
       </div>
