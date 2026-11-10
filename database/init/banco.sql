@@ -6,12 +6,14 @@ CREATE TABLE IF NOT EXISTS usuarios (
   cpf VARCHAR(14) UNIQUE NOT NULL,
   telefone VARCHAR(20),
   cargo ENUM('ADMIN', 'ORGANIZADOR', 'USUARIO') DEFAULT 'USUARIO',
-  ativo BOOLEAN DEFAULT TRUE,
+  ativo BOOLEAN default
+  TRUE,
   termo_lgpd_aceito BOOLEAN NOT NULL DEFAULT FALSE,
   termo_lgpd_data TIMESTAMP,
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
 
 CREATE TABLE IF NOT EXISTS categorias (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -27,8 +29,8 @@ CREATE TABLE IF NOT EXISTS eventos (
   descricao TEXT NOT NULL,
   capacidade_maxima INT NOT NULL CHECK (capacidade_maxima > 0),
   status ENUM('RASCUNHO', 'PUBLICADO', 'SUSPENSO', 'CANCELADO', 'CONCLUIDO') DEFAULT 'RASCUNHO',
-  data_inicio TIMESTAMP NOT NULL,
-  data_fim TIMESTAMP NOT NULL,
+  data_inicio TIMESTAMP NULL,
+  data_fim TIMESTAMP  NULL,
   local_nome VARCHAR(150) NOT NULL,
   local_endereco TEXT NOT NULL,
   imagem_capa_url VARCHAR(255),
@@ -56,8 +58,8 @@ CREATE TABLE IF NOT EXISTS atividades (
   descricao TEXT,
   tipo VARCHAR(50) NOT NULL,
   palestrante VARCHAR(150) NOT NULL,
-  data_hora_inicio TIMESTAMP NOT NULL,
-  data_hora_fim TIMESTAMP NOT NULL,
+  data_hora_inicio TIMESTAMP NULL,
+  data_hora_fim TIMESTAMP NULL,
   local_sala VARCHAR(100),
   vagas_maximas INT NOT NULL CHECK (vagas_maximas > 0),
   vagas_ocupadas INT DEFAULT 0 CHECK (vagas_ocupadas <= vagas_maximas),
