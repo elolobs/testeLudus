@@ -10,15 +10,13 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function fetchDashboardData() {
       try {
-        // Recupera o token de onde você salvou no login (ex: localStorage)
         const token = localStorage.getItem("token");
 
-        // Chama a rota do seu backend Express
         const response = await fetch("http://localhost:3000/admin/dashboard", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`, // Envia o token para o AuthMiddleware
+            "Authorization": `Bearer ${token}`,
           },
         });
 
