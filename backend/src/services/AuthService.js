@@ -44,10 +44,10 @@ export async function registrar({
     throw new TypeError("Nome completo deve ter entre 3 e 120 caracteres.");
   }
   if (!REGEX_EMAIL.test(emailLimpo) || emailLimpo.length > 150) {
-    throw new TypeError("Informe um e-mail válido com até 150 caracteres.");
+    throw new TypeError("Informe um e-mail válido");
   }
   if (!cpf) {
-    throw new TypeError("Informe um CPF fictício com exatamente 11 números.");
+    throw new TypeError("Informe o seu CPF.");
   }
   if (telefoneLimpo && telefoneLimpo.length > 20) {
     throw new TypeError("Telefone deve ter no máximo 20 caracteres.");
