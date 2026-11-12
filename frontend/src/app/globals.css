@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap');
-@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.3.1/css/all.min.css");
-
+@import url("bootstrap/dist/css/bootstrap.min.css");
 :root {
   --background: #f6f7f9;
   --foreground: #172033;
