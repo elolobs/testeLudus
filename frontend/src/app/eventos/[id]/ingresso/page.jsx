@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 export default function ContadorIngresso({
   maximo = 5,
-  precoUnitario = 100, // Preço obtido do backend
+  precoUnitario = 100, // Preço base obtido do backend
   taxaServico = 10     // Taxa obtida do backend
 }) {
   const router = useRouter();
@@ -14,15 +14,22 @@ export default function ContadorIngresso({
   // Controle de Tela: 'ingressos' | 'verificacao' | 'pagamento' | 'checkout'
   const [passo, setPasso] = useState("ingressos");
 
-  // Controle de Setores
-  const [setorAberto, setSetorAberto] = useState("");
-  const [setorSelecionado, setSetorSelecionado] = useState("");
+  const [setoresAbertos, setSetoresAbertos] = useState({});
 
-  // Quantidades individuais por tipo de ingresso
-  const [ingressos, setIngressos] = useState({
-    inteira: 0,
-    meia: 0,
-    idoso: 0,
+  // Definição de setores disponíveis
+  const setores = [
+    { id: "camarote", nome: "Setor Camarote", preco: precoUnitario * 1.5 },
+    { id: "pista", nome: "Setor Pista", preco: precoUnitario },
+    { id: "cadeira", nome: "Setor Cadeira", preco: precoUnitario * 1.2 },
+  ];
+
+  // Quantidades separadas por setor: { camarote: { inteira: 0, meia: 0, idoso: 0 }, ... }
+  const [ingressosPorSetor, setIngressosPorSetor] = useState(() => {
+    const inicial = {};
+    setores.forEach((s) => {
+      inicial[s.id] = { inteira: 0, meia: 0, idoso: 0 };
+    });
+    return inicial;
   });
 
   // Dados de verificação dos portadores dos ingressos
@@ -37,28 +44,41 @@ export default function ContadorIngresso({
   const [validade, setValidade] = useState("");
   const [parcelas, setParcelas] = useState("1");
 
-  // Definição de setores disponíveis
-  const setores = [
-    { id: "camarote", nome: "Setor Camarote", preco: precoUnitario },
-    { id: "pista", nome: "Setor Pista", preco: precoUnitario },
-    { id: "cadeira", nome: "Setor Cadeira", preco: precoUnitario },
-  ];
+  // Helper para pegar preços de um setor específico
+  const getPrecosSetor = (precoBase) => ({
+    inteira: precoBase,
+    meia: precoBase * 0.5,
+    idoso: precoBase * 0.5,
+  });
 
-  // Definição de preços por tipo
-  const precos = {
-    inteira: precoUnitario,
-    meia: precoUnitario * 0.5,
-    idoso: precoUnitario * 0.5,
-  };
+  // Lista de setores que têm pelo menos 1 ingresso selecionado
+  const setoresComIngressos = setores.filter((setor) => {
+    const qtd = ingressosPorSetor[setor.id];
+    return qtd.inteira + qtd.meia + qtd.idoso > 0;
+  });
 
-  // Quantidade total acumulada
-  const quantidadeTotal = ingressos.inteira + ingressos.meia + ingressos.idoso;
+  // Quantidade total acumulada em TODOS os setores
+  const quantidadeTotal = setores.reduce((acc, setor) => {
+    const qtd = ingressosPorSetor[setor.id];
+    return acc + qtd.inteira + qtd.meia + qtd.idoso;
+  }, 0);
 
-  // Cálculos Financeiros
-  const subtotalBase =
-    ingressos.inteira * precos.inteira +
-    ingressos.meia * precos.meia +
-    ingressos.idoso * precos.idoso;
+  // Cálculos Financeiros considerando o preço específico de cada setor
+  const subtotalBase = setores.reduce((acc, setor) => {
+    const qtd = ingressosPorSetor[setor.id];
+    const p = getPrecosSetor(setor.preco);
+    return acc + qtd.inteira * p.inteira + qtd.meia * p.meia + qtd.idoso * p.idoso;
+  }, 0);
+
+  const totalDesconto = setores.reduce((acc, setor) => {
+    const qtd = ingressosPorSetor[setor.id];
+    const p = getPrecosSetor(setor.preco);
+    return (
+      acc +
+      qtd.meia * (p.inteira - p.meia) +
+      qtd.idoso * (p.inteira - p.idoso)
+    );
+  }, 0);
 
   const totalTaxas = quantidadeTotal * taxaServico;
   const valorSemJuros = subtotalBase + totalTaxas;
@@ -74,46 +94,49 @@ export default function ContadorIngresso({
   const valorTotalFinal = valorSemJuros * (1 + taxaJurosAtual);
   const valorPorParcela = valorTotalFinal / numParcelas;
 
-  const totalDesconto = (ingressos.meia * (precos.inteira - precos.meia)) + (ingressos.idoso * (precos.inteira - precos.idoso));
-
-  // Manipulação de Setores
-  const handleSelecionarSetor = (setor) => {
-    if (setorAberto !== setor.id) {
-      // Ao mudar de setor, zera os ingressos para evitar compras cruzadas
-      setIngressos({ inteira: 0, meia: 0, idoso: 0 });
-      setSetorSelecionado(setor.nome);
-      setSetorAberto(setor.id);
-    } else {
-      // Apenas recolhe a sanfona
-      setSetorAberto("");
-    }
+  const toggleSetor = (setorId) => {
+    setSetoresAbertos((prev) => ({
+      ...prev,
+      [setorId]: !prev[setorId],
+    }));
   };
 
-  // Manipulação de quantidade individual respeitando o limite máximo total
-  const alterarQuantidade = (tipo, delta) => {
-    setIngressos((prev) => {
-      const atual = prev[tipo];
+  const alterarQuantidade = (setorId, tipo, delta) => {
+    setIngressosPorSetor((prev) => {
+      const atual = prev[setorId][tipo];
       const novaQtd = atual + delta;
 
       if (novaQtd < 0) return prev;
       if (delta > 0 && quantidadeTotal >= maximo) return prev;
 
-      return { ...prev, [tipo]: novaQtd };
+      return {
+        ...prev,
+        [setorId]: {
+          ...prev[setorId],
+          [tipo]: novaQtd,
+        },
+      };
     });
   };
 
-  const handleInputChange = (tipo, e) => {
+  const handleInputChange = (setorId, tipo, e) => {
     const valor = parseInt(e.target.value, 10);
     const valorValido = isNaN(valor) ? 0 : Math.max(0, valor);
 
-    setIngressos((prev) => {
-      const totalSemAtual = quantidadeTotal - prev[tipo];
+    setIngressosPorSetor((prev) => {
+      const totalSemAtual = quantidadeTotal - prev[setorId][tipo];
       const permitida = Math.min(valorValido, maximo - totalSemAtual);
-      return { ...prev, [tipo]: permitida };
+
+      return {
+        ...prev,
+        [setorId]: {
+          ...prev[setorId],
+          [tipo]: permitida,
+        },
+      };
     });
   };
 
-  // Gerar a lista de portadores com base nos ingressos selecionados
   const irParaVerificacao = () => {
     if (quantidadeTotal === 0) {
       alert("Selecione ao menos um Ingresso!");
@@ -127,26 +150,30 @@ export default function ContadorIngresso({
       { key: "idoso", label: "Ingresso Idoso" },
     ];
 
-    tipos.forEach(({ key, label }) => {
-      for (let i = 0; i < ingressos[key]; i++) {
-        novosPortadores.push({
-          id: `${key}-${i}`,
-          tipo: key,
-          tipoLabel: label,
-          nome: "",
-          cpf: "",
-          dataNascimento: "",
-          sexo: "",
-          dne: "",
-        });
-      }
+    setores.forEach((setor) => {
+      const qtdSetor = ingressosPorSetor[setor.id];
+      tipos.forEach(({ key, label }) => {
+        for (let i = 0; i < qtdSetor[key]; i++) {
+          novosPortadores.push({
+            id: `${setor.id}-${key}-${i}`,
+            setorId: setor.id,
+            setorNome: setor.nome,
+            tipo: key,
+            tipoLabel: label,
+            nome: "",
+            cpf: "",
+            dataNascimento: "",
+            sexo: "",
+            dne: "",
+          });
+        }
+      });
     });
 
     setDadosPortadores(novosPortadores);
     setPasso("verificacao");
   };
 
-  // Atualizar dados de um portador específico
   const handlePortadorChange = (index, campo, valor) => {
     setDadosPortadores((prev) => {
       const atualizados = [...prev];
@@ -155,14 +182,13 @@ export default function ContadorIngresso({
     });
   };
 
-  // Validação da Veracidade dos Portadores
   const confirmarVerificacao = (e) => {
     e.preventDefault();
 
     for (let i = 0; i < dadosPortadores.length; i++) {
       const p = dadosPortadores[i];
       if (!p.nome || !p.cpf || !p.dataNascimento || !p.sexo) {
-        alert(`Preencha todos os dados do Portador ${i + 1} (${p.tipoLabel})!`);
+        alert(`Preencha todos os dados do Portador ${i + 1} (${p.setorNome} - ${p.tipoLabel})!`);
         return;
       }
       if (p.tipo === "meia" && !p.dne) {
@@ -194,7 +220,8 @@ export default function ContadorIngresso({
       return;
     }
 
-    alert(`Pedido finalizado com sucesso!\nSetor: ${setorSelecionado}\nTotal: R$ ${valorTotalFinal.toFixed(2)}`);
+    const resumoSetores = setoresComIngressos.map((s) => s.nome).join(", ");
+    alert(`Pedido finalizado com sucesso!\nSetores: ${resumoSetores}\nTotal: R$ ${valorTotalFinal.toFixed(2)}`);
     router.push("/");
   };
 
@@ -202,9 +229,75 @@ export default function ContadorIngresso({
     return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
   };
 
-  // ----------------------------------------------------------------------
+  const CardResumo = ({ mostrarMetodo = false }) => (
+    <div className="sidesright">
+      <div className="card-resumo">
+        <h3 className="text-resumo">Resumo</h3>
+        {setoresComIngressos.length > 0 ? (
+          setoresComIngressos.map((setor) => {
+            const q = ingressosPorSetor[setor.id];
+            const totalSetor = q.inteira + q.meia + q.idoso;
+            return (
+              <p key={setor.id} className="resumo-text">
+                {setor.nome}: {totalSetor}x
+              </p>
+            );
+          })
+        ) : (
+          <p className="resumo-text">Nenhum setor selecionado</p>
+        )}
+
+        <p className="resumo-text">Ingressos totais: {quantidadeTotal}</p>
+        <p className="resumo-text">Subtotal: {formatarMoeda(subtotalBase)}</p>
+
+        <h3 className="text-resumo">Sub-Total</h3>
+        <p className="tax-text">Taxas de serviço: {formatarMoeda(totalTaxas)}</p>
+
+        {mostrarMetodo && (
+          <>
+            <p className="sub-text">Método: {metodoPagamento.toUpperCase()}</p>
+            {metodoPagamento === "credito" && (
+              <>
+                <p className="resumo-text">
+                  Parcelamento: {parcelas}x de {formatarMoeda(valorPorParcela)}
+                </p>
+                <p className="tax-text">
+                  {taxaJurosAtual > 0
+                    ? `Juros: ${(taxaJurosAtual * 100).toFixed(1)}% aplicado`
+                    : "Sem juros"}
+                </p>
+              </>
+            )}
+          </>
+        )}
+
+        <p className="resumo-text">Total desconto: {formatarMoeda(totalDesconto)}</p>
+        <p className="sub-text">
+          Valor total: {formatarMoeda(mostrarMetodo ? valorTotalFinal : valorSemJuros)}
+        </p>
+
+        {passo === "ingressos" && (
+          <>
+            <br />
+            <button
+              type="button"
+              className="btn-select"
+              onClick={irParaVerificacao}
+              disabled={quantidadeTotal === 0}
+              style={{
+                opacity: quantidadeTotal === 0 ? 0.5 : 1,
+                cursor: quantidadeTotal === 0 ? "not-allowed" : "pointer",
+              }}
+            >
+              Concluir
+            </button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+
   // 1. TELA DE VERIFICAÇÃO DE PORTADORES
-  // ----------------------------------------------------------------------
   if (passo === "verificacao") {
     return (
       <div className="container">
@@ -216,8 +309,14 @@ export default function ContadorIngresso({
 
           <form onSubmit={confirmarVerificacao} className="form-checkout">
             {dadosPortadores.map((portador, index) => (
-              <div key={portador.id} className="item-ingresso" style={{ flexDirection: "column", alignItems: "stretch", marginBottom: "20px" }}>
-                <h2>Portador {index + 1} - {portador.tipoLabel}</h2>
+              <div
+                key={portador.id}
+                className="item-ingresso"
+                style={{ flexDirection: "column", alignItems: "stretch", marginBottom: "20px" }}
+              >
+                <h2>
+                  Portador {index + 1} - {portador.setorNome} ({portador.tipoLabel})
+                </h2>
 
                 <div className="campo-form">
                   <label className="estiloLabel">Nome Completo:</label>
@@ -306,26 +405,12 @@ export default function ContadorIngresso({
           </form>
         </div>
 
-        <div className="sidesright">
-          <div className="card-resumo">
-            <h3 className="text-resumo">Resumo</h3>
-            <p className="resumo-text">Setor: {setorSelecionado}</p>
-            <p className="resumo-text">Ingressos: {quantidadeTotal}</p>
-            <p className="resumo-text">Subtotal: {formatarMoeda(subtotalBase)}</p>
-
-            <h3 className="text-resumo">Sub-Total</h3>
-            <p className="tax-text">Taxas: {formatarMoeda(totalTaxas)}</p>
-            <p className="resumo-text">Total desconto: {formatarMoeda(totalDesconto)}</p>
-            <p className="sub-text">Valor total: {formatarMoeda(valorSemJuros)}</p>
-          </div>
-        </div>
+        <CardResumo />
       </div>
     );
   }
 
-  // ----------------------------------------------------------------------
   // 2. TELA DE SELEÇÃO DE PAGAMENTO
-  // ----------------------------------------------------------------------
   if (passo === "pagamento") {
     return (
       <div className="container">
@@ -339,11 +424,7 @@ export default function ContadorIngresso({
                 <i className="fa-brands fa-pix"></i> Aprovação Instantânea
               </span>
             </div>
-            <button
-              type="button"
-              className="btn-select"
-              onClick={() => selecionarMetodo("pix")}
-            >
+            <button type="button" className="btn-select" onClick={() => selecionarMetodo("pix")}>
               Selecionar Pagamento
             </button>
           </div>
@@ -355,11 +436,7 @@ export default function ContadorIngresso({
                 <i className="fa-regular fa-credit-card"></i> Até 12x
               </span>
             </div>
-            <button
-              type="button"
-              className="btn-select"
-              onClick={() => selecionarMetodo("credito")}
-            >
+            <button type="button" className="btn-select" onClick={() => selecionarMetodo("credito")}>
               Selecionar Pagamento
             </button>
           </div>
@@ -371,45 +448,23 @@ export default function ContadorIngresso({
                 <i className="fa-solid fa-credit-card"></i> À vista
               </span>
             </div>
-            <button
-              type="button"
-              className="btn-select"
-              onClick={() => selecionarMetodo("debito")}
-            >
+            <button type="button" className="btn-select" onClick={() => selecionarMetodo("debito")}>
               Selecionar Pagamento
             </button>
           </div>
 
           <br />
-          <button
-            type="button"
-            className="btn-select"
-            onClick={() => setPasso("verificacao")}
-          >
+          <button type="button" className="btn-select" onClick={() => setPasso("verificacao")}>
             Voltar
           </button>
         </div>
 
-        <div className="sidesright">
-          <div className="card-resumo">
-            <h3 className="text-resumo">Resumo</h3>
-            <p className="resumo-text">Setor: {setorSelecionado}</p>
-            <p className="resumo-text">Ingressos: {quantidadeTotal}</p>
-            <p className="resumo-text">Subtotal: {formatarMoeda(subtotalBase)}</p>
-
-            <h3 className="text-resumo">Sub-Total</h3>
-            <p className="tax-text">Taxas: {formatarMoeda(totalTaxas)}</p>
-            <p className="resumo-text">Total desconto: {formatarMoeda(totalDesconto)}</p>
-            <p className="sub-text">Valor total: {formatarMoeda(valorSemJuros)}</p>
-          </div>
-        </div>
+        <CardResumo />
       </div>
     );
   }
 
-  // ----------------------------------------------------------------------
   // 3. TELA DE CHECKOUT (FORMULÁRIO)
-  // ----------------------------------------------------------------------
   if (passo === "checkout") {
     const precisaDadosCartao = metodoPagamento === "credito" || metodoPagamento === "debito";
 
@@ -453,7 +508,6 @@ export default function ContadorIngresso({
                 {metodoPagamento === "pix" && (
                   <div className="campo-form">
                     <img src="../../img/qrcode.png" alt="QR Code" className="qr" />
-
                     <textarea
                       name="copia"
                       id="copia-pix"
@@ -515,9 +569,7 @@ export default function ContadorIngresso({
 
                 {metodoPagamento === "credito" && (
                   <div className="campo-form">
-                    <label htmlFor="parcelas" className="estiloLabel">
-                      Parcelamento:
-                    </label>
+                    <label htmlFor="parcelas" className="estiloLabel">Parcelamento:</label>
                     <select
                       id="parcelas"
                       value={parcelas}
@@ -532,9 +584,7 @@ export default function ContadorIngresso({
                         return (
                           <option key={num} value={num}>
                             {num}x de {formatarMoeda(valorParcela)}{" "}
-                            {taxa === 0
-                              ? "(Sem juros)"
-                              : `(Juros de ${(taxa * 100).toFixed(1)}%)`}
+                            {taxa === 0 ? "(Sem juros)" : `(Juros de ${(taxa * 100).toFixed(1)}%)`}
                           </option>
                         );
                       })}
@@ -544,11 +594,7 @@ export default function ContadorIngresso({
 
                 <br />
                 <div className="acoes-checkout">
-                  <button
-                    type="button"
-                    className="btn-select"
-                    onClick={() => setPasso("pagamento")}
-                  >
+                  <button type="button" className="btn-select" onClick={() => setPasso("pagamento")}>
                     Voltar
                   </button>
                   <button type="submit" className="btn-selects">
@@ -560,140 +606,91 @@ export default function ContadorIngresso({
           </div>
         </div>
 
-        <div className="sidesright">
-          <div className="card-resumo">
-            <h3 className="text-resumo">Resumo</h3>
-            <p className="resumo-text">Setor: {setorSelecionado}</p>
-            <p className="resumo-text">Ingressos: {quantidadeTotal}</p>
-            <p className="resumo-text">Subtotal: {formatarMoeda(subtotalBase)}</p>
-
-            <h3 className="text-resumo">Sub-Total</h3>
-            <p className="tax-text">Taxas de serviço: {formatarMoeda(totalTaxas)}</p>
-            <p className="sub-text">Método: {metodoPagamento.toUpperCase()}</p>
-
-            {metodoPagamento === "credito" && (
-              <>
-                <p className="resumo-text">
-                  Parcelamento: {parcelas}x de {formatarMoeda(valorPorParcela)}
-                </p>
-                {taxaJurosAtual > 0 ? (
-                  <p className="tax-text">
-                    Juros: {(taxaJurosAtual * 100).toFixed(1)}% aplicado
-                  </p>
-                ) : (
-                  <p className="tax-text">Sem juros</p>
-                )}
-              </>
-            )}
-            <p className="resumo-text">Total desconto: {formatarMoeda(totalDesconto)}</p>
-            <p className="sub-text">
-              Valor total: {formatarMoeda(valorTotalFinal)}
-            </p>
-            <br />
-          </div>
-        </div>
+        <CardResumo mostrarMetodo />
       </div>
     );
   }
 
-  // ----------------------------------------------------------------------
   // 4. TELA INICIAL (SETORES E INGRESSOS)
-  // ----------------------------------------------------------------------
-  const tiposIngresso = [
-    { key: "inteira", label: "Ingresso Inteira", preco: precos.inteira },
-    { key: "meia", label: "Ingresso Meia", preco: precos.meia },
-    { key: "idoso", label: "Ingresso Idoso", preco: precos.idoso },
-  ];
-
   return (
     <div className="container">
       <div className="sidesleft">
         <h1 className="title">Setores Disponíveis</h1>
-        
-        {setores.map((setor) => (
-          <div key={setor.id}>
-            <div className="item-ingresso">
-              <div className="info-ingresso">
-                <span className="nome-ingresso">{setor.nome}</span>
-                <span className="preco-ingresso">{formatarMoeda(setor.preco)}</span>
+
+        {setores.map((setor) => {
+          const precosSetor = getPrecosSetor(setor.preco);
+          const tiposIngresso = [
+            { key: "inteira", label: "Ingresso Inteira", preco: precosSetor.inteira },
+            { key: "meia", label: "Ingresso Meia", preco: precosSetor.meia },
+            { key: "idoso", label: "Ingresso Idoso", preco: precosSetor.idoso },
+          ];
+          const qtdNoSetor =
+            ingressosPorSetor[setor.id].inteira +
+            ingressosPorSetor[setor.id].meia +
+            ingressosPorSetor[setor.id].idoso;
+
+          return (
+            <div key={setor.id}>
+              <div className="item-ingresso">
+                <div className="info-ingresso">
+                  <span className="nome-ingresso">
+                    {setor.nome} {qtdNoSetor > 0 && `(${qtdNoSetor} selecionado${qtdNoSetor > 1 ? "s" : ""})`}
+                  </span>
+                  <span className="preco-ingresso">{formatarMoeda(setor.preco)}</span>
+                </div>
+                <button
+                  type="button"
+                  className="btn-select"
+                  onClick={() => toggleSetor(setor.id)}
+                >
+                  {setoresAbertos[setor.id] ? "Ocultar" : "Selecionar"}
+                </button>
               </div>
-              <button
-                type="button"
-                className="btn-select"
-                onClick={() => handleSelecionarSetor(setor)}
-              >
-                {setorAberto === setor.id ? "Ocultar" : "Selecionar"}
-              </button>
+
+              {setoresAbertos[setor.id] && (
+                <div>
+                  {tiposIngresso.map(({ key, label, preco }) => (
+                    <div key={key} className="item-ingresso">
+                      <div className="info-ingresso">
+                        <span className="nome-ingresso">{label}</span>
+                        <span className="preco-ingresso">{formatarMoeda(preco)}</span>
+                      </div>
+                      <div className="contador-container">
+                        <button
+                          type="button"
+                          onClick={() => alterarQuantidade(setor.id, key, -1)}
+                          className="btn-contador"
+                          disabled={ingressosPorSetor[setor.id][key] === 0}
+                        >
+                          −
+                        </button>
+                        <input
+                          type="number"
+                          value={ingressosPorSetor[setor.id][key]}
+                          onChange={(e) => handleInputChange(setor.id, key, e)}
+                          className="input-numero"
+                          min="0"
+                          max={maximo}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => alterarQuantidade(setor.id, key, 1)}
+                          className="btn-contador"
+                          disabled={quantidadeTotal >= maximo}
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-
-            {setorAberto === setor.id && (
-              <div>
-                {tiposIngresso.map(({ key, label, preco }) => (
-                  <div key={key} className="item-ingresso">
-                    <div className="info-ingresso">
-                      <span className="nome-ingresso">{label}</span>
-                      <span className="preco-ingresso">{formatarMoeda(preco)}</span>
-                    </div>
-                    <div className="contador-container">
-                      <button
-                        type="button"
-                        onClick={() => alterarQuantidade(key, -1)}
-                        className="btn-contador"
-                        disabled={ingressos[key] === 0}
-                      >
-                        −
-                      </button>
-                      <input
-                        type="number"
-                        value={ingressos[key]}
-                        onChange={(e) => handleInputChange(key, e)}
-                        className="input-numero"
-                        min="0"
-                        max={maximo}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => alterarQuantidade(key, 1)}
-                        className="btn-contador"
-                        disabled={quantidadeTotal >= maximo}
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      <div className="sidesright">
-        <div className="card-resumo">
-          <h3 className="text-resumo">Resumo</h3>
-          {setorSelecionado ? (
-            <p className="resumo-text">Setor: {setorSelecionado}</p>
-          ) : (
-            <p className="resumo-text">Nenhum setor selecionado</p>
-          )}
-          <p className="resumo-text">Ingressos selecionados: {quantidadeTotal}</p>
-          <p className="resumo-text">Preço: {formatarMoeda(subtotalBase)}</p>
-          <h3 className="text-resumo">Sub-Total</h3>
-          <p className="tax-text">Valor da taxa: {formatarMoeda(totalTaxas)}</p>
-          <p className="resumo-text">Total desconto: {formatarMoeda(totalDesconto)}</p>
-          <p className="sub-text">Valor total: {formatarMoeda(valorSemJuros)}</p>
-          <br />
-          <button 
-            type="button" 
-            className="btn-select" 
-            onClick={irParaVerificacao}
-            disabled={quantidadeTotal === 0}
-            style={{ opacity: quantidadeTotal === 0 ? 0.5 : 1, cursor: quantidadeTotal === 0 ? 'not-allowed' : 'pointer' }}
-          >
-            Concluir
-          </button>
-        </div>
-      </div>
+      <CardResumo />
     </div>
   );
 }
