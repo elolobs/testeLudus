@@ -1,0 +1,40 @@
+.title-pedidosDetalhe {
+    font-weight: bold;
+    margin-top: 60px;
+    margin-bottom: 20px;
+    margin-left: 170px;
+}
+
+.subtitle-pedidosDetalhe {
+    margin-left: 170px;
+    font-size: 23px
+}
+
+.container-pedidosDetalhe {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+
+.pedidos-box-detalhe {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.qrcode-pedido {
+    width: 400;
+    display: flex;
+    margin: 0 auto;
+    border: 2 dotted;
+    margin-bottom: 50px;
+    margin-top: 50px;
+}
+
+.obs-pedidos {
+    font-size: 13px;
+    margin-left: 400px;
+}
