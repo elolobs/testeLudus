@@ -338,7 +338,7 @@ export default function ContadorIngresso({
                     value={portador.cpf}
                     onChange={(e) => handlePortadorChange(index, "cpf", e.target.value)}
                     placeholder="000.000.000-00"
-                    minlength={11}
+                    minLength={11}
                     maxlength={14}
                     required
                   />
@@ -503,7 +503,7 @@ export default function ContadorIngresso({
                     onChange={(e) => setCpf(e.target.value)}
                     placeholder="000.000.000-00"
                     className="nametext"
-                    minlength={11}
+                    minLength={11}
                     maxlength={14}
                     required
                   />
