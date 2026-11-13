@@ -5,11 +5,11 @@
   padding: 40px 20px;
   color: #333;
 }
-
+/*  COMENTEI PQ TAVA DANDO ERRO NO CSS MEU ENTAO TRATE DE COLOCAR UMA CLASS NESTE NEGOCIO
 h1, h2, h3 {
   font-family: 'Unbounded', sans-serif;
   color: #111;
-}
+} */
 
 .hero-section {
   text-align: left;
