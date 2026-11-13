@@ -52,19 +52,26 @@ export default function Pedidos() {
                     <div className="container text-center">
                         <div className="row">
                             <div className="col">
-                                <a href="./" target="_blank" rel="noopener noreferrer">
+                                <a href="./{pedido.id}" target="_blank" rel="noopener noreferrer">
                                     <div className="card" style={{ width: "335px" }}>
                                         <img src="../../img/qrcode.png" className="card-img-top" alt="..." />
+                                        {/* PRECISA MUDAR DE ACORODO COM O EVENTO */}
                                         <div className="card-body">
                                             <p className="card-text">
                                                 Nome do Evento:
                                             </p>
+                                            {/* PRECISA MUDAR DE ACORODO COM O EVENTO */}
+
                                             <p className="card-text">
                                                 Data | Local
                                             </p>
+                                            {/* PRECISA MUDAR DE ACORODO COM O EVENTO */}
+
                                             <p className="card-text">
                                                 ID pedido e data de compra
                                             </p>
+                                            {/* PRECISA MUDAR DE ACORODO COM O EVENTO */}
+
                                         </div>
                                     </div>
                                 </a>
