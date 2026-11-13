@@ -52,7 +52,7 @@ export default function Pedidos() {
                     <div className="container text-center">
                         <div className="row">
                             <div className="col">
-                                <a href="./page.js" target="_blank" rel="noopener noreferrer">
+                                <a href="./" target="_blank" rel="noopener noreferrer">
                                     <div className="card" style={{ width: "335px" }}>
                                         <img src="../../img/qrcode.png" className="card-img-top" alt="..." />
                                         <div className="card-body">
