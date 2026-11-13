@@ -12,7 +12,7 @@ export default function AdminDashboard() {
       try {
         const token = localStorage.getItem("token");
 
-        const response = await fetch("http://localhost:3000/admin/dashboard", {
+        const response = await fetch("http://localhost:8080", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -21,7 +21,9 @@ export default function AdminDashboard() {
         });
 
         if (!response.ok) {
-          throw new Error("Falha ao carregar os dados. Verifique suas permissões.");
+          const errorData = await response.json().catch(() => ({}));
+          console.error("Erro do backend:", response.status, errorData);
+          throw new Error(`Erro ${response.status}: Falha ao carregar os dados.`);
         }
 
         const result = await response.json();
