@@ -300,7 +300,7 @@ export default function ContadorIngresso({
   // 1. TELA DE VERIFICAÇÃO DE PORTADORES
   if (passo === "verificacao") {
     return (
-      <div className="container">
+      <div className="container-ingresso">
         <div className="sidesleft">
           <h1 className="title">Verificação de Veracidade</h1>
           <p style={{ marginBottom: "20px", color: "#666" }}>
@@ -415,7 +415,7 @@ export default function ContadorIngresso({
   // 2. TELA DE SELEÇÃO DE PAGAMENTO
   if (passo === "pagamento") {
     return (
-      <div className="container">
+      <div className="container-ingresso">
         <div className="sidesleft">
           <h1 className="title">Pagamentos Disponíveis</h1>
 
@@ -471,7 +471,7 @@ export default function ContadorIngresso({
     const precisaDadosCartao = metodoPagamento === "credito" || metodoPagamento === "debito";
 
     return (
-      <div className="container">
+      <div className="container-ingresso">
         <div className="sidesleft">
           <h1 className="title">
             {metodoPagamento === "pix" ? "Pagamento via PIX" : "Dados do Cartão"}
@@ -617,7 +617,7 @@ export default function ContadorIngresso({
 
   // 4. TELA INICIAL (SETORES E INGRESSOS)
   return (
-    <div className="container">
+    <div className="container-ingresso">
       <div className="sidesleft">
         <h1 className="title">Setores Disponíveis</h1>
 
@@ -659,7 +659,7 @@ export default function ContadorIngresso({
                         <span className="nome-ingresso">{label}</span>
                         <span className="preco-ingresso">{formatarMoeda(preco)}</span>
                       </div>
-                      <div className="contador-container">
+                      <div className="contador-container-ingresso">
                         <button
                           type="button"
                           onClick={() => alterarQuantidade(setor.id, key, -1)}

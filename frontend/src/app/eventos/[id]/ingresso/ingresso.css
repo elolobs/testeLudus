@@ -1,4 +1,4 @@
-.container {
+.container-ingresso {
     display: flex;
     gap: 40px;
     max-width: 1000px;
@@ -49,7 +49,7 @@
     color: #555;
 }
 
-.contador-container {
+.contador-container-ingresso {
     display: flex;
     align-items: center;
     gap: 8px;

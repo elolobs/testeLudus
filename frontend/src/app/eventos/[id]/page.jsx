@@ -57,7 +57,7 @@ export default function Detalha() {
 
   return (
     <>
-      <div className="container">
+      <div className="container-detalhes">
         <img
           src={evento.imagem_capa_url || "/img/fundocadastro.png"}
           alt={`Imagem do evento ${evento.titulo}`}
@@ -75,13 +75,13 @@ export default function Detalha() {
         </div>
       </div>
 
-      <div className="Container-env">
+      <div className="Container-env-detalhes">
         {ingressos.length === 0 && <p>Ingressos ainda não disponíveis.</p>}
         {ingressos.map((ingresso) => {
           const estado = disponibilidade(ingresso);
           return (
             <div className="boxs" key={ingresso.id}>
-              <div className="container-box">
+              <div className="container-box-detalhes">
                 <img src="/img/logo.png" alt="Logo Ludus" />
               </div>
               <div className="Linha" />
@@ -112,7 +112,7 @@ export default function Detalha() {
       <h1 className="title">Resumo do evento</h1>
       <p className="resumo">{evento.descricao}</p>
 
-      <div className="Container-env">
+      <div className="Container-env-detalhes">
         <h1 className="title">Programação</h1>
         {atividades.length === 0 && <p>Programação a confirmar.</p>}
         {atividades.map((atividade) => (

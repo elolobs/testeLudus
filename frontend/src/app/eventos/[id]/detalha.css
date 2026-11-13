@@ -4,13 +4,13 @@
     padding: 0;
 }
 
-.container {
+.container-detalhes {
     position: relative;
     width: 100%;
     height: 350px;
 }
 
-.container img {
+.container-detalhes img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -48,7 +48,7 @@
     margin-right: 70px;
 }
 
-.Container-env {
+.Container-env-detalhes {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,7 +67,7 @@
     background-color: #fff;
 }
 
-.container-box img {
+.container-box-detalhes img {
     width: 60px;
     height: auto;
     display: block;
