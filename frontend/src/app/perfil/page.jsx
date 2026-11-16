@@ -6,6 +6,10 @@ export default function Perfil() {
         <div className="perfil-container">
 
             <div className="perfil-header">
+                <div className="perfil-img">
+                    <img src="/perfil.png"/>
+                    <button className="btn-alterar-ft">Alterar Foto</button>
+                </div>
                 <h1>Seu nome</h1>
                 <p>Mantenha seus dados atualizados para receber seus ingressos</p>
             </div>
