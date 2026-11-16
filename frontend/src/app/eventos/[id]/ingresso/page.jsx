@@ -156,7 +156,8 @@ export default function ContadorIngresso() {
   return (
     <div className="container-ingresso">
       <div className="sidesleft">
-        <h1 className="title">Ingressos para {evento.titulo}</h1>
+        <h1 className="title">Setores disponíveis</h1>
+        <p className="descricao-ingresso">Ingressos para {evento.titulo}</p>
         <p>
           {formatarData(evento.data_inicio, { dateStyle: "long", timeStyle: "short" })}
           {" · "}{evento.local_nome}
