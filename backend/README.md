@@ -38,10 +38,16 @@ Cada recurso abaixo possui `GET /`, `GET /:id`, `POST /`, `PUT /:id`,
 | `/api/equipe-evento` | `equipe_evento` |
 | `/api/atividades` | `atividades` |
 | `/api/tipos-ingresso` | `tipo_ingresso` |
-| `/api/pedidos` | `pedidos` |
 | `/api/itens-pedido` | `itens_pedido` |
 | `/api/ingressos` | `ingressos` |
 | `/api/lista-espera` | `lista_espera` |
+
+`GET /api/pedidos` e `GET /api/pedidos/:id` exigem autenticação e retornam
+somente pedidos do usuário autenticado. `POST /api/pedidos` recebe
+`{ "itens": [{ "tipo_ingresso_id": 1, "quantidade": 2 }] }`, valida evento,
+período de venda e disponibilidade e grava pedido e itens em uma transação.
+O pedido fica com status `pendente`; como não há gateway de pagamento, a API
+não confirma cobrança nem emite ingressos.
 
 As listagens aceitam `limite` (1 a 100, padrão 50) e `deslocamento` (padrão
 0), além de filtros por campos definidos para cada recurso.
@@ -52,8 +58,8 @@ podem gerenciar os registros de todos os recursos; a criação de contas continu
 exclusiva da rota de cadastro. Organizadores podem gerenciar seus eventos,
 equipe, atividades e tipos de ingresso vinculados a eles. Usuários podem
 consultar seus próprios registros e alterar o próprio nome e telefone com
-`PATCH /api/usuarios/:id`. Escritas em pedidos, itens de pedido e ingressos são
-restritas a administradores.
+`PATCH /api/usuarios/:id`. Escritas em itens de pedido e ingressos são restritas
+a administradores.
 
 Datas devem ser enviadas em formato reconhecido pelo JavaScript, preferivelmente
 ISO 8601. Os valores de `ENUM` devem corresponder exatamente aos definidos no

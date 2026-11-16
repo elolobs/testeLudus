@@ -24,7 +24,7 @@ export async function buscarPorCpf(cpf) {
 export async function criar({
   nome_completo,
   email,
-  senhaHash,
+  senha_hash,
   cpf,
   telefone,
 }) {
@@ -33,7 +33,7 @@ export async function criar({
       (nome_completo, email, senha_hash, cpf, telefone, cargo, ativo,
        termo_lgpd_aceito, termo_lgpd_data)
      VALUES (?, ?, ?, ?, ?, 'USUARIO', TRUE, TRUE, CURRENT_TIMESTAMP)`,
-    [nome_completo, email, senhaHash, cpf, telefone],
+    [nome_completo, email, senha_hash, cpf, telefone],
   );
 
   const [linhas] = await pool.query(

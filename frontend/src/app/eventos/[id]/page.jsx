@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import "./detalha.css";
 import { apiRequest, formatarData, formatarPreco } from "@/lib/api.mjs";
 
@@ -12,7 +13,6 @@ export default function Detalha() {
   const [ingressos, setIngressos] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
-  const [mensagemIngresso, setMensagemIngresso] = useState("");
 
   useEffect(() => {
     let ativo = true;
@@ -57,7 +57,7 @@ export default function Detalha() {
 
   return (
     <>
-      <div className="container">
+      <div className="container-detalhes">
         <img
           src={evento.imagem_capa_url || "/img/fundocadastro.png"}
           alt={`Imagem do evento ${evento.titulo}`}
@@ -75,13 +75,13 @@ export default function Detalha() {
         </div>
       </div>
 
-      <div className="Container-env">
+      <div className="Container-env-detalhes">
         {ingressos.length === 0 && <p>Ingressos ainda não disponíveis.</p>}
         {ingressos.map((ingresso) => {
           const estado = disponibilidade(ingresso);
           return (
             <div className="boxs" key={ingresso.id}>
-              <div className="container-box">
+              <div className="container-box-detalhes">
                 <img src="/img/logo.png" alt="Logo Ludus" />
               </div>
               <div className="Linha" />
@@ -94,25 +94,25 @@ export default function Detalha() {
                   {formatarPreco(ingresso.preco)} · {estado.restantes} de {ingresso.quant_total} disponíveis
                 </p>
               </div>
-              <button
-                type="button"
-                disabled={estado.restantes === 0}
-                onClick={() => setMensagemIngresso(
-                  "A API atual ainda não oferece uma etapa de compra. Consulte o organizador do evento.",
-                )}
+              <Link
+                className={estado.restantes === 0 ? "botao-ingresso desabilitado" : "botao-ingresso"}
+                href={`/eventos/${id}/ingresso?tipo=${ingresso.id}`}
+                aria-disabled={estado.restantes === 0}
+                onClick={(event) => {
+                  if (estado.restantes === 0) event.preventDefault();
+                }}
               >
                 {estado.restantes === 0 ? "Esgotado" : "Adquirir Ingresso"}
-              </button>
+              </Link>
             </div>
           );
         })}
-        {mensagemIngresso && <p role="status">{mensagemIngresso}</p>}
       </div>
 
       <h1 className="title">Resumo do evento</h1>
       <p className="resumo">{evento.descricao}</p>
 
-      <div className="Container-env">
+      <div className="Container-env-detalhes">
         <h1 className="title">Programação</h1>
         {atividades.length === 0 && <p>Programação a confirmar.</p>}
         {atividades.map((atividade) => (

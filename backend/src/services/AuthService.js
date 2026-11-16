@@ -81,7 +81,7 @@ export async function registrar({
     return await UsuarioModel.criar({
       nome_completo: nomeLimpo,
       email: emailLimpo,
-      senhaHash: await bcrypt.hash(senha, 10),
+      senha_hash: await bcrypt.hash(senha, 10),
       cpf,
       telefone: telefoneLimpo,
     });

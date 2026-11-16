@@ -6,12 +6,14 @@ CREATE TABLE IF NOT EXISTS usuarios (
   cpf VARCHAR(14) UNIQUE NOT NULL,
   telefone VARCHAR(20),
   cargo ENUM('ADMIN', 'ORGANIZADOR', 'USUARIO') DEFAULT 'USUARIO',
-  ativo BOOLEAN DEFAULT TRUE,
+  ativo BOOLEAN default
+  TRUE,
   termo_lgpd_aceito BOOLEAN NOT NULL DEFAULT FALSE,
   termo_lgpd_data TIMESTAMP,
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
 
 CREATE TABLE IF NOT EXISTS categorias (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -28,7 +30,7 @@ CREATE TABLE IF NOT EXISTS eventos (
   capacidade_maxima INT NOT NULL CHECK (capacidade_maxima > 0),
   status ENUM('RASCUNHO', 'PUBLICADO', 'SUSPENSO', 'CANCELADO', 'CONCLUIDO') DEFAULT 'RASCUNHO',
   data_inicio TIMESTAMP NULL,
-  data_fim TIMESTAMP NULL,
+  data_fim TIMESTAMP  NULL,
   local_nome VARCHAR(150) NOT NULL,
   local_endereco TEXT NOT NULL,
   imagem_capa_url VARCHAR(255),
@@ -57,7 +59,7 @@ CREATE TABLE IF NOT EXISTS atividades (
   tipo VARCHAR(50) NOT NULL,
   palestrante VARCHAR(150) NOT NULL,
   data_hora_inicio TIMESTAMP NULL,
-  data_hora_fim TIMESTAMP  NULL,
+  data_hora_fim TIMESTAMP NULL,
   local_sala VARCHAR(100),
   vagas_maximas INT NOT NULL CHECK (vagas_maximas > 0),
   vagas_ocupadas INT DEFAULT 0 CHECK (vagas_ocupadas <= vagas_maximas),
@@ -125,9 +127,10 @@ CREATE TABLE IF NOT EXISTS lista_espera (
 
 INSERT INTO usuarios (nome_completo, email, senha_hash, cpf, telefone, cargo, ativo, termo_lgpd_aceito, termo_lgpd_data) 
 VALUES 
-('Mylena Lima Pacheco', 'mylenacheco@gmail.com', 'hash_senha_123', '15583527080', '11943546087', 'ADMIN', TRUE, TRUE, CURRENT_TIMESTAMP),
+('Mylena Lima Pacheco', 'mylenacheco@gmail.com', 'A12345678*', '15583527080', '11943546087', 'ADMIN', TRUE, TRUE, CURRENT_TIMESTAMP),
 ('Eloah Lourenço', 'eloah@email.com', 'hash_senha_456', '12345678901', '11987654321', 'ORGANIZADOR', TRUE, TRUE, CURRENT_TIMESTAMP),
 ('João Silva', 'joao@email.com', 'hash_senha_789', '98765432100', '11911112222', 'USUARIO', TRUE, TRUE, CURRENT_TIMESTAMP);
+
 
 INSERT INTO categorias (nome, descricao) 
 VALUES 
@@ -136,7 +139,7 @@ VALUES
 
 INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco) 
 VALUES 
-(2, 1, 'Tech Summit 2024', 'Maior evento de tecnologia do ano.', 500, 'PUBLICADO', '2024-10-15 09:00:00', '2024-10-17 18:00:00', 'Centro de Convenções', 'Rua Principal, 100 - São Paulo');
+(2, 1, 'Tech Summit', 'Maior evento de tecnologia do ano.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 32 DAY), 'Centro de Convenções', 'Rua Principal, 100 - São Paulo');
 
 INSERT INTO atividades (evento_id, titulo, descricao, tipo, palestrante, data_hora_inicio, data_hora_fim, local_sala, vagas_maximas) 
 VALUES 
@@ -144,8 +147,8 @@ VALUES
 
 INSERT INTO tipo_ingresso (evento_id, nome, preco, quant_total, quant_vendida, venda_inicio, venda_final) 
 VALUES 
-(1, 'Ingresso VIP', 150.00, 100, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59'),
-(1, 'Ingresso Padrão', 75.00, 400, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59');
+(1, 'Ingresso VIP', 150.00, 100, 0, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 29 DAY)),
+(1, 'Ingresso Padrão', 75.00, 400, 0, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 29 DAY));
 
 INSERT INTO pedidos (usuario_id, valor_total, status) 
 VALUES 

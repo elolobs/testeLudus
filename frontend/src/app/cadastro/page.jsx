@@ -41,9 +41,9 @@ export default function Cadastro() {
   }
 
   return (
-    <div className="container">
+    <div className="container-cadastro">
       <div className="leftSide">
-        <div className="container-imagem">
+        <div className="container-imagemcadastro">
           <img src="/img/fundocadastro.png" alt="Foto Cadastro" />
           <div className="imgblur">
             <div className="texto-sobreposto">
