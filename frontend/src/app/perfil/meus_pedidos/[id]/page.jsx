@@ -97,7 +97,9 @@ export default function InfoPedidos() {
                 {pedido.itens.map((item) => (
                   <li key={item.id}>
                     <span>
-                      {item.tipo_ingresso_nome} · {item.quantidade}x
+                      {item.tipo_ingresso_nome} ·
+                      {" "}{item.categoria === "meia" ? "Meia-entrada" : "Inteira"} ·
+                      {" "}{item.quantidade}x
                       {item.ingressos.length > 0 && (
                         <small>
                           {" "}({item.ingressos.map((ingresso) =>

@@ -25,18 +25,22 @@ export function normalizarItensPedido(itens) {
       !Number.isInteger(item.tipo_ingresso_id) ||
       item.tipo_ingresso_id < 1 ||
       !Number.isInteger(item.quantidade) ||
-      item.quantidade < 1
+      item.quantidade < 1 ||
+      (item.categoria !== undefined && !["inteira", "meia"].includes(item.categoria))
     ) {
       throw erroPedido(422, "Os ingressos selecionados são inválidos.");
     }
-    if (ids.has(item.tipo_ingresso_id)) {
-      throw erroPedido(422, "Cada tipo de ingresso deve aparecer uma única vez.");
+    const categoria = item.categoria || "inteira";
+    const chave = `${item.tipo_ingresso_id}:${categoria}`;
+    if (ids.has(chave)) {
+      throw erroPedido(422, "Cada tipo de ingresso e categoria deve aparecer uma única vez.");
     }
 
-    ids.add(item.tipo_ingresso_id);
+    ids.add(chave);
     quantidadeTotal += item.quantidade;
     normalizados.push({
       tipo_ingresso_id: item.tipo_ingresso_id,
+      categoria,
       quantidade: item.quantidade,
     });
   }
@@ -51,6 +55,25 @@ export function normalizarItensPedido(itens) {
   return normalizados;
 }
 
+export function calcularPrecoCentavos(
+  preco,
+  categoria,
+  mensagemErro = "O tipo de ingresso está sem preço válido.",
+) {
+  const precoInteiroCentavos = Math.round(Number(preco) * 100);
+  if (
+    preco === null ||
+    !Number.isSafeInteger(precoInteiroCentavos) ||
+    precoInteiroCentavos < 0
+  ) {
+    throw erroPedido(409, mensagemErro);
+  }
+
+  return categoria === "meia"
+    ? Math.round(precoInteiroCentavos / 2)
+    : precoInteiroCentavos;
+}
+
 export async function criarPedido(usuarioId, itensInformados) {
   const itens = normalizarItensPedido(itensInformados);
   const conexao = await pool.getConnection();
@@ -60,7 +83,7 @@ export async function criarPedido(usuarioId, itensInformados) {
     await conexao.beginTransaction();
     transacaoAberta = true;
 
-    const ids = itens.map((item) => item.tipo_ingresso_id);
+    const ids = [...new Set(itens.map((item) => item.tipo_ingresso_id))];
     const placeholders = ids.map(() => "?").join(", ");
     const [tipos] = await conexao.query(
       `SELECT ti.id, ti.evento_id, ti.nome, ti.preco, ti.quant_total,
@@ -76,7 +99,7 @@ export async function criarPedido(usuarioId, itensInformados) {
       ids,
     );
 
-    if (tipos.length !== itens.length) {
+    if (tipos.length !== ids.length) {
       throw erroPedido(422, "Um ou mais tipos de ingresso não existem.");
     }
 
@@ -86,6 +109,7 @@ export async function criarPedido(usuarioId, itensInformados) {
     }
 
     const tiposPorId = new Map(tipos.map((tipo) => [tipo.id, tipo]));
+    const quantidadePorTipo = new Map();
     let totalCentavos = 0;
 
     for (const item of itens) {
@@ -97,22 +121,24 @@ export async function criarPedido(usuarioId, itensInformados) {
         throw erroPedido(409, `A venda de ${tipo.nome} não está aberta.`);
       }
 
-      const precoCentavos = Math.round(Number(tipo.preco) * 100);
-      if (
-        tipo.preco === null ||
-        !Number.isSafeInteger(precoCentavos) ||
-        precoCentavos < 0
-      ) {
-        throw erroPedido(409, `${tipo.nome} está sem preço válido.`);
-      }
+      item.preco_centavos = calcularPrecoCentavos(
+        tipo.preco,
+        item.categoria,
+        `${tipo.nome} está sem preço válido.`,
+      );
+      quantidadePorTipo.set(
+        item.tipo_ingresso_id,
+        (quantidadePorTipo.get(item.tipo_ingresso_id) || 0) + item.quantidade,
+      );
+      totalCentavos += item.preco_centavos * item.quantidade;
+    }
 
+    for (const [tipoId, quantidade] of quantidadePorTipo) {
+      const tipo = tiposPorId.get(tipoId);
       const restantes = Number(tipo.quant_total) - Number(tipo.quant_vendida);
-      if (item.quantidade > restantes) {
+      if (quantidade > restantes) {
         throw erroPedido(409, `Não há ingressos suficientes de ${tipo.nome}.`);
       }
-
-      item.preco_centavos = precoCentavos;
-      totalCentavos += precoCentavos * item.quantidade;
     }
 
     const valorTotal = totalCentavos / 100;
@@ -124,11 +150,12 @@ export async function criarPedido(usuarioId, itensInformados) {
     for (const item of itens) {
       await conexao.query(
         `INSERT INTO itens_pedido
-         (pedido_id, tipo_ingresso_id, quantidade, preco_unitario)
-         VALUES (?, ?, ?, ?)`,
+         (pedido_id, tipo_ingresso_id, categoria, quantidade, preco_unitario)
+         VALUES (?, ?, ?, ?, ?)`,
         [
           pedido.insertId,
           item.tipo_ingresso_id,
+          item.categoria,
           item.quantidade,
           item.preco_centavos / 100,
         ],
@@ -163,7 +190,8 @@ export async function listarPedidos(usuarioId, pedidoId) {
   const [linhas] = await pool.query(
     `SELECT p.id AS pedido_id, p.valor_total, p.status AS pedido_status,
             p.criado_em, ip.id AS item_id, ip.quantidade,
-            ip.preco_unitario, ti.nome AS tipo_ingresso_nome,
+            ip.preco_unitario, ip.categoria AS item_categoria,
+            ti.nome AS tipo_ingresso_nome,
             e.id AS evento_id, e.titulo AS evento_titulo,
             e.data_inicio, e.local_nome, ing.id AS ingresso_id,
             ing.status AS ingresso_status
@@ -206,6 +234,7 @@ export async function listarPedidos(usuarioId, pedidoId) {
       item = {
         id: linha.item_id,
         tipo_ingresso_nome: linha.tipo_ingresso_nome,
+        categoria: linha.item_categoria,
         quantidade: linha.quantidade,
         preco_unitario: linha.preco_unitario,
         ingressos: [],

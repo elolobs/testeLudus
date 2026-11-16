@@ -43,11 +43,19 @@ Cada recurso abaixo possui `GET /`, `GET /:id`, `POST /`, `PUT /:id`,
 | `/api/lista-espera` | `lista_espera` |
 
 `GET /api/pedidos` e `GET /api/pedidos/:id` exigem autenticação e retornam
-somente pedidos do usuário autenticado. `POST /api/pedidos` recebe
-`{ "itens": [{ "tipo_ingresso_id": 1, "quantidade": 2 }] }`, valida evento,
-período de venda e disponibilidade e grava pedido e itens em uma transação.
-O pedido fica com status `pendente`; como não há gateway de pagamento, a API
-não confirma cobrança nem emite ingressos.
+somente pedidos do usuário autenticado. `POST /api/pedidos` recebe, por exemplo,
+`{ "itens": [{ "tipo_ingresso_id": 1, "categoria": "meia", "quantidade": 2 }] }`.
+`categoria` aceita `inteira` ou `meia` e, quando omitida, assume `inteira`.
+O preço é calculado no servidor com base no preço do tipo de ingresso; meia
+entrada custa 50% do valor, arredondado para centavos. Evento, período de venda,
+categoria, quantidade e disponibilidade são validados antes de gravar pedido e
+itens em uma transação. O pedido fica com status `pendente`; como não há gateway
+de pagamento, a API não confirma cobrança nem emite ingressos.
+
+Para bancos já existentes, aplique uma única vez
+`../database/migrations/001_categoria_ingresso_meia.sql` antes de iniciar a versão
+atualizada da API. Bancos novos recebem a coluna pela definição em
+`database/init/banco.sql`.
 
 As listagens aceitam `limite` (1 a 100, padrão 50) e `deslocamento` (padrão
 0), além de filtros por campos definidos para cada recurso.

@@ -25,6 +25,17 @@
     color: #555;
 }
 
+.evento-ingresso {
+    margin-top: -12px;
+    color: #555;
+}
+
+.setor-ingresso {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .item-ingresso {
     display: flex;
     justify-content: space-between;
@@ -34,6 +45,17 @@
     border: 1px solid #000;
     border-radius: 4px;
     background-color: #fff;
+}
+
+.ingresso-opcao {
+    margin-left: 16px;
+    border-color: #ddd;
+}
+
+.opcoes-ingresso {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .info-ingresso {
@@ -184,6 +206,10 @@
     .item-ingresso {
         align-items: flex-start;
         padding: 16px;
+    }
+
+    .ingresso-opcao {
+        margin-left: 8px;
     }
 
     .container-ingresso .title {

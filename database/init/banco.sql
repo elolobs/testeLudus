@@ -91,6 +91,7 @@ CREATE TABLE IF NOT EXISTS itens_pedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
   pedido_id INT NOT NULL,
   tipo_ingresso_id INT NOT NULL,
+  categoria ENUM('inteira', 'meia') NOT NULL DEFAULT 'inteira',
   quantidade INT NOT NULL,
   preco_unitario DECIMAL(10,2) NOT NULL,
   FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
