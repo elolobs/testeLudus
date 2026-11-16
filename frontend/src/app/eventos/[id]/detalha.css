@@ -103,18 +103,27 @@
     color: #333;
 }
 
-.boxs button {
+.boxs button,
+.boxs .botao-ingresso {
     background-color: #2D1E80;
     color: white;
     border: none;
+    display: inline-block;
     padding: 12px 24px;
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
+    text-decoration: none;
 }
 
-.boxs button:hover {
+.boxs button:hover,
+.boxs .botao-ingresso:hover {
     background-color: #A49EC2;
+}
+
+.boxs .botao-ingresso.desabilitado {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .badge-disponibilidade {

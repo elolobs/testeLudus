@@ -26,7 +26,14 @@ export default function Login() {
       });
       salvarSessao(resposta.dados);
       window.dispatchEvent(new Event("ludus:sessao"));
-      router.push("/");
+      const destino = new URLSearchParams(window.location.search).get("redirect");
+      router.push(
+        destino?.startsWith("/") &&
+          !destino.startsWith("//") &&
+          !destino.startsWith("/\\")
+          ? destino
+          : "/",
+      );
     } catch (error) {
       setErrorMessage(error.message);
     } finally {

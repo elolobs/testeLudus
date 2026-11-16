@@ -1,25 +1,64 @@
 .pedidos-container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-
-    .pedidos-box {
-        background-color: #f9f9f9;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 20px;
-        margin-bottom: 20px;
-    }
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
 
 .title{
-    margin-top: 30px;
-    margin-left: 370px;
+    margin: 30px auto 0;
+    max-width: 1160px;
 }
 
 .subtitle{
-    margin-top: 10px;
-    margin-left: 370px;
-    font-size: 25px;
+    max-width: 1160px;
+    margin: 10px auto;
+    font-size: 20px;
+}
+
+.pedidos-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+.pedido-card {
+    display: block;
+    padding: 22px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+}
+
+.pedido-card:hover {
+    border-color: #2D1E80;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.pedido-card h2 {
+    font-size: 19px;
+}
+
+.status-pedido {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 14px;
+    background: #eee;
+}
+
+.status-pendente,
+.status-reservado {
+    background: #fff3cd;
+}
+
+.status-pago {
+    background: #d1e7dd;
+}
+
+.erro-pedidos {
+    max-width: 1200px;
+    margin: 20px auto;
+    color: #b71c1c;
 }
 

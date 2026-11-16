@@ -139,7 +139,7 @@ VALUES
 
 INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco) 
 VALUES 
-(2, 1, 'Tech Summit 2024', 'Maior evento de tecnologia do ano.', 500, 'PUBLICADO', '2024-10-15 09:00:00', '2024-10-17 18:00:00', 'Centro de Convenções', 'Rua Principal, 100 - São Paulo');
+(2, 1, 'Tech Summit', 'Maior evento de tecnologia do ano.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 32 DAY), 'Centro de Convenções', 'Rua Principal, 100 - São Paulo');
 
 INSERT INTO atividades (evento_id, titulo, descricao, tipo, palestrante, data_hora_inicio, data_hora_fim, local_sala, vagas_maximas) 
 VALUES 
@@ -147,8 +147,8 @@ VALUES
 
 INSERT INTO tipo_ingresso (evento_id, nome, preco, quant_total, quant_vendida, venda_inicio, venda_final) 
 VALUES 
-(1, 'Ingresso VIP', 150.00, 100, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59'),
-(1, 'Ingresso Padrão', 75.00, 400, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59');
+(1, 'Ingresso VIP', 150.00, 100, 0, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 29 DAY)),
+(1, 'Ingresso Padrão', 75.00, 400, 0, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 29 DAY));
 
 INSERT INTO pedidos (usuario_id, valor_total, status) 
 VALUES 
