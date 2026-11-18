@@ -1,0 +1,154 @@
+.container-editar {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.seccao-form {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+
+.title-admin {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.form-title {
+    margin-top: 0;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #e5e7eb;
+    padding-bottom: 10px;
+    color: #1f2937;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+    flex: 1;
+}
+
+.form-group-label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #374151;
+}
+
+.form-group-input {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    max-width: 155px;
+}
+
+
+.form-group-links {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+
+.form-row {
+    display: flex;
+    gap: 16px;
+}
+
+.card-ingresso-edit {
+    background: #f9fafb;
+    border: 1px dashed #d1d5db;
+    padding: 16px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+}
+
+.btn-remover {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 26px;
+}
+
+.btn-remover:hover {
+    background-color: #c51717;
+}
+
+.btn-adicionar {
+    background: #e5e7eb;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    padding: 10px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn-adicionar:hover {
+    background-color: #d1d5db;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 30px;
+}
+
+.btn-cancelar {
+    background: white;
+    border: 1px solid #d1d5db;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-guardar {
+    background: #2D1E80;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-guardar:hover {
+    background-color: #A49EC2;
+}
+
+.editor-texto-fixo {
+    min-height: 120px;
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    background-color: white;
+    overflow-y: auto;
+    outline: none;
+    line-height: 1.5;
+}
+
+.editor-texto-fixo:focus {
+    border-color: #312e81;
+    box-shadow: 0 0 0 2px rgba(49, 46, 129, 0.2);
+}
+
+.editor-texto-fixo {
+    resize: none;
+}
+
+.dica-texto {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 4px;
+}
