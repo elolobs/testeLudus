@@ -50,13 +50,19 @@ export default function Home() {
           <div className="hero-content">
             <span className="hero-kicker">O SEU PRÓXIMO MOMENTO COMEÇA AQUI</span>
             <h1 className="hero-title">
-              Vive mais.<br />
-              <span>Descobre agora.</span>
+              O que você quer viver.<br />
+              <span>A gente encontra.</span>
             </h1>
             <p className="hero-subtitle">
-              Eventos, festivais e experiências que ficam contigo.
+              Shows, festivais, teatro, stand-up. A maior curadoria de eventos do <br></br>Brasil em um só lugar, com checkout seguro e ingressos no seu app.
             </p>
-            <Link href="/eventos" className="btn-pesquisar">Explorar</Link>
+            
+            <Link href="/eventos" className="btn-explorar-novo">
+              Explorar mais
+              <svg viewBox="0 0 448 512" fill="currentColor" height="1em" width="1em">
+                <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+              </svg>
+            </Link>
           </div>
         </section>
 
