@@ -112,13 +112,7 @@ export default function Header() {
                     <span className="dropdown-section-title">ATIVIDADE</span>
                     <ul className="dropdown-links">
                       <li>
-                        <Link href="/ingressos" onClick={() => setMenuAberto(false)}>
-                          <i className="fa-solid fa-ticket"></i>
-                          Meus Ingressos
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/pedidos" onClick={() => setMenuAberto(false)}>
+                        <Link href="/perfil/meus_pedidos" onClick={() => setMenuAberto(false)}>
                           <i className="fa-solid fa-box"></i>
                           Meus Pedidos
                         </Link>
