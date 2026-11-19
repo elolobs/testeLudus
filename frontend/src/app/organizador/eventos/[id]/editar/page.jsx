@@ -65,7 +65,7 @@ export default function EditarEvento() {
         e.preventDefault();
         console.log("Dados guardados:", { evento, ingressos });
         alert("Evento atualizado com sucesso!");
-        router.push("/admin");
+        router.push("/organizador");
     };
 
     return (
@@ -223,7 +223,7 @@ export default function EditarEvento() {
                 </section>
 
                 <div className="form-actions">
-                    <button type="button" onClick={() => router.push('/admin')} className="btn-cancelar">
+                    <button type="button" onClick={() => router.push('/organizador')} className="btn-cancelar">
                         Cancelar
                     </button>
                     <button type="submit" className="btn-guardar">
