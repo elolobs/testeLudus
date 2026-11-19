@@ -62,7 +62,8 @@ CREATE TABLE IF NOT EXISTS atividades (
   data_hora_fim TIMESTAMP NULL,
   local_sala VARCHAR(100),
   vagas_maximas INT NOT NULL CHECK (vagas_maximas > 0),
-  vagas_ocupadas INT DEFAULT 0 CHECK (vagas_ocupadas <= vagas_maximas),
+  vagas_ocupadas INT DEFAULT 0,
+  CHECK (vagas_ocupadas <= vagas_maximas),
   FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE
 );
 
