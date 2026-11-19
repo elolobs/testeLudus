@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 
 async function gerarHash() {
-  const hash = await bcrypt.hash("12345678A*", 10);
+  const hash = await bcrypt.hash("Aa12345678*", 10);
   console.log("Copie o hash abaixo e cole no banco de dados na coluna senha_hash:");
   console.log(hash); 
 }
