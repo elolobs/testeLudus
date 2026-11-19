@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import "./login.css";
 import { apiRequest } from "@/lib/api.mjs";
 import { salvarSessao } from "@/lib/sessao.mjs";
@@ -42,63 +43,89 @@ export default function Login() {
   };
 
   return (
-    <>
-      <div className="container-login">
-        <div className="leftSide">
-          <div className="container-imagem-login">
-            <img src="/img/fundocadastro.png" alt="Foto Cadastro" width={450} />
-            <div className="imgblur">
-              <div className="texto-sobreposto">
-                <h3>Conecte-se às suas<br /> melhores experiências.</h3>
-              </div>
+    <div className="container-login">
+      <div className="leftSide">
+        <div className="container-imagem-login">
+          <img src="/img/fundocadastro.png" alt="Fundo Login" className="bg-img" />
+          <div className="imgblur"></div>
+          
+          <div className="left-content">
+            <div className="left-header">
+              <Image 
+                src="/img/logo.png" 
+                alt="Logo Ludus" 
+                width={80} 
+                height={30} 
+                style={{ objectFit: 'contain', filter: 'brightness(0) invert(1)' }} 
+              />
+              <Link href="/" className="voltar-link">
+                Voltar ao início <i className="fa-solid fa-arrow-right"></i>
+              </Link>
+            </div>
+            
+            <div className="left-text">
+              <span className="badge-text">UMA CONTA. TODOS OS MOMENTOS.</span>
+              <h2>O seu próximo<br/><span className="text-purple">evento começa<br/>aqui.</span></h2>
+              <p>Descubra experiências, guarde ingressos e entre sem filas com o seu QR Code.</p>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="rightSide">
-          <div className="subCad">
-            <h4>Bem-Vindo de volta</h4>
-            <p>
-              Entra no teu ritmo.
-              <br />
-              Acede aos teus eventos, ingressos e experiências.
-            </p>
+      <div className="rightSide">
+        <div className="right-top-nav">
+          <span className="nav-active">Entrar</span>
+          <Link href="/cadastro" className="nav-inactive">Criar conta</Link>
+        </div>
+
+        <div className="right-content">
+          <div className="form-header">
+            <span className="bem-vindo">BEM-VINDO DE VOLTA</span>
+            <h1 className="Title">Entre no seu ritmo.</h1>
+            <p className="subtitle">Acesse aos seus eventos, ingressos e experiências.</p>
           </div>
-          <h1 className="Title">Seu Login</h1>
+
           <form onSubmit={handleSubmit}>
-            <label htmlFor="email">E-mail</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              placeholder=" E-mail"
-              autoComplete="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              required
-            />
-            <br />
-            <label htmlFor="senha">Senha</label>
-            <input
-              type="password"
-              id="senha"
-              name="senha"
-              placeholder=" Senha"
-              autoComplete="current-password"
-              value={senha}
-              onChange={(event) => setSenha(event.target.value)}
-              required
-            />
-            <br />
-            <button type="submit" disabled={enviando}>
-              {enviando ? "Entrando..." : "Fazer Login"}
+            <div className="input-group">
+              <label htmlFor="email">E-MAIL</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="nome@email.com"
+                autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+              />
+            </div>
+            
+            <div className="input-group">
+              <label htmlFor="senha">SENHA</label>
+              <input
+                type="password"
+                id="senha"
+                name="senha"
+                placeholder="Digite sua senha"
+                autoComplete="current-password"
+                value={senha}
+                onChange={(event) => setSenha(event.target.value)}
+                required
+              />
+            </div>
+
+            <button type="submit" className="btn-login" disabled={enviando}>
+              {enviando ? "Entrando..." : "Fazer Login"} <i className="fa-solid fa-arrow-right"></i>
             </button>
+            
             {errorMessage && <p className="error" role="alert">{errorMessage}</p>}
-            <br/>
-            <p>Ainda não tem conta? <Link href="/cadastro">Cadastre-se</Link></p>
+            
+            <div className="form-footer">
+              <p>Ainda não tem uma conta? <Link href="/cadastro">Criar conta gratuitamente</Link></p>
+            </div>
           </form>
         </div>
       </div>
-    </>
+    </div>
   );
 }
