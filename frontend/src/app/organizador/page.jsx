@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link"; // Mantive caso vá usar no futuro
-import "./admin.css";
+import "./organizador.css";
 import { apiRequest } from "@/lib/api.mjs";
 
 const coresStatus = {
@@ -11,7 +11,7 @@ const coresStatus = {
     "Rascunho": "goldenrod"
 };
 
-export default function Admin() {
+export default function organizador() {
 
     const [eventos, setEventos] = useState([]);
 
@@ -37,32 +37,32 @@ export default function Admin() {
 
     return (
         <>
-            <h1 className="title-admin">Painel Administrativo</h1>
-            <p className="subAdmin">Visão geral dos seus eventos e vendas</p>
+            <h1 className="title-organizador">Painel Organizador</h1>
+            <p className="suborganizador">Visão geral dos seus eventos e vendas</p>
 
-            <div className="dashboard-grid-admin">
-                <div className="card-metrica-admin">
+            <div className="dashboard-grid-organizador">
+                <div className="card-metrica-organizador">
                     <h3>R$ {metricas.receita}</h3>
                     <p>Receita do mês</p>
                 </div>
 
-                <div className="card-metrica-admin">
+                <div className="card-metrica-organizador">
                     <h3>{metricas.ingressos}</h3>
                     <p>Ingressos vendidos</p>
                 </div>
 
-                <div className="card-metrica-admin">
+                <div className="card-metrica-organizador">
                     <h3>{metricas.ativos}</h3>
                     <p>Eventos ativos</p>
                 </div>
 
-                <div className="card-metrica-admin">
+                <div className="card-metrica-organizador">
                     <h3>{metricas.clientes}</h3>
                     <p>Novos clientes</p>
                 </div>
             </div>
 
-            <h3 className="title-admin">Eventos</h3>
+            <h3 className="title-organizador">Eventos</h3>
             <div className="lista-eventos">
                 <div className="linha-grid cabecalho">
                     <div>Evento</div>
@@ -83,7 +83,7 @@ export default function Admin() {
                         </div>
 
                         <div className="acoes">
-                            <Link href={`/admin/eventos/${evento.id}/editar`} className="acao-link">
+                            <Link href={`/organizador/eventos/${evento.id}/editar`} className="acao-link">
                                 Editar
                             </Link>
 
@@ -98,7 +98,7 @@ export default function Admin() {
                                     Publicar
                                 </span>
                             ) : (
-                                <Link href={`/admin/eventos/${evento.id}/vendas`} className="acao-link">
+                                <Link href={`/organizador/eventos/${evento.id}/vendas`} className="acao-link">
                                     Ver vendas
                                 </Link>
                             )}
