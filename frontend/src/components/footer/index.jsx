@@ -19,19 +19,19 @@ export default function Footer() {
                     <h3 className="h3a">Acesso Rápido</h3>
                     <div className="columns-grid">
                         <div className="column">
-                            <a href="#">Página</a>
-                            <a href="#">Página</a>
-                            <a href="#">Página</a>
+                            <a href="#">Suporte ao Fã</a>
+                            <a href="#">Termos de Uso</a>
+                            <a href="#">Política de Compra</a>
                         </div>
                         <div className="column">
-                            <a href="#">Página</a>
-                            <a href="#">Página</a>
-                            <a href="#">Página</a>
+                            <a href="#">Política de Privacidade</a>
+                            <a href="#">Política de Cookies</a>
+                            <a href="#">Trabalhe Conosco</a>
                         </div>
                         <div className="column">
-                            <a href="#">Página</a>
-                            <a href="#">Página</a>
-                            <a href="#">Página</a>
+                            <a href="#">Meia-entrada</a>
+                            <a href="#">Sobre Nós</a>
+                            <a href="#">Nossos eventos</a>
                         </div>
                     </div>
                 </div>
