@@ -163,3 +163,7 @@ VALUES
 INSERT INTO ingressos (pedido_id, tipo_ingresso_id, usuario_id, quantidade, status, preco_unitario) 
 VALUES 
 (1, 2, 3, 1, 'valido', 75.00);
+
+update categorias 
+set nome = 'Musica'
+where descricao = 'Shows, festivais e workshops musicais';
