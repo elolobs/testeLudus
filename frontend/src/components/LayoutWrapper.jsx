@@ -7,7 +7,7 @@ import Footer from '@/components/footer';
 export default function LayoutWrapper({ children }) {
   const pathname = usePathname();
 
-  const paginasSemFooter = ['/cadastro', '/login'];
+  const paginasSemFooter = ['/cadastro', '/login', 'perfil'];
   
   const esconderFooter = paginasSemFooter.includes(pathname);
 

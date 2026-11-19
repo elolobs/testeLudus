@@ -7,7 +7,7 @@ export default function Perfil() {
         <div className="perfil-avatar">
           <span>EB</span>
         </div>
-        <div className="perfil-titulos">
+        <div className="perfil-titulos">    
           <h1>eloah barbosa</h1>
           <p>eloahlourbar2@gmail.com</p>
         </div>

@@ -17,14 +17,14 @@ button {
   text-align: left;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
-  height: 65vh; 
-  min-height: 500px; 
+  height: 65vh;
+  min-height: 500px;
   background: url("/img/fundohome3.png") center / cover no-repeat;
   display: flex;
-  align-items: center; 
+  align-items: center;
   position: relative;
-  margin-top: -40px; 
-  margin-bottom: 60px; 
+  margin-top: -40px;
+  margin-bottom: 60px;
 }
 
 .hero-content {
@@ -49,7 +49,7 @@ button {
 }
 
 .hero-title span {
-  color: #9088c7;    
+  color: #9088c7;
 }
 
 .hero-subtitle {
@@ -81,8 +81,7 @@ button {
   height: 18px;
 }
 
-.btn-compre,
-.btn-juntar {
+.btn-compre {
   background-color: #714ab4;
   color: #fff;
   border: none;
@@ -91,33 +90,38 @@ button {
   font-weight: bold;
 }
 
-.btn-juntar{
-  background-color: #f8f6f6;
-  color: #714ab4; 
+.btn-juntar {
+  background: linear-gradient(to right, #3c1e70, #5a2a81);
+  text-transform: uppercase;
+  padding: 20px 20px;
+  color: #ffffff;
+  border-radius: 4px;
+  font-weight: 500px;
+
 }
 
-.faq-item p{
+.faq-item p {
   color: #333;
 }
 
 .faq-intro h2 {
-  color: #714ab4; 
+  color: #714ab4;
 }
 
-.faq-intro p{
+.faq-intro p {
   color: #333;
 }
 
 .categories-header h2 {
-  color: #714ab4; 
+  color: #714ab4;
 }
 
-.final-cta-section-h2{
-  color:#eaeaea;
+.final-cta-section-h2 {
+  color: #eaeaea;
 }
 
-.final-cta-section-p{
-  color:#eaeaea;
+.final-cta-section-p {
+  color: #eaeaea;
 }
 
 .featured-event-section,
@@ -128,16 +132,16 @@ button {
   margin-bottom: 60px;
 }
 
-.categories-section{
+.categories-section {
   margin-top: 100px;
 }
 
-.experiences-section{
-  margin-top: 40px; 
+.experiences-section {
+  margin-top: 40px;
 }
 
 .experiences-section h2 {
-  color: #714ab4; 
+  color: #714ab4;
 }
 
 .featured-event-content {
@@ -192,14 +196,14 @@ button {
 
 .btn-ver-todos {
   background: none;
-  border: 1px solid #7947cf; 
+  border: 1px solid #7947cf;
   color: #7947cf;
   padding: 8px 16px;
   border-radius: 4px;
   font-weight: bold;
 }
 
-.btn-ver-todos :hover{
+.btn-ver-todos :hover {
   background-color: #7c3aed;
   color: #fff;
   transition: 3s;
@@ -246,28 +250,28 @@ button {
 }
 
 .final-cta-section {
-  width: 100vw; 
-  margin: 0; 
-  padding: 100px 80px; 
-  background: linear-gradient(#714ab4, #7c3aed, #3a0b8d );
-  text-align: center; 
+  width: 100vw;
+  margin: 0;
+  padding: 100px 80px;
+  background: url("/img/bannercta.png") center / cover no-repeat;
+  text-align: left;
 }
 
-.final-cta-section h2{
+.final-cta-section h2 {
   font-size: 3rem;
   margin-bottom: 16px;
 }
 
 .page-container .final-cta-section {
-  width: 100vw; 
-  margin-left: calc(-50vw + 50%); 
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
 }
 
 .grid-eventos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-  gap: 24px; 
-  width: 100%; 
-  max-width: 1200px; 
-  margin: 0 auto; 
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
