@@ -16,22 +16,24 @@ export default function Footer() {
                 </div>
 
                 <div className="center-side">
-                    <h3 className="h3a">Acesso Rápido</h3>
                     <div className="columns-grid">
                         <div className="column">
+                            <h3 className="column-title">Acesso Rápido</h3>
+                            <a href="#">Minhas Compras</a>
+                            <a href="#">Meu Perfil</a>
                             <a href="#">Suporte ao Fã</a>
+                        </div>
+                        <div className="column">
+                            <h3 className="column-title">Termos e Políticas</h3>
                             <a href="#">Termos de Uso</a>
                             <a href="#">Política de Compra</a>
-                        </div>
-                        <div className="column">
                             <a href="#">Política de Privacidade</a>
-                            <a href="#">Política de Cookies</a>
-                            <a href="#">Trabalhe Conosco</a>
                         </div>
                         <div className="column">
-                            <a href="#">Meia-entrada</a>
-                            <a href="#">Sobre Nós</a>
-                            <a href="#">Nossos eventos</a>
+                            <h3 className="column-title">Sobre a Ludus</h3>
+                            <a href="#">Ludus Brasil</a>
+                            <a href="#">Ludus Internacional</a>
+                            <a href="#">Trabalhe com a gente</a>
                         </div>
                     </div>
                 </div>

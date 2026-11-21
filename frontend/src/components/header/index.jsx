@@ -62,14 +62,26 @@ export default function Header() {
         <ul>
           <li>
             <Link href="/" className={pathname === "/" ? "active" : ""}>
-              Home
+              Início
             </Link>
           </li>
           <li>
             <Link href="/eventos" className={pathname === "/eventos" ? "active" : ""}>
-              Catálogo
+              Eventos
             </Link>
           </li>
+          <li>
+            <Link href="/eventos" className={pathname === "/eventos" ? "active" : ""}>
+              Sobre Nós
+            </Link>
+          </li>
+           <li>
+            <Link href="/eventos" className={pathname === "/eventos" ? "active" : ""}>
+              Suporte ao fã
+            </Link>
+          </li>
+
+
         </ul>
       </nav>
 

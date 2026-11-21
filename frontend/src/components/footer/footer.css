@@ -9,7 +9,6 @@ h4 {
     font-family: "Unbounded", sans-serif;
 }
 
-
 .footer-container {
     width: 100%;
     background-color: #fff;
@@ -60,31 +59,30 @@ h4 {
     height: 20px;
 }
 
-.center-side, .h3a {
+.center-side {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     flex: 1;
-}
-
-.center-side, .h3a {
-    font-family: "Unbounded", sans-serif;
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 25px;
-    color: #111;
+    justify-content: center; 
 }
 
 .columns-grid {
     display: flex;
-    gap: 60px;
+    gap: 100px; 
 }
 
 .column {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    align-items: center;
+    align-items: flex-start; 
+}
+
+.column-title {
+    font-family: "Unbounded", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+    margin-bottom: 5px; 
 }
 
 .column a {
@@ -96,7 +94,7 @@ h4 {
 }
 
 .column a:hover {
-    color: #A49EC2;
+    color: #312782; 
 }
 
 .right-sides {
@@ -119,4 +117,37 @@ h4 {
 
 .social-icons img:hover {
     opacity: 0.7;
+}
+
+@media (max-width: 1024px) {
+    .columns-grid {
+        gap: 40px;
+    }
+}
+
+@media (max-width: 800px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .left-sides {
+        align-items: center;
+    }
+
+    .columns-grid {
+        flex-direction: column;
+        gap: 30px;
+        align-items: center;
+    }
+
+    .column {
+        align-items: center;
+    }
+
+    .social-icons {
+        flex-direction: row;
+        gap: 20px;
+    }
 }
