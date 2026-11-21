@@ -80,3 +80,43 @@
     text-decoration: underline;
     color: #004c99;
 }
+
+.eventos-organizador-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  margin: 0 0 20px 170px;
+}
+
+.eventos-organizador-heading .title-organizador {
+  margin: 0;
+}
+
+.btn-criar-evento {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: #2D1E80;
+  color: white;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.btn-criar-evento:hover {
+  background-color: #A49EC2;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid-organizador,
+  .lista-eventos,
+  .eventos-organizador-heading {
+    width: calc(100% - 40px);
+    margin-left: 20px;
+  }
+
+  .linha-grid {
+    grid-template-columns: 2fr 1fr 1.5fr 1fr 1.5fr;
+    overflow-x: auto;
+  }
+}

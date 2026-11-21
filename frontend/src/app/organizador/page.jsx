@@ -62,7 +62,12 @@ export default function organizador() {
                 </div>
             </div>
 
-            <h3 className="title-organizador">Eventos</h3>
+            <div className="eventos-organizador-heading">
+                <h3 className="title-organizador">Eventos</h3>
+                <Link href="/organizador/eventos/criar" className="btn-criar-evento">
+                    + Criar evento
+                </Link>
+            </div>
             <div className="lista-eventos">
                 <div className="linha-grid cabecalho">
                     <div>Evento</div>
