@@ -44,20 +44,20 @@ export default function Home() {
   );
 
   return (
-    <div className="page-container">
+    <div className="home-page-container">
       <main className="home-main">
-        <section className="hero-section">
-          <div className="hero-content">
-            <span className="hero-kicker">O SEU PRÓXIMO MOMENTO COMEÇA AQUI</span>
-            <h1 className="hero-title">
+        <section className="home-hero-section">
+          <div className="home-hero-content">
+            <span className="home-hero-kicker">O SEU PRÓXIMO MOMENTO COMEÇA AQUI</span>
+            <h1 className="home-hero-title">
               O que você quer viver.<br />
               <span>A gente encontra.</span>
             </h1>
-            <p className="hero-subtitle">
+            <p className="home-hero-subtitle">
               Shows, festivais, teatro, stand-up. A maior curadoria de eventos do <br></br>Brasil em um só lugar, com checkout seguro e ingressos no seu app.
             </p>
 
-            <Link href="/eventos" className="btn-explorar-novo">
+            <Link href="/eventos" className="home-btn-explorar-novo">
               Explorar mais
               <svg viewBox="0 0 448 512" fill="currentColor" height="1em" width="1em">
                 <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
@@ -65,19 +65,19 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="hero-stats-badge">
-            <span className="stats-number">+480</span>
-            <span className="stats-text">EVENTOS<br />ESTE MÊS</span>
+          <div className="home-hero-stats-badge">
+            <span className="home-stats-number">+480</span>
+            <span className="home-stats-text">EVENTOS<br />ESTE MÊS</span>
           </div>
         </section>
 
-        <section className="experiences-section">
-          <div className="experiences-header">
-            <div className="experiences-title">
-              <span className="experiences-kicker">CURADORIA LUDUS</span>
+        <section className="home-experiences-section">
+          <div className="home-experiences-header">
+            <div className="home-experiences-title">
+              <span className="home-experiences-kicker">CURADORIA LUDUS</span>
               <h2>Eventos em destaque</h2>
             </div>
-            <Link href="/eventos" className="btn-ver-todos-destaque">
+            <Link href="/eventos" className="home-btn-ver-todos-destaque">
               Ver todos <i className="fa-solid fa-arrow-right"></i>
             </Link>
           </div>
@@ -87,9 +87,9 @@ export default function Home() {
           {!carregando && !erro && eventos.length === 0 && (
             <p>Nenhum evento publicado no momento.</p>
           )}
-          <div className="carousel-container">
-            <button className="nav-arrow prev-arrow" aria-label="Anterior" type="button">❮</button>
-            <div className="grid-eventos">
+          <div className="home-carousel-container">
+            <button className="home-nav-arrow home-prev-arrow" aria-label="Anterior" type="button">❮</button>
+            <div className="home-grid-eventos">
               {eventos.map((evento) => {
                 const { dia, mes } = obterDataCard(evento.data_inicio);
                 return (
@@ -106,85 +106,85 @@ export default function Home() {
                 );
               })}
             </div>
-            <button className="nav-arrow next-arrow" aria-label="Próximo" type="button">❯</button>
+            <button className="home-nav-arrow home-next-arrow" aria-label="Próximo" type="button">❯</button>
           </div>
         </section>
 
-       <div className="categories-wrapper">
-          <section className="categories-section">
-            <div className="categories-intro">
-              <span className="categories-kicker">PARA CADA VIBE</span>
+       <div className="home-categories-wrapper">
+          <section className="home-categories-section">
+            <div className="home-categories-intro">
+              <span className="home-categories-kicker">PARA CADA VIBE</span>
               <h2>Explorar por<br />categoria</h2>
             </div>
-            <ul className="categories-list">
+            <ul className="home-categories-list">
               {categorias.map((categoria, indice) => (
-                <li className="category-item" key={categoria.id}>
-                  <span className="category-number">
+                <li className="home-category-item" key={categoria.id}>
+                  <span className="home-category-number">
                     {String(indice + 1).padStart(2, '0')}
                   </span>
-                  <span className="category-name">{categoria.nome}</span>
-                  <i className="fa-solid fa-arrow-right category-arrow"></i>
+                  <span className="home-category-name">{categoria.nome}</span>
+                  <i className="fa-solid fa-arrow-right home-category-arrow"></i>
                 </li>
               ))}
               {!carregando && !erro && categorias.length === 0 && (
-                <li className="category-item">Nenhuma categoria disponível.</li>
+                <li className="home-category-item">Nenhuma categoria disponível.</li>
               )}
             </ul>
           </section>
         </div>
 
-        <section className="faq-section">
-          <div className="faq-intro">
-            <div className="faq-line"></div>
+        <section className="home-faq-section">
+          <div className="home-faq-intro">
+            <div className="home-faq-line"></div>
             <h2>Perguntas<br />frequentes</h2>
             <p>
               Não achou sua dúvida?<br />
               Entre em contato com nosso <span><a href="/suporte">Suporte</a></span>
             </p>
           </div>
-          <div className="faq-accordion">
-            <details className="faq-item">
+          <div className="home-faq-accordion">
+            <details className="home-faq-item">
               <summary>
                 Como recebo o meu bilhete?
-                <i className="fa-solid fa-chevron-down faq-icon"></i>
+                <i className="fa-solid fa-chevron-down home-faq-icon"></i>
               </summary>
               <p>Após a inscrição, o bilhete com QR Code aparece na tua área de ingressos e fica disponível no telemóvel.</p>
             </details>
-            <details className="faq-item">
+            <details className="home-faq-item">
               <summary>
                 Preciso de imprimir o bilhete?
-                <i className="fa-solid fa-chevron-down faq-icon"></i>
+                <i className="fa-solid fa-chevron-down home-faq-icon"></i>
               </summary>
               <p>Não. Basta mostrar o QR Code no ecrã ao staff, que faz o check-in em segundos.</p>
             </details>
-            <details className="faq-item">
+            <details className="home-faq-item">
               <summary>
                 O que é a lista de espera?
-                <i className="fa-solid fa-chevron-down faq-icon"></i>
+                <i className="fa-solid fa-chevron-down home-faq-icon"></i>
               </summary>
               <p>Quando um evento esgota, podes entrar na lista de espera e <br />recebes aviso assim que houver vagas ou devoluções.</p>
             </details>
-            <details className="faq-item">
+            <details className="home-faq-item">
               <summary>
                 Os organizadores podem gerir vários eventos?
-                <i className="fa-solid fa-chevron-down faq-icon"></i>
+                <i className="fa-solid fa-chevron-down home-faq-icon"></i>
               </summary>
               <p>Sim. O dashboard do organizador permite criar, editar e acompanhar eventos,<br /> gerir equipes e consultar relatórios financeiros.</p>
             </details>
-            <details className="faq-item">
+            <details className="home-faq-item">
               <summary>
                 É necessário CPF para criar conta?
-                <i className="fa-solid fa-chevron-down faq-icon"></i>
+                <i className="fa-solid fa-chevron-down home-faq-icon"></i>
               </summary>
               <p>Sim, o registo exige nome, e-mail válido e CPF para garantir a segurança de participantes e organizadores.</p>
             </details>
           </div>
         </section>
 
-        <section className="final-cta-section">
-          <h2 className="final-cta-section-h2">Pronto para seu <br />próximo Evento?</h2>
-          <p className="final-cta-section-p">Junta-se ao Ludus e descubra novos eventos</p><br />
-          <Link className="btn-juntar" href="/cadastro">Começar agora  <svg viewBox="0 0 448 512" fill="currentColor" height="1em" width="1em">
+        <section className="home-final-cta-section">
+          <h2 className="home-final-cta-section-h2">Pronto para seu <br />próximo Evento?</h2>
+          <p className="home-final-cta-section-p">Junta-se ao Ludus e descubra novos eventos</p><br />
+          <Link className="home-btn-juntar" href="/cadastro">Começar agora  <svg viewBox="0 0 448 512" fill="currentColor" height="1em" width="1em">
             <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z" />
           </svg></Link>
         </section>

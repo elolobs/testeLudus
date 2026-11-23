@@ -2,7 +2,7 @@
   font-family: "Montserrat", sans-serif;
 }
 
-.page-container {
+.home-page-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 40px 20px;
@@ -13,7 +13,7 @@ button {
   cursor: pointer;
 }
 
-.hero-section {
+.home-hero-section {
   text-align: left;
   width: 100vw;
   margin-left: calc(-50vw + 50%);
@@ -27,38 +27,38 @@ button {
   margin-bottom: 60px;
 }
 
-.hero-content {
+.home-hero-content {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-.hero-kicker {
+.home-hero-kicker {
   color: #d8ceeb;
   font-weight: bold;
   font-size: 0.775rem;
   letter-spacing: 1.0;
 }
 
-.hero-title {
+.home-hero-title {
   font-size: 5rem;
   margin: 16px 0;
   line-height: 1.2;
   color: #eaeaea;
 }
 
-.hero-title span {
+.home-hero-title span {
   color: #9088c7;
 }
 
-.hero-subtitle {
+.home-hero-subtitle {
   font-size: 1.125rem;
   color: #acaaaa;
   margin-bottom: 40px;
 }
 
-.btn-explorar-novo {
+.home-btn-explorar-novo {
   background-color: #312782;
   color: #ffffff;
   padding: 16px 32px;
@@ -72,16 +72,16 @@ button {
   transition: background-color 0.2s ease;
 }
 
-.btn-explorar-novo:hover {
+.home-btn-explorar-novo:hover {
   background-color: #231c61;
 }
 
-.btn-explorar-novo svg {
+.home-btn-explorar-novo svg {
   width: 18px;
   height: 18px;
 }
 
-.hero-stats-badge {
+.home-hero-stats-badge {
   position: absolute;
   bottom: 40px;
   right: calc(50vw - 580px);
@@ -91,13 +91,13 @@ button {
   color: #ffffff;
 }
 
-.stats-number {
+.home-stats-number {
   font-size: 2.5rem;
   font-weight: 800;
   line-height: 1;
 }
 
-.stats-text {
+.home-stats-text {
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.2;
@@ -105,7 +105,7 @@ button {
   letter-spacing: 1px;
 }
 
-.btn-compre {
+.home-btn-compre {
   background-color: #312782;
   color: #fff;
   border: none;
@@ -114,7 +114,7 @@ button {
   font-weight: bold;
 }
 
-.btn-juntar {
+.home-btn-juntar {
   background-color: #312782;
   text-transform: uppercase;
   padding: 20px 24px;
@@ -128,41 +128,41 @@ button {
   transition: opacity 0.2s ease;
 }
 
-.btn-juntar:hover {
+.home-btn-juntar:hover {
   opacity: 0.9;
 }
 
-.final-cta-section-h2 {
+.home-final-cta-section-h2 {
   color: #eaeaea;
 }
 
-.final-cta-section-p {
+.home-final-cta-section-p {
   color: #eaeaea;
 }
 
-.featured-event-section,
-.experiences-section,
-.final-cta-section {
+.home-featured-event-section,
+.home-experiences-section,
+.home-final-cta-section {
   margin-bottom: 60px;
 }
 
-.experiences-section {
+.home-experiences-section {
   margin-top: 40px;
 }
 
-.experiences-header {
+.home-experiences-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   margin-bottom: 32px;
 }
 
-.experiences-title {
+.home-experiences-title {
   display: flex;
   flex-direction: column;
 }
 
-.experiences-kicker {
+.home-experiences-kicker {
   color: #312782;
   font-size: 0.75rem;
   font-weight: 700;
@@ -171,7 +171,7 @@ button {
   margin-bottom: 12px;
 }
 
-.experiences-section h2 {
+.home-experiences-section h2 {
   color: #111827;
   font-size: 2.5rem;
   line-height: 1.1;
@@ -179,7 +179,7 @@ button {
   margin: 0;
 }
 
-.btn-ver-todos-destaque {
+.home-btn-ver-todos-destaque {
   color: #312782;
   font-weight: 700;
   font-size: 0.95rem;
@@ -190,11 +190,11 @@ button {
   transition: opacity 0.2s ease;
 }
 
-.btn-ver-todos-destaque:hover {
+.home-btn-ver-todos-destaque:hover {
   opacity: 0.7;
 }
 
-.featured-event-content {
+.home-featured-event-content {
   background-color: #f9fafb;
   border: 1px solid #eaeaea;
   padding: 40px;
@@ -202,40 +202,40 @@ button {
   border-radius: 8px;
 }
 
-.carousel-container {
+.home-carousel-container {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-.cards-wrapper {
+.home-cards-wrapper {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
   width: 100%;
 }
 
-.experience-card {
+.home-experience-card {
   border: 1px solid #eaeaea;
   padding: 16px;
   border-radius: 8px;
 }
 
-.card-image-placeholder {
+.home-card-image-placeholder {
   height: 120px;
   background-color: #f3f4f6;
   border-radius: 4px;
   margin-bottom: 12px;
 }
 
-.nav-arrow {
+.home-nav-arrow {
   background: none;
   border: none;
   font-size: 1.5rem;
   color: #312782;
 }
 
-.final-cta-section {
+.home-final-cta-section {
   width: 100vw;
   margin: 0;
   padding: 100px 80px;
@@ -243,17 +243,17 @@ button {
   text-align: left;
 }
 
-.final-cta-section h2 {
+.home-final-cta-section h2 {
   font-size: 3rem;
   margin-bottom: 16px;
 }
 
-.page-container .final-cta-section {
+.home-page-container .home-final-cta-section {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
 }
 
-.grid-eventos {
+.home-grid-eventos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
@@ -262,7 +262,7 @@ button {
   margin: 0 auto;
 }
 
-.categories-wrapper {
+.home-categories-wrapper {
   width: 100vw;
   margin-left: calc(-50vw + 50%);
   background-color: #f3f0fc;
@@ -271,7 +271,7 @@ button {
   margin-bottom: 60px;
 }
 
-.categories-section {
+.home-categories-section {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 120px;
@@ -281,13 +281,13 @@ button {
   padding: 0 20px;
 }
 
-.categories-intro {
+.home-categories-intro {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
 }
 
-.categories-kicker {
+.home-categories-kicker {
   color: #312782;
   font-size: 0.8rem;
   font-weight: 700;
@@ -296,7 +296,7 @@ button {
   margin-bottom: 16px;
 }
 
-.categories-intro h2 {
+.home-categories-intro h2 {
   color: #111827;
   font-size: 2.5rem;
   line-height: 1.1;
@@ -304,7 +304,7 @@ button {
   margin: 0;
 }
 
-.categories-list {
+.home-categories-list {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -312,21 +312,21 @@ button {
   border-top: 1px solid #d8ceeb;
 }
 
-.category-item {
+.home-category-item {
   display: flex;
   align-items: center;
   padding: 24px 0;
   border-bottom: 1px solid #d8ceeb;
 }
 
-.category-number {
+.home-category-number {
   color: #9ca3af;
   font-size: 0.9rem;
   font-weight: 400;
   width: 40px; 
 }
 
-.category-name {
+.home-category-name {
   font-family: 'Montserrat', sans-serif;
   font-weight: 700;
   font-size: 1.25rem;
@@ -334,12 +334,12 @@ button {
   flex-grow: 1;
 }
 
-.category-arrow {
+.home-category-arrow {
   color: #111827;
   font-size: 1.2rem;
 }
 
-.faq-section {
+.home-faq-section {
   display: grid;
   grid-template-columns: 1fr 2fr;
   gap: 120px;
@@ -348,12 +348,12 @@ button {
   margin-bottom: 140px;
 }
 
-.faq-intro {
+.home-faq-intro {
   display: flex;
   flex-direction: column;
 }
 
-.faq-line {
+.home-faq-line {
   width: 50px;
   height: 4px;
   background-color: #312782;
@@ -361,7 +361,7 @@ button {
   border-radius: 2px;
 }
 
-.faq-intro h2 {
+.home-faq-intro h2 {
   color: #111827;
   font-size: 2.5rem;
   line-height: 1.1;
@@ -369,30 +369,30 @@ button {
   margin: 0 0 24px 0;
 }
 
-.faq-intro p {
+.home-faq-intro p {
   color: #6b7280;
   font-size: 1rem;
   line-height: 1.6;
   margin: 0;
 }
 
-.faq-intro p a {
+.home-faq-intro p a {
   color: #312782;
   font-weight: 600;
   text-decoration: underline;
 }
 
-.faq-accordion {
+.home-faq-accordion {
   width: 100%;
   border-top: 1px solid #eaeaea;
 }
 
-.faq-accordion details {
+.home-faq-accordion details {
   border-bottom: 1px solid #eaeaea;
   padding: 24px 0;
 }
 
-.faq-accordion summary {
+.home-faq-accordion summary {
   font-family: 'Montserrat', sans-serif;
   font-weight: 600;
   font-size: 1.1rem;
@@ -404,21 +404,21 @@ button {
   align-items: center;
 }
 
-.faq-accordion summary::-webkit-details-marker {
+.home-faq-accordion summary::-webkit-details-marker {
   display: none;
 }
 
-.faq-icon {
+.home-faq-icon {
   color: #6b7280;
   font-size: 1rem;
   transition: transform 0.3s ease;
 }
 
-.faq-accordion details[open] .faq-icon {
+.home-faq-accordion details[open] .home-faq-icon {
   transform: rotate(180deg);
 }
 
-.faq-item p {
+.home-faq-item p {
   color: #4b5563;
   margin-top: 16px;
   margin-bottom: 0;
@@ -427,27 +427,27 @@ button {
 }
 
 @media (max-width: 1250px) {
-  .hero-stats-badge {
+  .home-hero-stats-badge {
     right: 40px;
   }
 }
 
 @media (max-width: 800px) {
-  .faq-section,
-  .categories-section {
+  .home-faq-section,
+  .home-categories-section {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  .experiences-header {
+  .home-experiences-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
   }
-  .hero-stats-badge {
+  .home-hero-stats-badge {
     bottom: 20px;
     right: 20px;
   }
-  .stats-number {
+  .home-stats-number {
     font-size: 2rem;
   }
 }
