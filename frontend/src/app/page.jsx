@@ -139,7 +139,7 @@ export default function Home() {
             <h2>Perguntas<br />frequentes</h2>
             <p>
               Não achou sua dúvida?<br />
-              Entre em contato com nosso <span><a href="/suporte">suporte</a></span>
+              Entre em contato com nosso <span><a href="/suporte">Suporte</a></span>
             </p>
           </div>
           <div className="faq-accordion">
