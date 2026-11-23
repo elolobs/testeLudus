@@ -75,7 +75,7 @@ export default function EditarEvento() {
             <form onSubmit={guardarAlteracoes}>
 
                 <section className="seccao-form">
-                    <h3><i class="fa-regular fa-address-card"></i> Informações Básicas</h3>
+                    <h3><i className="fa-regular fa-address-card"></i> Informações Básicas</h3>
 
                     <div className="form-group">
                         <label className="form-group-label">Nome do Evento</label>
@@ -140,7 +140,7 @@ export default function EditarEvento() {
                 </section>
 
                 <section className="seccao-form">
-                    <h3 className="form-title"><i class="fa-solid fa-ticket"></i> Ingressos Disponíveis</h3>
+                    <h3 className="form-title"><i className="fa-solid fa-ticket"></i> Ingressos Disponíveis</h3>
 
                     {ingressos.map((ingresso, index) => (
                         <div key={ingresso.id} className="card-ingresso-edit">
@@ -197,7 +197,7 @@ export default function EditarEvento() {
                 </section>
 
                 <section className="seccao-form">
-                    <h3><i class="fa-regular fa-pen-to-square"></i>Localização e Playlist</h3>
+                    <h3><i className="fa-regular fa-pen-to-square"></i>Localização e Playlist</h3>
 
                     <div className="form-group">
                         <label className="form-group-label">Link do Google Maps (Como chegar)</label>
