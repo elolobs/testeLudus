@@ -19,6 +19,10 @@ Inicie a API com `npm run dev` ou `npm start`.
 - `POST /api/auth/login`: recebe `email` e `senha`; retorna um token Bearer.
 - Envie o token nas rotas autenticadas usando
   `Authorization: Bearer <token>`.
+- `GET /api/perfil` retorna os dados do perfil autenticado e
+  `PUT /api/perfil` atualiza seus dados pessoais complementares, endereço e
+  preferências de comunicação. A rota não aceita um identificador de usuário
+  no corpo; o perfil é sempre vinculado ao token.
 
 As senhas `hash_senha_*` do SQL de exemplo são placeholders e não permitem
 login. Para desenvolvimento, cadastre uma conta e atribua o cargo `ADMIN` a
@@ -56,6 +60,10 @@ Para bancos já existentes, aplique uma única vez
 `../database/migrations/001_categoria_ingresso_meia.sql` antes de iniciar a versão
 atualizada da API. Bancos novos recebem a coluna pela definição em
 `database/init/banco.sql`.
+
+Para habilitar os campos adicionais do perfil em bancos existentes, aplique uma
+única vez `../database/migrations/002_perfil_usuario.sql`. Bancos novos recebem
+esses campos pela definição em `database/init/banco.sql`.
 
 As listagens aceitam `limite` (1 a 100, padrão 50) e `deslocamento` (padrão
 0), além de filtros por campos definidos para cada recurso.

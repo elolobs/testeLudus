@@ -42,3 +42,43 @@ export async function criar({
   );
   return linhas[0];
 }
+
+export async function buscarPerfilPorId(id) {
+  const [linhas] = await pool.query(
+    `SELECT id, nome_completo, email, cpf, telefone, nacionalidade, sexo,
+            DATE_FORMAT(data_nascimento, '%Y-%m-%d') AS data_nascimento,
+            cep, logradouro, numero, complemento, bairro, estado, cidade,
+            receber_sms_whatsapp, receber_newsletter
+     FROM usuarios
+     WHERE id = ?
+     LIMIT 1`,
+    [id],
+  );
+  return linhas[0] || null;
+}
+
+export async function atualizarPerfil(id, perfil) {
+  await pool.query(
+    `UPDATE usuarios
+     SET nacionalidade = ?, sexo = ?, data_nascimento = ?, cep = ?,
+         logradouro = ?, numero = ?, complemento = ?, bairro = ?, estado = ?,
+         cidade = ?, receber_sms_whatsapp = ?, receber_newsletter = ?
+     WHERE id = ?`,
+    [
+      perfil.nacionalidade,
+      perfil.sexo,
+      perfil.data_nascimento,
+      perfil.cep,
+      perfil.logradouro,
+      perfil.numero,
+      perfil.complemento,
+      perfil.bairro,
+      perfil.estado,
+      perfil.cidade,
+      perfil.receber_sms_whatsapp,
+      perfil.receber_newsletter,
+      id,
+    ],
+  );
+  return buscarPerfilPorId(id);
+}

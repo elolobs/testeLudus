@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import healthRoutes from "./routes/healthRoutes.js";
 import { authRouter } from "./routes/AuthRoutes.js";
 import pedidoRoutes from "./routes/pedidoRoutes.js";
+import perfilRoutes from "./routes/perfilRoutes.js";
 import recursoRoutes from "./routes/recursoRoutes.js";
 
 export const app = express();
@@ -27,6 +28,7 @@ app.get("/", (request, response) => {
 app.use("/api/health", healthRoutes);
 app.use("/api/auth", authRouter);
 app.use("/api/pedidos", pedidoRoutes);
+app.use("/api/perfil", perfilRoutes);
 app.use("/api", recursoRoutes);
 
 app.use(errorHandler);
