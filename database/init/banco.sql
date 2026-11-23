@@ -175,18 +175,9 @@ INSERT INTO ingressos (pedido_id, tipo_ingresso_id, usuario_id, quantidade, stat
 VALUES 
 (1, 2, 3, 1, 'valido', 75.00);
 
-SET FOREIGN_KEY_CHECKS = 0;
-DELETE FROM eventos WHERE categoria_id = 2;
-
-select * from categorias;
-
-DELETE c1 FROM categorias c1
-INNER JOIN categorias c2 
-WHERE c1.id > c2.id 
-  AND c1.nome = c2.nome;
-
-insert into categorias (nome, descricao) values
-('Tecnologia', 'Eventos sobre programação, IA, segurança digital, robótica e inovação');
+update categorias 
+set nome = 'Musica'
+where descricao = 'Shows, festivais e workshops musicais';
 
 INSERT INTO categorias (nome, descricao) 
 VALUES 
@@ -209,7 +200,6 @@ VALUES
 ('Sustentabilidade e Meio Ambiente', 'Feiras orgânicas, mutirões de limpeza, reciclagem e ativismo climático'),
 ('Causa Social e Voluntariado', 'Eventos beneficentes, bazares solidários, doações e fóruns comunitários'),
 ('Religião e Espiritualidade', 'Retiros espirituais, encontros de jovens, celebrações e palestras filosóficas');
-
 
 INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
 VALUES
