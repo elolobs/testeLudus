@@ -35,6 +35,13 @@ export async function apiRequest(path, { token, ...options } = {}) {
   return result;
 }
 
+export function obterUrlImagemEvento(valor) {
+  const imagem = typeof valor === "string" ? valor.trim() : "";
+  if (!imagem) return "/img/tech.png";
+  if (imagem.startsWith("/") || /^[a-z][a-z\d+.-]*:/i.test(imagem)) return imagem;
+  return `/img/${imagem}`;
+}
+
 export function formatarData(valor, options = {}) {
   if (!valor) return "Data a confirmar";
   const data = new Date(valor);

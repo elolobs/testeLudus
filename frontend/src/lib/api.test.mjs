@@ -1,6 +1,12 @@
 import assert from "node:assert/strict";
 import { afterEach, test } from "node:test";
-import { apiRequest, formatarData, obterDataCard, formatarPreco } from "./api.mjs";
+import {
+  apiRequest,
+  formatarData,
+  obterDataCard,
+  obterUrlImagemEvento,
+  formatarPreco,
+} from "./api.mjs";
 
 const originalFetch = globalThis.fetch;
 
@@ -66,4 +72,11 @@ test("formata datas, datas de cartão e preços", () => {
   assert.notEqual(obterDataCard("2026-10-18").dia, "--");
   assert.match(formatarPreco(25), /25,00/);
   assert.equal(formatarPreco(null), "Preço a confirmar");
+});
+
+test("resolve nomes locais de capas para a pasta pública de imagens", () => {
+  assert.equal(obterUrlImagemEvento("lana.png"), "/img/lana.png");
+  assert.equal(obterUrlImagemEvento("/img/lana.png"), "/img/lana.png");
+  assert.equal(obterUrlImagemEvento("https://exemplo.com/lana.png"), "https://exemplo.com/lana.png");
+  assert.equal(obterUrlImagemEvento(null), "/img/tech.png");
 });

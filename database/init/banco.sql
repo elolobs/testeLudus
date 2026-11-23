@@ -140,8 +140,15 @@ VALUES
 ('Música', 'Shows, festivais e workshops musicais');
 
 INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco) 
-VALUES 
+VALUES
 (2, 1, 'Tech Summit', 'Maior evento de tecnologia do ano.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 32 DAY), 'Centro de Convenções', 'Rua Principal, 100 - São Paulo');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url)
+VALUES
+(2, 4, 'Lana Del Rey - Did You Know That There''s a Tunnel Under Ocean Blvd Tour', 'Show único no Brasil trazendo os maiores sucessos e faixas do álbum mais recente.', 45000, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), 'Allianz Parque', 'Av. Francisco Matarazzo, 1705 - São Paulo', '/img/lana.png'),
+(3, 4, 'Olivia Rodrigo - GUTS World Tour', 'Apresentação enérgica com hits do pop rock e repertório completo dos álbuns SOUR e GUTS.', 35000, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), 'Estádio Nilton Santos (Engenhão)', 'Rua José dos Reis, 425 - Rio de Janeiro', 'olivia.png'),
+(2, 4, 'BTS - Arirang', 'Espetáculo grandioso do grupo sul-coreano com coreografias icônicas e efeitos pirotécnicos.', 65000, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 75 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 76 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', 'bts.png'),
+(4, 4, 'Marina Sena - Turnê Coisas Naturais', 'Show vibrante misturando pop brasileiro, MPB e coreografias marcantes.', 4000, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', 'marina.png');
 
 INSERT INTO atividades (evento_id, titulo, descricao, tipo, palestrante, data_hora_inicio, data_hora_fim, local_sala, vagas_maximas) 
 VALUES 

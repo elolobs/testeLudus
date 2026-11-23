@@ -161,6 +161,12 @@ export function criarRecursoController(caminho) {
         exigirPermissaoDeEscrita(recurso, req.usuario, "POST");
         const corpo = { ...req.body };
         const camposInternos = [];
+        const incluiTiposIngresso =
+          caminho === "eventos" && Object.hasOwn(corpo, "tipos_ingresso");
+        const tiposIngressoInformados = incluiTiposIngresso
+          ? corpo.tipos_ingresso
+          : undefined;
+        if (caminho === "eventos") delete corpo.tipos_ingresso;
 
         if (recurso.tabela === "eventos" && req.usuario.cargo === "ORGANIZADOR") {
           if (Object.hasOwn(corpo, "organizador_id")) {
@@ -176,7 +182,16 @@ export function criarRecursoController(caminho) {
         });
         RecursoService.validarConsistencia(recurso, dados);
         await validarVinculoOrganizador(recurso, dados, req.usuario);
-        const registro = await RecursoService.criar(caminho, dados);
+        const registro = incluiTiposIngresso
+          ? await RecursoService.criarEventoComIngressos(
+            dados,
+            RecursoService.validarTiposIngresso(
+              tiposIngressoInformados,
+              req.usuario.cargo,
+              dados.capacidade_maxima,
+            ),
+          )
+          : await RecursoService.criar(caminho, dados);
         return res.status(201).json({ sucesso: true, dados: registro });
       } catch (erro) {
         return tratarErro(erro, res, next);

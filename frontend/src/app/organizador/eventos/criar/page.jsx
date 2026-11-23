@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import "../[id]/editar/editar.css";
 import "./criar.css";
 import { apiRequest } from "@/lib/api.mjs";
@@ -22,7 +21,7 @@ const eventoInicial = {
 
 const ingressoInicial = () => ({
   nome: "",
-  preco: "",
+  preco: "300",
   quant_total: "",
 });
 
@@ -35,8 +34,11 @@ export default function CriarEvento() {
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
   const [erroCarregamento, setErroCarregamento] = useState("");
-  const [aviso, setAviso] = useState("");
   const [eventoCriado, setEventoCriado] = useState(false);
+  const quantidadeIngressos = ingressos.reduce(
+    (total, ingresso) => total + (Number(ingresso.quant_total) || 0),
+    0,
+  );
 
   useEffect(() => {
     let ativo = true;
@@ -98,7 +100,10 @@ export default function CriarEvento() {
   async function criarEvento(event) {
     event.preventDefault();
     setErro("");
-    setAviso("");
+    if (quantidadeIngressos > Number(evento.capacidadeMaxima)) {
+      setErro("A quantidade de ingressos não pode exceder a capacidade máxima do evento.");
+      return;
+    }
     setEnviando(true);
 
     try {
@@ -119,41 +124,23 @@ export default function CriarEvento() {
         local_nome: evento.localNome,
         local_endereco: evento.localEndereco,
         imagem_capa_url: evento.imagemCapaUrl || null,
+        tipos_ingresso: ingressos.map((ingresso) => ({
+          nome: ingresso.nome,
+          preco: Number(ingresso.preco),
+          quant_total: Number(ingresso.quant_total),
+        })),
       };
 
       if (sessao.usuario.cargo === "ADMIN") {
         dadosEvento.organizador_id = Number(sessao.usuario.id);
       }
 
-      const respostaEvento = await apiRequest("eventos", {
+      await apiRequest("eventos", {
         method: "POST",
         token: sessao.token,
         body: dadosEvento,
       });
       setEventoCriado(true);
-
-      try {
-        await Promise.all(
-          ingressos.map((ingresso) =>
-            apiRequest("tipos-ingresso", {
-              method: "POST",
-              token: sessao.token,
-              body: {
-                evento_id: respostaEvento.dados.id,
-                nome: ingresso.nome,
-                preco: Number(ingresso.preco),
-                quant_total: Number(ingresso.quant_total),
-              },
-            }),
-          ),
-        );
-      } catch (erroIngressos) {
-        setAviso(
-          `O evento foi criado, mas houve um erro ao cadastrar os ingressos: ${erroIngressos.message} Acesse o painel para verificar antes de tentar novamente.`,
-        );
-        return;
-      }
-
       router.push("/organizador");
     } catch (erroApi) {
       setErro(erroApi.message);
@@ -170,14 +157,8 @@ export default function CriarEvento() {
       {erroCarregamento && (
         <p className="criar-evento-mensagem erro" role="alert">{erroCarregamento}</p>
       )}
-      {aviso && (
-        <div className="criar-evento-mensagem aviso" role="alert">
-          <p>{aviso}</p>
-          <Link href="/organizador">Voltar ao painel</Link>
-        </div>
-      )}
 
-      {!carregando && !erroCarregamento && !aviso && (
+      {!carregando && !erroCarregamento && (
         <form onSubmit={criarEvento}>
           <section className="seccao-form">
             <h3 className="form-title">
@@ -294,7 +275,7 @@ export default function CriarEvento() {
                     />
                   </div>
                   <div className="form-group">
-                    <label className="form-group-label" htmlFor={`ingresso-quantidade-${index}`}>Qtd. Total</label>
+                    <label className="form-group-label" htmlFor={`ingresso-quantidade-${index}`}>Quantidade de ingressos</label>
                     <input
                       className="form-group-input"
                       id={`ingresso-quantidade-${index}`}
@@ -321,6 +302,10 @@ export default function CriarEvento() {
                 </div>
               </div>
             ))}
+            <p className="dica-texto" aria-live="polite">
+              Quantidade total cadastrada: {quantidadeIngressos}
+              {evento.capacidadeMaxima ? ` de ${evento.capacidadeMaxima}` : ""}
+            </p>
 
             <div className="form-group">
               <label className="form-group-label" htmlFor="capacidade-evento">Capacidade máxima do evento</label>

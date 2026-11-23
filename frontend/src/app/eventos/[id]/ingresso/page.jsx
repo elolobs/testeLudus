@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { apiRequest, formatarData, formatarPreco } from "@/lib/api.mjs";
+import { apiRequest, formatarData, formatarPreco, obterUrlImagemEvento } from "@/lib/api.mjs";
 import { obterSessao } from "@/lib/sessao.mjs";
 import "./ingresso.css";
 
@@ -246,179 +246,192 @@ export default function ContadorIngresso() {
   if (!evento) return <p>Evento não encontrado.</p>;
 
   return (
-    <div className="container-ingresso">
-      
-      {/* LADO ESQUERDO: LISTA DE INGRESSOS ORIGINAL SIMPLIFICADA */}
-      <div className="sidesleft">
-        <h1 className="title">Setores disponíveis</h1>
-        <p className="descricao-ingresso">Ingressos para {evento.titulo}</p>
-        <p className="evento-ingresso">
-          {formatarData(evento.data_inicio, { dateStyle: "long", timeStyle: "short" })}
-          {" · "}{evento.local_nome}
-        </p>
-
-        {tiposIngresso.length === 0 && <p>Ingressos ainda não disponíveis.</p>}
-
-        {tiposIngresso.map((tipo) => {
-          const restantes = Math.max(
-            0,
-            Number(tipo.quant_total) - Number(tipo.quant_vendida || 0),
-          );
-          const disponivel = restantes > 0 && tipo.preco !== null;
-          const quantidadePorCategoria = quantidades[tipo.id] || {};
-          const quantidade = quantidadeDoTipo(quantidades, tipo.id);
-          const setorAberto = Boolean(setoresAbertos[tipo.id]);
-          const precoInteiraCentavos = precoEmCentavos(tipo.preco);
-          const precoMeia = Math.round(precoInteiraCentavos / 2) / 100;
-
-          return (
-            <section className="setor-ingresso" key={tipo.id}>
-              <div className="item-ingresso">
-                <div className="info-ingresso">
-                  <span className="nome-ingresso">
-                    {tipo.nome}
-                    {quantidade > 0 && ` (${quantidade} selecionado${quantidade > 1 ? "s" : ""})`}
-                  </span>
-                  <span className="preco-ingresso">{formatarPreco(tipo.preco)}</span>
-                </div>
-                <button
-                  type="button"
-                  className="btn-select-simples"
-                  onClick={() => toggleSetor(tipo.id)}
-                  disabled={!disponivel}
-                >
-                  {setorAberto ? "Ocultar" : "Selecionar"}
-                </button>
-              </div>
-
-              {setorAberto && disponivel && (
-                <div className="opcoes-ingresso">
-                  {[
-                    { categoria: "inteira", nome: "Inteira", preco: tipo.preco },
-                    { categoria: "meia", nome: "Meia-entrada", preco: precoMeia },
-                  ].map((opcao) => {
-                    const quantidadeOpcao = quantidadePorCategoria[opcao.categoria] || 0;
-                    const quantidadeOutras = quantidade - quantidadeOpcao;
-                    const limiteOpcao = Math.max(
-                      0,
-                      Math.min(
-                        restantes - quantidadeOutras,
-                        LIMITE_INGRESSOS_POR_PEDIDO - quantidadeTotal + quantidadeOpcao,
-                      ),
-                    );
-
-                    return (
-                      <div className="item-ingresso ingresso-opcao" key={opcao.categoria}>
-                        <div className="info-ingresso">
-                          <span className="nome-ingresso">{opcao.nome}</span>
-                          <span className="preco-ingresso">
-                            {formatarPreco(opcao.preco)}
-                          </span>
-                        </div>
-                        <div className="contador-container-ingresso">
-                          <button
-                            type="button"
-                            onClick={() => alterarQuantidade(tipo, opcao.categoria, quantidadeOpcao - 1)}
-                            className="btn-contador"
-                            disabled={quantidadeOpcao === 0}
-                          >−</button>
-                          <input
-                            type="number"
-                            value={quantidadeOpcao}
-                            onChange={(e) => alterarQuantidade(tipo, opcao.categoria, e.target.value)}
-                            className="input-numero"
-                            min="0"
-                            max={limiteOpcao}
-                            readOnly
-                          />
-                          <button
-                            type="button"
-                            onClick={() => alterarQuantidade(tipo, opcao.categoria, quantidadeOpcao + 1)}
-                            className="btn-contador"
-                            disabled={quantidadeTotal >= LIMITE_INGRESSOS_POR_PEDIDO || quantidadeOpcao >= limiteOpcao}
-                          >+</button>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </section>
-          );
-        })}
-      </div>
-
-      {/* LADO DIREITO: RESUMO INSPIRADO NA REFERÊNCIA */}
-      <aside className="sidesright">
-        <div className="card-resumo">
-          <div className="resumo-kicker">RESUMO DO PEDIDO</div>
-          
-          <h2 className="resumo-destaque">
-            {quantidadeTotal > 0 ? `${quantidadeTotal} ingresso${quantidadeTotal > 1 ? 's' : ''}` : 'Seu carrinho'}
-          </h2>
-
-          <div className="resumo-price-row">
-            <div className="resumo-price-label">
-              Total<br />
-              <span>+ taxas aplicáveis</span>
-            </div>
-            <div className="resumo-price-value">
-              {formatarPreco(valorTotal)}
-            </div>
+    <>
+      <section className="ingresso-evento-capa">
+        <img
+          src={obterUrlImagemEvento(evento.imagem_capa_url)}
+          alt={`Imagem do evento ${evento.titulo}`}
+        />
+        <div className="ingresso-evento-capa-overlay">
+          <div>
+            <h1>{evento.titulo}</h1>
+            <p>{evento.local_nome}</p>
           </div>
-
-          <hr className="resumo-divider" />
-
-          <div className="resumo-lista">
-            {tiposIngresso.some((tipo) => quantidadeDoTipo(quantidades, tipo.id) > 0) ? (
-              tiposIngresso
-                .filter((tipo) => quantidadeDoTipo(quantidades, tipo.id) > 0)
-                .flatMap((tipo) => CATEGORIAS_INGRESSO
-                  .filter((categoria) => quantidades[tipo.id]?.[categoria] > 0)
-                  .map((categoria) => {
-                    const precoCat = categoria === "meia" 
-                      ? Math.round(precoEmCentavos(tipo.preco) / 2) / 100 
-                      : tipo.preco;
-                    
-                    return (
-                      <div key={`${tipo.id}-${categoria}`} className="resumo-item">
-                        {/* Círculo roxo imitando o "radio" selecionado da imagem */}
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <circle cx="12" cy="12" r="10" stroke="#312782" strokeWidth="2"/>
-                          <circle cx="12" cy="12" r="5" fill="#312782"/>
-                        </svg>
-                        <div className="resumo-item-info">
-                          <span className="resumo-item-nome">{tipo.nome}</span>
-                          <span className="resumo-item-qtd">{quantidades[tipo.id][categoria]}x {categoria === "meia" ? "Meia" : "Inteira"}</span>
-                        </div>
-                        <span className="resumo-item-preco">{formatarPreco(precoCat * quantidades[tipo.id][categoria])}</span>
-                      </div>
-                    );
-                  }))
-            ) : (
-              <p style={{ color: "#9ca3af", fontSize: "14px", margin: 0, textAlign: "center" }}>
-                Nenhum ingresso selecionado.
-              </p>
-            )}
-          </div>
-
-          <button
-            type="button"
-            className="btn-garantir"
-            onClick={finalizarPedido}
-            disabled={quantidadeTotal === 0 || enviando}
-          >
-            {enviando ? "Processando..." : sessao ? "Garantir ingresso →" : "Entrar e continuar →"}
-          </button>
-          
-          <div className="compra-segura">
-            ✓ Compra segura · Cancelamento em 7 dias
-          </div>
-
-          {erro && <p className="erro-pedido">{erro}</p>}
+          <p>
+            {formatarData(evento.data_inicio, { dateStyle: "long", timeStyle: "short" })}
+          </p>
         </div>
-      </aside>
+      </section>
 
-    </div>
+      <div className="container-ingresso">
+        <div className="sidesleft">
+          <h1 className="title">Setores disponíveis</h1>
+          <p className="descricao-ingresso">Ingressos para {evento.titulo}</p>
+          <p className="evento-ingresso">
+            {formatarData(evento.data_inicio, { dateStyle: "long", timeStyle: "short" })}
+            {" · "}{evento.local_nome}
+          </p>
+
+          {tiposIngresso.length === 0 && <p>Ingressos ainda não disponíveis.</p>}
+
+          {tiposIngresso.map((tipo) => {
+            const restantes = Math.max(
+              0,
+              Number(tipo.quant_total) - Number(tipo.quant_vendida || 0),
+            );
+            const disponivel = restantes > 0 && tipo.preco !== null;
+            const quantidadePorCategoria = quantidades[tipo.id] || {};
+            const quantidade = quantidadeDoTipo(quantidades, tipo.id);
+            const setorAberto = Boolean(setoresAbertos[tipo.id]);
+            const precoInteiraCentavos = precoEmCentavos(tipo.preco);
+            const precoMeia = Math.round(precoInteiraCentavos / 2) / 100;
+
+            return (
+              <section className="setor-ingresso" key={tipo.id}>
+                <div className="item-ingresso">
+                  <div className="info-ingresso">
+                    <span className="nome-ingresso">
+                      {tipo.nome}
+                      {quantidade > 0 && ` (${quantidade} selecionado${quantidade > 1 ? "s" : ""})`}
+                    </span>
+                    <span className="preco-ingresso">{formatarPreco(tipo.preco)}</span>
+                  </div>
+                  <button
+                    type="button"
+                    className="btn-select-simples"
+                    onClick={() => toggleSetor(tipo.id)}
+                    disabled={!disponivel}
+                  >
+                    {setorAberto ? "Ocultar" : "Selecionar"}
+                  </button>
+                </div>
+
+                {setorAberto && disponivel && (
+                  <div className="opcoes-ingresso">
+                    {[
+                      { categoria: "inteira", nome: "Inteira", preco: tipo.preco },
+                      { categoria: "meia", nome: "Meia-entrada", preco: precoMeia },
+                    ].map((opcao) => {
+                      const quantidadeOpcao = quantidadePorCategoria[opcao.categoria] || 0;
+                      const quantidadeOutras = quantidade - quantidadeOpcao;
+                      const limiteOpcao = Math.max(
+                        0,
+                        Math.min(
+                          restantes - quantidadeOutras,
+                          LIMITE_INGRESSOS_POR_PEDIDO - quantidadeTotal + quantidadeOpcao,
+                        ),
+                      );
+
+                      return (
+                        <div className="item-ingresso ingresso-opcao" key={opcao.categoria}>
+                          <div className="info-ingresso">
+                            <span className="nome-ingresso">{opcao.nome}</span>
+                            <span className="preco-ingresso">
+                              {formatarPreco(opcao.preco)}
+                            </span>
+                          </div>
+                          <div className="contador-container-ingresso">
+                            <button
+                              type="button"
+                              onClick={() => alterarQuantidade(tipo, opcao.categoria, quantidadeOpcao - 1)}
+                              className="btn-contador"
+                              disabled={quantidadeOpcao === 0}
+                            >−</button>
+                            <input
+                              type="number"
+                              value={quantidadeOpcao}
+                              onChange={(e) => alterarQuantidade(tipo, opcao.categoria, e.target.value)}
+                              className="input-numero"
+                              min="0"
+                              max={limiteOpcao}
+                              readOnly
+                            />
+                            <button
+                              type="button"
+                              onClick={() => alterarQuantidade(tipo, opcao.categoria, quantidadeOpcao + 1)}
+                              className="btn-contador"
+                              disabled={quantidadeTotal >= LIMITE_INGRESSOS_POR_PEDIDO || quantidadeOpcao >= limiteOpcao}
+                            >+</button>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </section>
+            );
+          })}
+        </div>
+
+        <aside className="sidesright">
+          <div className="card-resumo">
+            <div className="resumo-kicker">RESUMO DO PEDIDO</div>
+          
+            <h2 className="resumo-destaque">
+              {quantidadeTotal > 0 ? `${quantidadeTotal} ingresso${quantidadeTotal > 1 ? 's' : ''}` : 'Seu carrinho'}
+            </h2>
+
+            <div className="resumo-price-row">
+              <div className="resumo-price-label">
+                Total<br />
+                <span>+ taxas aplicáveis</span>
+              </div>
+              <div className="resumo-price-value">
+                {formatarPreco(valorTotal)}
+              </div>
+            </div>
+
+            <hr className="resumo-divider" />
+
+            <div className="resumo-lista">
+              {tiposIngresso.some((tipo) => quantidadeDoTipo(quantidades, tipo.id) > 0) ? (
+                tiposIngresso
+                  .filter((tipo) => quantidadeDoTipo(quantidades, tipo.id) > 0)
+                  .flatMap((tipo) => CATEGORIAS_INGRESSO
+                    .filter((categoria) => quantidades[tipo.id]?.[categoria] > 0)
+                    .map((categoria) => {
+                      const precoCat = categoria === "meia"
+                        ? Math.round(precoEmCentavos(tipo.preco) / 2) / 100
+                        : tipo.preco;
+                    
+                      return (
+                        <div key={`${tipo.id}-${categoria}`} className="resumo-item">
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="#312782" strokeWidth="2"/>
+                            <circle cx="12" cy="12" r="5" fill="#312782"/>
+                          </svg>
+                          <div className="resumo-item-info">
+                            <span className="resumo-item-nome">{tipo.nome}</span>
+                            <span className="resumo-item-qtd">{quantidades[tipo.id][categoria]}x {categoria === "meia" ? "Meia" : "Inteira"}</span>
+                          </div>
+                          <span className="resumo-item-preco">{formatarPreco(precoCat * quantidades[tipo.id][categoria])}</span>
+                        </div>
+                      );
+                    }))
+              ) : (
+                <p style={{ color: "#9ca3af", fontSize: "14px", margin: 0, textAlign: "center" }}>
+                  Nenhum ingresso selecionado.
+                </p>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className="btn-garantir"
+              onClick={finalizarPedido}
+              disabled={quantidadeTotal === 0 || enviando}
+            >
+              {enviando ? "Processando..." : sessao ? "Garantir ingresso →" : "Entrar e continuar →"}
+            </button>
+          
+            <div className="compra-segura">
+              ✓ Compra segura · Cancelamento em 7 dias
+            </div>
+
+            {erro && <p className="erro-pedido">{erro}</p>}
+          </div>
+        </aside>
+      </div>
+    </>
   );
 }
