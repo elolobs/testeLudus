@@ -174,3 +174,32 @@ VALUES
 update categorias 
 set nome = 'Musica'
 where descricao = 'Shows, festivais e workshops musicais';
+
+INSERT INTO categorias (nome, descricao) 
+VALUES 
+('Tecnologia', 'Eventos sobre programação, IA, segurança digital, robótica e inovação'),
+('Música', 'Shows, festivais, concertos, rodas de samba e workshops musicais'),
+('Gastronomia', 'Festivais gastronômicos, feiras de food trucks, degustações e aulas de culinária'),
+('Negócios e Empreendedorismo', 'Networking, palestras de liderança, feiras de franquias e encontros de startups'),
+('Educação e Carreira', 'Workshops, cursos intensivos, mentorias, feiras de profissões e congressos acadêmicos'),
+('Artes Cênicas', 'Peças de teatro, espetáculos de dança, stand-up comedy, ópera, circo e musicais'),
+('Cinema e Audiovisual', 'Mostras de cinema, pré-estreias, festivais de curtas e exibições ao ar livre'),
+('Artes Visuais e Exposições', 'Galerias de arte, museus, fotografia, escultura e instalações imersivas'),
+('Literatura e Poesia', 'Feiras do livro, lançamentos, saraus, clubes de leitura e batalhas de rima'),
+('Festas e Vida Noturna', 'Baladas, festas temáticas, blocos de carnaval e eventos em rooftops'),
+('Marketing e Comunicação', 'Eventos sobre mídias sociais, branding, vendas e criação de conteúdo'),
+('Esportes e Fitness', 'Corridas de rua, campeonatos amadores, aulas ao ar livre, trilhas e e-sports'),
+('Saúde e Bem-Estar', 'Retiros de yoga, meditação, terapias holísticas, saúde mental e nutrição'),
+('Moda e Beleza', 'Desfiles, bazares, brechós coletivos, workshops de maquiagem e feiras de cosméticos'),
+('Geek e Cultura Pop', 'Convenções de quadrinhos, encontros de cosplay, jogos de tabuleiro e RPG'),
+('Família e Infantil', 'Espetáculos infantis, oficinas criativas para crianças e contação de histórias'),
+('Sustentabilidade e Meio Ambiente', 'Feiras orgânicas, mutirões de limpeza, reciclagem e ativismo climático'),
+('Causa Social e Voluntariado', 'Eventos beneficentes, bazares solidários, doações e fóruns comunitários'),
+('Religião e Espiritualidade', 'Retiros espirituais, encontros de jovens, celebrações e palestras filosóficas');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES
+(2, 2, 'Lana Del Rey - Did You Know That There''s a Tunnel Under Ocean Blvd Tour', 'Show único no Brasil trazendo os maiores sucessos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), 'Allianz Parque', 'Av. Francisco Matarazzo, 1705 - São Paulo', 'lana.png'),
+(2, 2, 'Olivia Rodrigo - The Unraveled Tour', 'The Unraveled Tour é a terceira turnê de shows de Olivia Rodrigo, criada para promover seu terceiro álbum de estúdio, You Seem Pretty Sad for a Girl So in Love (2026)', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), 'Estádio Nilton Santos (Engenhão)', 'Rua José dos Reis, 425 - Rio de Janeiro', 'olivia.png'),
+(2, 2, 'BTS - Arirang', 'Espetáculo grandioso do grupo sul-coreano com coreografias icônicas e efeitos pirotécnicos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 75 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 76 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', 'bts.png'),
+(2, 2, 'Marina Sena - Turnê Coisas Naturais', 'Show vibrante misturando pop brasileiro, MPB e coreografias marcantes.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', 'marina.png');
