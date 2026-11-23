@@ -1,3 +1,7 @@
+create database app_db;
+
+use app_db;
+
 CREATE TABLE IF NOT EXISTS usuarios (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nome_completo VARCHAR(120) NOT NULL,
@@ -6,14 +10,12 @@ CREATE TABLE IF NOT EXISTS usuarios (
   cpf VARCHAR(14) UNIQUE NOT NULL,
   telefone VARCHAR(20),
   cargo ENUM('ADMIN', 'ORGANIZADOR', 'USUARIO') DEFAULT 'USUARIO',
-  ativo BOOLEAN default
-  TRUE,
+  ativo BOOLEAN DEFAULT TRUE,
   termo_lgpd_aceito BOOLEAN NOT NULL DEFAULT FALSE,
   termo_lgpd_data TIMESTAMP,
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-
 
 CREATE TABLE IF NOT EXISTS categorias (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -30,7 +32,7 @@ CREATE TABLE IF NOT EXISTS eventos (
   capacidade_maxima INT NOT NULL CHECK (capacidade_maxima > 0),
   status ENUM('RASCUNHO', 'PUBLICADO', 'SUSPENSO', 'CANCELADO', 'CONCLUIDO') DEFAULT 'RASCUNHO',
   data_inicio TIMESTAMP NULL,
-  data_fim TIMESTAMP  NULL,
+  data_fim TIMESTAMP NULL,
   local_nome VARCHAR(150) NOT NULL,
   local_endereco TEXT NOT NULL,
   imagem_capa_url VARCHAR(255),
@@ -62,8 +64,7 @@ CREATE TABLE IF NOT EXISTS atividades (
   data_hora_fim TIMESTAMP NULL,
   local_sala VARCHAR(100),
   vagas_maximas INT NOT NULL CHECK (vagas_maximas > 0),
-  vagas_ocupadas INT DEFAULT 0,
-  CHECK (vagas_ocupadas <= vagas_maximas),
+  vagas_ocupadas INT DEFAULT 0 CHECK (vagas_ocupadas <= vagas_maximas),
   FOREIGN KEY (evento_id) REFERENCES eventos(id) ON DELETE CASCADE
 );
 
@@ -92,7 +93,6 @@ CREATE TABLE IF NOT EXISTS itens_pedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
   pedido_id INT NOT NULL,
   tipo_ingresso_id INT NOT NULL,
-  categoria ENUM('inteira', 'meia') NOT NULL DEFAULT 'inteira',
   quantidade INT NOT NULL,
   preco_unitario DECIMAL(10,2) NOT NULL,
   FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
@@ -129,10 +129,9 @@ CREATE TABLE IF NOT EXISTS lista_espera (
 
 INSERT INTO usuarios (nome_completo, email, senha_hash, cpf, telefone, cargo, ativo, termo_lgpd_aceito, termo_lgpd_data) 
 VALUES 
-('Mylena Lima Pacheco', 'mylenacheco@gmail.com', 'Aa12345678*', '15583527080', '11943546087', 'ADMIN', TRUE, TRUE, CURRENT_TIMESTAMP),
+('Mylena Lima Pacheco', 'mylenacheco@gmail.com', 'hash_senha_123', '15583527080', '11943546087', 'ADMIN', TRUE, TRUE, CURRENT_TIMESTAMP),
 ('Eloah Lourenço', 'eloah@email.com', 'hash_senha_456', '12345678901', '11987654321', 'ORGANIZADOR', TRUE, TRUE, CURRENT_TIMESTAMP),
 ('João Silva', 'joao@email.com', 'hash_senha_789', '98765432100', '11911112222', 'USUARIO', TRUE, TRUE, CURRENT_TIMESTAMP);
-
 
 INSERT INTO categorias (nome, descricao) 
 VALUES 
@@ -143,21 +142,14 @@ INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade
 VALUES
 (2, 1, 'Tech Summit', 'Maior evento de tecnologia do ano.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 32 DAY), 'Centro de Convenções', 'Rua Principal, 100 - São Paulo');
 
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url)
-VALUES
-(2, 4, 'Lana Del Rey - Did You Know That There''s a Tunnel Under Ocean Blvd Tour', 'Show único no Brasil trazendo os maiores sucessos e faixas do álbum mais recente.', 45000, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), 'Allianz Parque', 'Av. Francisco Matarazzo, 1705 - São Paulo', '/img/lana.png'),
-(3, 4, 'Olivia Rodrigo - GUTS World Tour', 'Apresentação enérgica com hits do pop rock e repertório completo dos álbuns SOUR e GUTS.', 35000, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), 'Estádio Nilton Santos (Engenhão)', 'Rua José dos Reis, 425 - Rio de Janeiro', 'olivia.png'),
-(2, 4, 'BTS - Arirang', 'Espetáculo grandioso do grupo sul-coreano com coreografias icônicas e efeitos pirotécnicos.', 65000, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 75 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 76 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', 'bts.png'),
-(4, 4, 'Marina Sena - Turnê Coisas Naturais', 'Show vibrante misturando pop brasileiro, MPB e coreografias marcantes.', 4000, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', 'marina.png');
-
 INSERT INTO atividades (evento_id, titulo, descricao, tipo, palestrante, data_hora_inicio, data_hora_fim, local_sala, vagas_maximas) 
 VALUES 
 (1, 'Workshop de Python', 'Aprenda Python do zero', 'Workshop', 'Mylena Lima', '2024-10-15 10:00:00', '2024-10-15 12:00:00', 'Sala A', 50);
 
 INSERT INTO tipo_ingresso (evento_id, nome, preco, quant_total, quant_vendida, venda_inicio, venda_final) 
 VALUES 
-(1, 'Ingresso VIP', 150.00, 100, 0, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 29 DAY)),
-(1, 'Ingresso Padrão', 75.00, 400, 0, CURRENT_TIMESTAMP, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 29 DAY));
+(1, 'Ingresso VIP', 150.00, 100, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59'),
+(1, 'Ingresso Padrão', 75.00, 400, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59');
 
 INSERT INTO pedidos (usuario_id, valor_total, status) 
 VALUES 
@@ -171,6 +163,45 @@ INSERT INTO ingressos (pedido_id, tipo_ingresso_id, usuario_id, quantidade, stat
 VALUES 
 (1, 2, 3, 1, 'valido', 75.00);
 
-update categorias 
-set nome = 'Musica'
-where descricao = 'Shows, festivais e workshops musicais';
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM eventos WHERE categoria_id = 2;
+
+select * from categorias;
+
+DELETE c1 FROM categorias c1
+INNER JOIN categorias c2 
+WHERE c1.id > c2.id 
+  AND c1.nome = c2.nome;
+
+insert into categorias (nome, descricao) values
+('Tecnologia', 'Eventos sobre programação, IA, segurança digital, robótica e inovação');
+
+INSERT INTO categorias (nome, descricao) 
+VALUES 
+('Tecnologia', 'Eventos sobre programação, IA, segurança digital, robótica e inovação'),
+('Música', 'Shows, festivais, concertos, rodas de samba e workshops musicais'),
+('Gastronomia', 'Festivais gastronômicos, feiras de food trucks, degustações e aulas de culinária'),
+('Negócios e Empreendedorismo', 'Networking, palestras de liderança, feiras de franquias e encontros de startups'),
+('Educação e Carreira', 'Workshops, cursos intensivos, mentorias, feiras de profissões e congressos acadêmicos'),
+('Artes Cênicas', 'Peças de teatro, espetáculos de dança, stand-up comedy, ópera, circo e musicais'),
+('Cinema e Audiovisual', 'Mostras de cinema, pré-estreias, festivais de curtas e exibições ao ar livre'),
+('Artes Visuais e Exposições', 'Galerias de arte, museus, fotografia, escultura e instalações imersivas'),
+('Literatura e Poesia', 'Feiras do livro, lançamentos, saraus, clubes de leitura e batalhas de rima'),
+('Festas e Vida Noturna', 'Baladas, festas temáticas, blocos de carnaval e eventos em rooftops'),
+('Marketing e Comunicação', 'Eventos sobre mídias sociais, branding, vendas e criação de conteúdo'),
+('Esportes e Fitness', 'Corridas de rua, campeonatos amadores, aulas ao ar livre, trilhas e e-sports'),
+('Saúde e Bem-Estar', 'Retiros de yoga, meditação, terapias holísticas, saúde mental e nutrição'),
+('Moda e Beleza', 'Desfiles, bazares, brechós coletivos, workshops de maquiagem e feiras de cosméticos'),
+('Geek e Cultura Pop', 'Convenções de quadrinhos, encontros de cosplay, jogos de tabuleiro e RPG'),
+('Família e Infantil', 'Espetáculos infantis, oficinas criativas para crianças e contação de histórias'),
+('Sustentabilidade e Meio Ambiente', 'Feiras orgânicas, mutirões de limpeza, reciclagem e ativismo climático'),
+('Causa Social e Voluntariado', 'Eventos beneficentes, bazares solidários, doações e fóruns comunitários'),
+('Religião e Espiritualidade', 'Retiros espirituais, encontros de jovens, celebrações e palestras filosóficas');
+
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES
+(2, 2, 'Lana Del Rey - Did You Know That There''s a Tunnel Under Ocean Blvd Tour', 'Show único no Brasil trazendo os maiores sucessos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), 'Allianz Parque', 'Av. Francisco Matarazzo, 1705 - São Paulo', 'lana.png'),
+(2, 2, 'Olivia Rodrigo - The Unraveled Tour', 'The Unraveled Tour é a terceira turnê de shows de Olivia Rodrigo, criada para promover seu terceiro álbum de estúdio, You Seem Pretty Sad for a Girl So in Love (2026)', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), 'Estádio Nilton Santos (Engenhão)', 'Rua José dos Reis, 425 - Rio de Janeiro', 'olivia.png'),
+(2, 2, 'BTS - Arirang', 'Espetáculo grandioso do grupo sul-coreano com coreografias icônicas e efeitos pirotécnicos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 75 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 76 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', 'bts.png'),
+(2, 2, 'Marina Sena - Turnê Coisas Naturais', 'Show vibrante misturando pop brasileiro, MPB e coreografias marcantes.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', 'marina.png');
