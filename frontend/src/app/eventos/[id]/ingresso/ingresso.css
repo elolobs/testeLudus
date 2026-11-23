@@ -1,14 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Unbounded:wght@700;800;900&display=swap');
+
 .container-ingresso {
     display: flex;
     align-items: flex-start;
     gap: 40px;
-    max-width: 1000px;
-    margin: 0 auto;
+    max-width: 1100px;
+    margin: 40px auto;
     padding: 20px;
     box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    color: #030e38;
 }
 
-.container-ingresso .sidesleft {
+/* --- LADO ESQUERDO: LISTA DE INGRESSOS (SIMPLES) --- */
+.sidesleft {
     flex: 1;
     min-width: 0;
     display: flex;
@@ -16,24 +21,31 @@
     gap: 16px;
 }
 
-.container-ingresso .title {
-    margin: 65px 0 0;
+.title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #030e38;
+    margin: 0 0 4px 0;
 }
 
 .descricao-ingresso {
-    margin: -8px 0 4px;
-    color: #555;
+    color: #4b5563;
+    font-weight: 500;
+    margin: 0 0 4px 0;
 }
 
 .evento-ingresso {
-    margin-top: -12px;
-    color: #555;
+    color: #6b7280;
+    font-size: 14px;
+    margin: 0 0 24px 0;
 }
 
 .setor-ingresso {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    margin-bottom: 16px;
 }
 
 .item-ingresso {
@@ -42,44 +54,61 @@
     align-items: center;
     gap: 20px;
     padding: 20px;
-    border: 1px solid #000;
-    border-radius: 4px;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
     background-color: #fff;
 }
 
 .ingresso-opcao {
-    margin-left: 16px;
-    border-color: #ddd;
+    margin-left: 24px;
+    border-color: #f3f4f6;
+    background-color: #f9fafb;
 }
 
 .opcoes-ingresso {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .info-ingresso {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
 }
 
 .nome-ingresso {
-    font-weight: bold;
-    font-size: 18px;
-    color: #000;
+    font-weight: 700;
+    font-size: 16px;
+    color: #030e38;
 }
 
 .preco-ingresso {
-    font-size: 16px;
-    color: #555;
+    font-size: 14px;
+    color: #4b5563;
 }
 
+.btn-select-simples {
+    padding: 10px 24px;
+    border: 1px solid #312782;
+    border-radius: 6px;
+    background-color: #fff;
+    color: #312782;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-select-simples:hover:not(:disabled) {
+    background-color: #f8f9fc;
+}
+
+/* Contadores simplificados */
 .contador-container-ingresso {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-shrink: 0;
 }
 
 .btn-contador {
@@ -88,10 +117,11 @@
     justify-content: center;
     width: 32px;
     height: 32px;
-    border: 1px solid #ccc;
+    border: 1px solid #d1d5db;
     border-radius: 50%;
     background-color: #fff;
     font-size: 18px;
+    color: #312782;
     cursor: pointer;
 }
 
@@ -106,117 +136,164 @@
     background: transparent;
     text-align: center;
     font-size: 16px;
-    font-weight: bold;
-    cursor: default;
-    appearance: textfield;
+    font-weight: 700;
+    color: #030e38;
 }
 
-.input-numero::-webkit-outer-spin-button,
-.input-numero::-webkit-inner-spin-button {
-    margin: 0;
-    -webkit-appearance: none;
-}
-
-.container-ingresso .sidesright {
-    width: 300px;
+/* --- LADO DIREITO: RESUMO DO PEDIDO (INSPIRADO NA REFERÊNCIA) --- */
+.sidesright {
+    width: 380px;
     flex-shrink: 0;
-    margin-top: 120px;
+    position: sticky;
+    top: 40px;
 }
 
 .card-resumo {
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.resumo-kicker {
+    font-size: 11px;
+    font-weight: 700;
+    color: #312782;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+}
+
+.resumo-destaque {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 32px;
+    font-weight: 900;
+    color: #030e38;
+    margin: 0 0 24px 0;
+    letter-spacing: -1px;
+}
+
+.resumo-price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.resumo-price-label {
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.4;
+}
+
+.resumo-price-label span {
+    font-size: 12px;
+    color: #9ca3af;
+}
+
+.resumo-price-value {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #030e38;
+}
+
+.resumo-divider {
+    height: 1px;
+    background-color: #eaeaea;
+    margin: 24px 0;
+    border: none;
+}
+
+.resumo-lista {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     gap: 12px;
-    min-height: 250px;
-    padding: 24px;
-    border: 1px solid #000;
-    border-radius: 4px;
-    background-color: #fff;
+    margin-bottom: 24px;
+    min-height: 40px;
 }
 
-.text-resumo {
-    margin: 0;
-    color: #000;
-    font-size: 20px;
-    font-weight: bold;
+.resumo-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    border: 1px solid #312782;
+    border-radius: 8px;
+    background-color: #f8f9fc;
 }
 
-.resumo-text {
-    margin: 0;
+.resumo-item-info {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
 }
 
-.sub-text {
-    margin: 0;
-    font-size: 19px;
+.resumo-item-nome {
+    font-weight: 700;
+    font-size: 14px;
+    color: #030e38;
 }
 
-.aviso-pagamento {
-    margin: 0;
-    color: #555;
-    font-size: 13px;
-    line-height: 1.5;
+.resumo-item-qtd {
+    font-size: 12px;
+    color: #6b7280;
 }
 
-.erro-pedido {
-    margin: 0;
-    color: #b71c1c;
+.resumo-item-preco {
+    font-weight: 700;
+    font-size: 14px;
+    color: #030e38;
 }
 
-.btn-select {
-    padding: 10px 30px;
+.btn-garantir {
+    width: 100%;
+    padding: 16px;
     border: none;
-    border-radius: 10px;
-    background-color: #2D1E80;
+    border-radius: 8px;
+    background-color: #312782;
     color: #fff;
-    font-size: 17px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    transition: background-color 0.2s;
 }
 
-.btn-select:hover:not(:disabled) {
-    background-color: #A49EC2;
+.btn-garantir:hover:not(:disabled) {
+    background-color: #21195e;
 }
 
-.btn-select:disabled {
-    opacity: 0.55;
+.btn-garantir:disabled {
+    background-color: #d1d5db;
     cursor: not-allowed;
 }
 
-@media (max-width: 700px) {
-    .container-ingresso {
-        flex-direction: column;
-        gap: 24px;
-    }
-
-    .container-ingresso .title {
-        margin-top: 24px;
-    }
-
-    .container-ingresso .sidesleft,
-    .container-ingresso .sidesright {
-        width: 100%;
-    }
-
-    .container-ingresso .sidesright {
-        margin-top: 0;
-    }
+.compra-segura {
+    text-align: center;
+    font-size: 11px;
+    color: #9ca3af;
+    margin-top: 16px;
 }
 
-@media (max-width: 420px) {
-    .item-ingresso {
-        align-items: flex-start;
-        padding: 16px;
-    }
+.erro-pedido {
+    margin-top: 12px;
+    color: #dc2626;
+    font-size: 13px;
+    text-align: center;
+}
 
-    .ingresso-opcao {
-        margin-left: 8px;
+@media (max-width: 900px) {
+    .container-ingresso {
+        flex-direction: column;
     }
-
-    .container-ingresso .title {
-        font-size: 24px;
-    }
-
-    .card-resumo {
-        padding: 20px;
+    .sidesright {
+        width: 100%;
+        position: static;
     }
 }

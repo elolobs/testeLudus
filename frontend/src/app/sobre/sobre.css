@@ -1,0 +1,518 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.sobre-container {
+    width: 100%;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #fafafa;
+    padding-bottom: 80px;
+}
+
+.sobre-hero {
+    background: linear-gradient(135deg, #030e38 0%, #1a1549 100%);
+    color: white;
+    padding: 120px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 0 0 40px 40px;
+    box-shadow: 0 10px 30px rgba(3, 14, 56, 0.15);
+}
+
+.sobre-hero-kicker {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #9a8cde;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 16px;
+}
+
+.sobre-hero h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 4.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 900px;
+    margin-bottom: 24px;
+}
+
+.sobre-hero p {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    max-width: 600px;
+    opacity: 0.85;
+}
+
+.sobre-stats-wrapper {
+    max-width: 1000px;
+    margin: -50px auto 60px;
+    position: relative;
+    z-index: 2;
+    padding: 0 20px;
+}
+
+.sobre-stats {
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 24px;
+    padding: 40px;
+    display: flex;
+    justify-content: space-around;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.stat-item {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.stat-numero {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 3rem;
+    font-weight: 800;
+    color: #312782;
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-divisor {
+    width: 1px;
+    background-color: #eaeaea;
+}
+
+.secao-header {
+    margin-bottom: 30px;
+}
+
+.texto-centralizado {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.secao-kicker {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #312782;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.secao-titulo {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 2.5rem;
+    color: #111;
+}
+
+.sobre-historia {
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    gap: 80px;
+}
+
+.historia-texto {
+    flex: 1;
+}
+
+.historia-texto h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 3rem;
+    color: #030e38;
+    line-height: 1.1;
+    margin-bottom: 24px;
+}
+
+.historia-texto p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #4b5563;
+    margin-bottom: 16px;
+}
+
+.historia-texto .destaque {
+    font-weight: 700;
+    color: #312782;
+}
+
+.historia-imagem {
+    flex: 1;
+    position: relative;
+}
+
+.imagem-placeholder {
+    width: 100%;
+    height: 500px;
+    background: url('/img/fundocadastro.png') center/cover;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(3, 14, 56, 0.1);
+}
+
+.badge-flutuante {
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    background-color: #312782;
+    color: white;
+    padding: 24px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 10px 20px rgba(49, 39, 130, 0.3);
+}
+
+.badge-flutuante i {
+    font-size: 2rem;
+    color: #9a8cde;
+}
+
+.badge-flutuante span {
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.sobre-valores {
+    max-width: 1200px;
+    margin: 100px auto;
+    padding: 0 20px;
+}
+
+.valores-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin-top: 40px;
+}
+
+.valor-card {
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 20px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+}
+
+.valor-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+    border-color: #d1d5db;
+}
+
+.valor-icone {
+    width: 72px;
+    height: 72px;
+    background-color: #f3f4f6;
+    color: #312782;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 24px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.valor-card:hover .valor-icone {
+    background-color: #312782;
+    color: white;
+}
+
+.valor-card h3 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.25rem;
+    color: #111;
+    margin-bottom: 12px;
+}
+
+.valor-card p {
+    color: #6b7280;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.sobre-depoimentos {
+    max-width: 1200px;
+    margin: 0 auto 100px;
+    padding: 0 20px;
+}
+
+.depoimentos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.depoimento-card {
+    background-color: #fff;
+    border: 1px solid #eaeaea;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    position: relative;
+    transition: transform 0.3s ease;
+}
+
+.depoimento-card:hover {
+    transform: translateY(-5px);
+}
+
+.depoimento-icone {
+    color: #9a8cde;
+    font-size: 2.5rem;
+    margin-bottom: 24px;
+    opacity: 0.4;
+}
+
+.depoimento-texto {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: #4b5563;
+    font-style: italic;
+    margin-bottom: 30px;
+}
+
+.depoimento-autor {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border-top: 1px solid #eaeaea;
+    padding-top: 20px;
+}
+
+.autor-avatar {
+    width: 50px;
+    height: 50px;
+    background-color: #030e38;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.autor-avatar.alt {
+    background-color: #312782;
+}
+
+.autor-info h4 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1rem;
+    color: #111;
+    margin-bottom: 4px;
+}
+
+.autor-info span {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.sobre-cta {
+    max-width: 1000px;
+    margin: 0 auto;
+    background-color: #030e38;
+    border-radius: 24px;
+    padding: 80px 60px;
+    text-align: center;
+    color: white;
+    background-image: radial-gradient(circle at top right, rgba(49, 39, 130, 0.8) 0%, transparent 60%);
+    box-shadow: 0 20px 40px rgba(3, 14, 56, 0.2);
+}
+
+.sobre-cta h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.sobre-cta p {
+    font-size: 1.1rem;
+    opacity: 0.8;
+    margin-bottom: 40px;
+}
+
+.btn-cta {
+    background-color: white;
+    color: #030e38;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 18px 48px;
+    border-radius: 12px;
+    text-decoration: none;
+    display: inline-block;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+.btn-cta:hover {
+    background-color: #eaeaea;
+    transform: scale(1.05);
+}
+
+
+.sobre-features {
+    max-width: 1200px;
+    margin: 120px auto;
+    padding: 0 20px;
+}
+
+.features-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.kicker-linha-centro {
+    width: 40px;
+    height: 4px;
+    background-color: #312782;
+    margin: 0 auto 16px;
+    border-radius: 2px;
+}
+
+.features-header h2 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 2.5rem;
+    color: #111;
+    margin-bottom: 16px;
+}
+
+.features-header p {
+    color: #6b7280;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.feature-row {
+    display: flex;
+    align-items: center;
+    gap: 80px;
+    margin-bottom: 100px;
+}
+
+.feature-row.reverse {
+    flex-direction: row-reverse;
+}
+
+.feature-imagem {
+    flex: 1;
+    height: 450px;
+    background: linear-gradient(135deg, rgba(3,14,56,0.8), rgba(49,39,130,0.8)), url('/img/fundocadastro.png') center/cover;
+    border-radius: 24px;
+    box-shadow: 0 20px 40px rgba(3, 14, 56, 0.1);
+}
+
+.feature-texto {
+    flex: 1;
+}
+
+.kicker-linha-esquerda {
+    width: 40px;
+    height: 4px;
+    background-color: #312782;
+    margin-bottom: 20px;
+    border-radius: 2px;
+}
+
+.feature-texto h3 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 2.2rem;
+    color: #111;
+    margin-bottom: 16px;
+    line-height: 1.2;
+}
+
+.feature-texto p {
+    font-size: 1.1rem;
+    color: #6b7280;
+    margin-bottom: 32px;
+    line-height: 1.6;
+}
+
+.feature-lista {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.feature-lista li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111;
+}
+
+.feature-lista li i {
+    color: #9a8cde;
+    background-color: rgba(154, 140, 222, 0.15);
+    padding: 6px;
+    border-radius: 50%;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+}
+
+@media (max-width: 900px) {
+    .feature-row, .feature-row.reverse {
+        flex-direction: column;
+        gap: 40px;
+        text-align: center;
+        margin-bottom: 80px;
+    }
+    .kicker-linha-esquerda {
+        margin: 0 auto 20px;
+    }
+    .feature-lista li {
+        justify-content: center;
+    }
+    .feature-imagem {
+        width: 100%;
+        height: 300px;
+    }
+
+}
+
+
+@media (max-width: 900px) {
+    .sobre-hero h1 { font-size: 3rem; }
+    .sobre-historia { flex-direction: column; gap: 40px; text-align: center; }
+    .valores-grid { grid-template-columns: 1fr; }
+    .depoimentos-grid { grid-template-columns: 1fr; }
+    .sobre-stats { flex-direction: column; gap: 30px; }
+    .stat-divisor { width: 100%; height: 1px; }
+    .badge-flutuante { left: 50%; transform: translateX(-50%); bottom: -30px; width: 90%; justify-content: center; }
+    .sobre-cta { padding: 60px 30px; }
+    .sobre-cta h2 { font-size: 2rem; }
+}

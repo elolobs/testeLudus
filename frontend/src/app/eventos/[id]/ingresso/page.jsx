@@ -129,6 +129,7 @@ export default function ContadorIngresso() {
       ),
     0,
   );
+  
   const valorTotalCentavos = tiposIngresso.reduce((total, tipo) => {
     const quantidade = quantidades[tipo.id] || {};
     const precoInteira = precoEmCentavos(tipo.preco);
@@ -199,7 +200,6 @@ export default function ContadorIngresso() {
 
   async function finalizarPedido() {
     setErro("");
-
     const itens = Object.entries(quantidades).flatMap(([tipoId, categorias]) =>
       CATEGORIAS_INGRESSO
         .filter((categoria) => categorias[categoria] > 0)
@@ -241,12 +241,14 @@ export default function ContadorIngresso() {
     }
   }
 
-  if (carregando) return <p role="status">Carregando setores...</p>;
-  if (erro && !evento) return <p role="alert">{erro}</p>;
+  if (carregando) return <p>Carregando...</p>;
+  if (erro && !evento) return <p>{erro}</p>;
   if (!evento) return <p>Evento não encontrado.</p>;
 
   return (
     <div className="container-ingresso">
+      
+      {/* LADO ESQUERDO: LISTA DE INGRESSOS ORIGINAL SIMPLIFICADA */}
       <div className="sidesleft">
         <h1 className="title">Setores disponíveis</h1>
         <p className="descricao-ingresso">Ingressos para {evento.titulo}</p>
@@ -278,24 +280,19 @@ export default function ContadorIngresso() {
                     {quantidade > 0 && ` (${quantidade} selecionado${quantidade > 1 ? "s" : ""})`}
                   </span>
                   <span className="preco-ingresso">{formatarPreco(tipo.preco)}</span>
-                  <span className="preco-ingresso">
-                    {restantes === 0 ? "Esgotado" : `${restantes} disponíveis`}
-                  </span>
                 </div>
                 <button
                   type="button"
-                  className="btn-select"
+                  className="btn-select-simples"
                   onClick={() => toggleSetor(tipo.id)}
                   disabled={!disponivel}
-                  aria-expanded={setorAberto}
-                  aria-controls={`setor-ingresso-${tipo.id}`}
                 >
                   {setorAberto ? "Ocultar" : "Selecionar"}
                 </button>
               </div>
 
               {setorAberto && disponivel && (
-                <div className="opcoes-ingresso" id={`setor-ingresso-${tipo.id}`}>
+                <div className="opcoes-ingresso">
                   {[
                     { categoria: "inteira", nome: "Inteira", preco: tipo.preco },
                     { categoria: "meia", nome: "Meia-entrada", preco: precoMeia },
@@ -315,57 +312,31 @@ export default function ContadorIngresso() {
                         <div className="info-ingresso">
                           <span className="nome-ingresso">{opcao.nome}</span>
                           <span className="preco-ingresso">
-                            {formatarPreco(opcao.preco)} por ingresso
+                            {formatarPreco(opcao.preco)}
                           </span>
-                          {opcao.categoria === "meia" && (
-                            <span className="preco-ingresso">
-                              Apresente documento que comprove o direito à meia-entrada.
-                            </span>
-                          )}
                         </div>
                         <div className="contador-container-ingresso">
                           <button
                             type="button"
-                            onClick={() => alterarQuantidade(
-                              tipo,
-                              opcao.categoria,
-                              quantidadeOpcao - 1,
-                            )}
+                            onClick={() => alterarQuantidade(tipo, opcao.categoria, quantidadeOpcao - 1)}
                             className="btn-contador"
                             disabled={quantidadeOpcao === 0}
-                            aria-label={`Remover ingresso ${opcao.nome} do setor ${tipo.nome}`}
-                          >
-                            −
-                          </button>
+                          >−</button>
                           <input
                             type="number"
                             value={quantidadeOpcao}
-                            onChange={(event) => alterarQuantidade(
-                              tipo,
-                              opcao.categoria,
-                              event.target.value,
-                            )}
+                            onChange={(e) => alterarQuantidade(tipo, opcao.categoria, e.target.value)}
                             className="input-numero"
                             min="0"
                             max={limiteOpcao}
-                            aria-label={`Quantidade de ingressos ${opcao.nome} do setor ${tipo.nome}`}
+                            readOnly
                           />
                           <button
                             type="button"
-                            onClick={() => alterarQuantidade(
-                              tipo,
-                              opcao.categoria,
-                              quantidadeOpcao + 1,
-                            )}
+                            onClick={() => alterarQuantidade(tipo, opcao.categoria, quantidadeOpcao + 1)}
                             className="btn-contador"
-                            disabled={
-                              quantidadeTotal >= LIMITE_INGRESSOS_POR_PEDIDO ||
-                              quantidadeOpcao >= limiteOpcao
-                            }
-                            aria-label={`Adicionar ingresso ${opcao.nome} do setor ${tipo.nome}`}
-                          >
-                            +
-                          </button>
+                            disabled={quantidadeTotal >= LIMITE_INGRESSOS_POR_PEDIDO || quantidadeOpcao >= limiteOpcao}
+                          >+</button>
                         </div>
                       </div>
                     );
@@ -377,43 +348,77 @@ export default function ContadorIngresso() {
         })}
       </div>
 
+      {/* LADO DIREITO: RESUMO INSPIRADO NA REFERÊNCIA */}
       <aside className="sidesright">
         <div className="card-resumo">
-          <h2 className="text-resumo">Resumo do pedido</h2>
-          {tiposIngresso.some((tipo) => quantidadeDoTipo(quantidades, tipo.id) > 0) ? (
-            tiposIngresso
-              .filter((tipo) => quantidadeDoTipo(quantidades, tipo.id) > 0)
-              .flatMap((tipo) => CATEGORIAS_INGRESSO
-                .filter((categoria) => quantidades[tipo.id]?.[categoria] > 0)
-                .map((categoria) => (
-                  <p key={`${tipo.id}-${categoria}`} className="resumo-text">
-                    {tipo.nome} — {categoria === "meia" ? "Meia-entrada" : "Inteira"}:{" "}
-                    {quantidades[tipo.id][categoria]}x
-                  </p>
-                )))
-          ) : (
-            <p className="resumo-text">Nenhum setor selecionado.</p>
-          )}
-          <p className="resumo-text">Ingressos selecionados: {quantidadeTotal}</p>
-          <p className="sub-text">Total: {formatarPreco(valorTotal)}</p>
-          <p className="aviso-pagamento">
-            O pedido será criado como pendente. Nenhuma cobrança será realizada nesta etapa.
-          </p>
-          {erro && <p className="erro-pedido" role="alert">{erro}</p>}
+          <div className="resumo-kicker">RESUMO DO PEDIDO</div>
+          
+          <h2 className="resumo-destaque">
+            {quantidadeTotal > 0 ? `${quantidadeTotal} ingresso${quantidadeTotal > 1 ? 's' : ''}` : 'Seu carrinho'}
+          </h2>
+
+          <div className="resumo-price-row">
+            <div className="resumo-price-label">
+              Total<br />
+              <span>+ taxas aplicáveis</span>
+            </div>
+            <div className="resumo-price-value">
+              {formatarPreco(valorTotal)}
+            </div>
+          </div>
+
+          <hr className="resumo-divider" />
+
+          <div className="resumo-lista">
+            {tiposIngresso.some((tipo) => quantidadeDoTipo(quantidades, tipo.id) > 0) ? (
+              tiposIngresso
+                .filter((tipo) => quantidadeDoTipo(quantidades, tipo.id) > 0)
+                .flatMap((tipo) => CATEGORIAS_INGRESSO
+                  .filter((categoria) => quantidades[tipo.id]?.[categoria] > 0)
+                  .map((categoria) => {
+                    const precoCat = categoria === "meia" 
+                      ? Math.round(precoEmCentavos(tipo.preco) / 2) / 100 
+                      : tipo.preco;
+                    
+                    return (
+                      <div key={`${tipo.id}-${categoria}`} className="resumo-item">
+                        {/* Círculo roxo imitando o "radio" selecionado da imagem */}
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="12" cy="12" r="10" stroke="#312782" strokeWidth="2"/>
+                          <circle cx="12" cy="12" r="5" fill="#312782"/>
+                        </svg>
+                        <div className="resumo-item-info">
+                          <span className="resumo-item-nome">{tipo.nome}</span>
+                          <span className="resumo-item-qtd">{quantidades[tipo.id][categoria]}x {categoria === "meia" ? "Meia" : "Inteira"}</span>
+                        </div>
+                        <span className="resumo-item-preco">{formatarPreco(precoCat * quantidades[tipo.id][categoria])}</span>
+                      </div>
+                    );
+                  }))
+            ) : (
+              <p style={{ color: "#9ca3af", fontSize: "14px", margin: 0, textAlign: "center" }}>
+                Nenhum ingresso selecionado.
+              </p>
+            )}
+          </div>
+
           <button
             type="button"
-            className="btn-select"
+            className="btn-garantir"
             onClick={finalizarPedido}
             disabled={quantidadeTotal === 0 || enviando}
           >
-            {enviando
-              ? "Criando pedido..."
-              : sessao
-                ? "Concluir pedido"
-                : "Entrar e continuar"}
+            {enviando ? "Processando..." : sessao ? "Garantir ingresso →" : "Entrar e continuar →"}
           </button>
+          
+          <div className="compra-segura">
+            ✓ Compra segura · Cancelamento em 7 dias
+          </div>
+
+          {erro && <p className="erro-pedido">{erro}</p>}
         </div>
       </aside>
+
     </div>
   );
 }

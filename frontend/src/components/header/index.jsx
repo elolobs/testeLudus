@@ -71,12 +71,12 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <Link href="/eventos" className={pathname === "/eventos" ? "active" : ""}>
+            <Link href="/sobre" className={pathname === "/sobre" ? "active" : ""}>
               Sobre Nós
             </Link>
           </li>
            <li>
-            <Link href="/eventos" className={pathname === "/eventos" ? "active" : ""}>
+            <Link href="/suporte" className={pathname === "/suporte" ? "active" : ""}>
               Suporte ao fã
             </Link>
           </li>
