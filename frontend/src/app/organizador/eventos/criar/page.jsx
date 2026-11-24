@@ -26,16 +26,26 @@ const ingressoInicial = () => ({
   quant_total: "",
 });
 
+const atividadeInicial = () => ({
+  titulo: "",
+  tipo: "",
+  palestrante: "",
+  data_hora: "",
+  local: "",
+});
+
 export default function CriarEvento() {
   const router = useRouter();
   const [evento, setEvento] = useState(eventoInicial);
   const [ingressos, setIngressos] = useState([ingressoInicial()]);
+  const [programacao, setProgramacao] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
   const [erroCarregamento, setErroCarregamento] = useState("");
   const [eventoCriado, setEventoCriado] = useState(false);
+  
   const quantidadeIngressos = ingressos.reduce(
     (total, ingresso) => total + (Number(ingresso.quant_total) || 0),
     0,
@@ -98,6 +108,24 @@ export default function CriarEvento() {
     );
   }
 
+  function handleProgramacaoChange(index, campo, valor) {
+    setProgramacao((anteriores) =>
+      anteriores.map((atividade, indice) =>
+        indice === index ? { ...atividade, [campo]: valor } : atividade,
+      ),
+    );
+  }
+
+  function adicionarAtividade() {
+    setProgramacao((anteriores) => [...anteriores, atividadeInicial()]);
+  }
+
+  function removerAtividade(indexParaRemover) {
+    setProgramacao((anteriores) =>
+      anteriores.filter((_, index) => index !== indexParaRemover),
+    );
+  }
+
   async function criarEvento(event) {
     event.preventDefault();
     setErro("");
@@ -130,6 +158,14 @@ export default function CriarEvento() {
           nome: ingresso.nome,
           preco: Number(ingresso.preco),
           quant_total: Number(ingresso.quant_total),
+        })),
+        // Ajuste o nome da chave abaixo ("programacao" ou "atividades") conforme esperado pela sua API
+        programacao: programacao.map((atividade) => ({
+          titulo: atividade.titulo,
+          tipo: atividade.tipo,
+          palestrante: atividade.palestrante,
+          data_hora: atividade.data_hora,
+          local: atividade.local,
         })),
       };
 
@@ -241,6 +277,122 @@ export default function CriarEvento() {
                 required
               />
             </div>
+          </section>
+
+          {/* NOVA SEÇÃO DE PROGRAMAÇÃO */}
+          <section className="seccao-form">
+            <h3 className="form-title">
+              <i className="fa-regular fa-calendar-check" /> Programação (Opcional)
+            </h3>
+
+            {programacao.length === 0 && (
+              <p className="dica-texto">
+                Nenhuma atividade adicionada. Clique no botão abaixo para montar a programação do evento.
+              </p>
+            )}
+
+            {programacao.map((atividade, index) => (
+              <div key={index} className="card-ingresso-edit">
+                <div className="form-group">
+                  <label className="form-group-label" htmlFor={`prog-titulo-${index}`}>
+                    Título da Atividade
+                  </label>
+                  <input
+                    className="form-group-links"
+                    id={`prog-titulo-${index}`}
+                    type="text"
+                    maxLength={150}
+                    placeholder="Ex: Workshop de Python"
+                    value={atividade.titulo}
+                    onChange={(event) => handleProgramacaoChange(index, "titulo", event.target.value)}
+                    required
+                  />
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-group-label" htmlFor={`prog-tipo-${index}`}>
+                      Tipo
+                    </label>
+                    <input
+                      className="form-group-input"
+                      id={`prog-tipo-${index}`}
+                      type="text"
+                      maxLength={80}
+                      placeholder="Ex: Workshop, Palestra"
+                      value={atividade.tipo}
+                      onChange={(event) => handleProgramacaoChange(index, "tipo", event.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-group-label" htmlFor={`prog-palestrante-${index}`}>
+                      Palestrante / Responsável
+                    </label>
+                    <input
+                      className="form-group-input"
+                      id={`prog-palestrante-${index}`}
+                      type="text"
+                      maxLength={150}
+                      placeholder="Ex: Mylena Lima"
+                      value={atividade.palestrante}
+                      onChange={(event) => handleProgramacaoChange(index, "palestrante", event.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-group-label" htmlFor={`prog-data-${index}`}>
+                      Data e Hora
+                    </label>
+                    <input
+                      className="form-group-input"
+                      id={`prog-data-${index}`}
+                      type="datetime-local"
+                      min={evento.dataInicio}
+                      max={evento.dataFim}
+                      value={atividade.data_hora}
+                      onChange={(event) => handleProgramacaoChange(index, "data_hora", event.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-group-label" htmlFor={`prog-local-${index}`}>
+                      Local / Sala
+                    </label>
+                    <input
+                      className="form-group-input"
+                      id={`prog-local-${index}`}
+                      type="text"
+                      maxLength={100}
+                      placeholder="Ex: Sala A"
+                      value={atividade.local}
+                      onChange={(event) => handleProgramacaoChange(index, "local", event.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group acao-remover">
+                    <button
+                      type="button"
+                      onClick={() => removerAtividade(index)}
+                      className="btn-remover"
+                      aria-label={`Remover atividade ${index + 1}`}
+                    >
+                      Remover
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            <button type="button" onClick={adicionarAtividade} className="btn-adicionar">
+              + Adicionar Atividade
+            </button>
           </section>
 
           <section className="seccao-form">

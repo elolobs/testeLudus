@@ -1,63 +1,181 @@
-"use client"
+"use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link"; // Mantive caso vá usar no futuro
+import Link from "next/link";
 import "./organizador.css";
 import { apiRequest } from "@/lib/api.mjs";
 
-const coresStatus = {
-    "Ativo": "green",
-    "Esgotado": "red",
-    "Rascunho": "goldenrod"
+const CONFIG_STATUS = {
+    PUBLICADO: { label: "Ativo", cor: "green" },
+    RASCUNHO: { label: "Rascunho", cor: "goldenrod" },
+    ESGOTADO: { label: "Esgotado", cor: "red" },
+    SUSPENSO: { label: "Suspenso", cor: "orangered" },
+    CANCELADO: { label: "Cancelado", cor: "crimson" },
+    CONCLUIDO: { label: "Concluído", cor: "gray" },
 };
 
-export default function organizador() {
+// Altere aqui para a rota exata que funciona no seu back-end (apiRequest já adiciona /api)[cite: 1]
+const ROTA_EVENTOS = "/api/eventos";
+const rotaPublicarEvento = (id) => `/eventos/${id}/publicar`;
 
+export default function Organizador() {
     const [eventos, setEventos] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [erro, setErro] = useState(null);
 
-    //exemplo, apagar e usar do banco depois!
     const [metricas, setMetricas] = useState({
-        receita: "48.250",
-        ingressos: "1.320",
-        ativos: "8",
-        clientes: "540"
+        receita: "0,00",
+        ingressos: "0",
+        ativos: "0",
+        clientes: "0",
     });
 
-    useEffect(() => {
-        // Quando ligar a sua apiRequest, a rota do backend (ex: '/api/meus-dados') 
-        // tem de ler o token de quem está logado e devolver APENAS os dados dele.
+    function extrairListaEventos(payload) {
+        if (Array.isArray(payload)) return payload;
+        if (!payload || typeof payload !== "object") return [];
+        if (Array.isArray(payload.eventos)) return payload.eventos;
+        if (Array.isArray(payload.data)) return payload.data;
+        if (Array.isArray(payload.content)) return payload.content;
+        return [];
+    }
 
-        //exemplo, apagar depois!
-        setEventos([
-            { id: 1, nome: "Festa de Verão", data: "12/12/2026", vendidos: 320, total: 500, status: "Ativo" },
-            { id: 2, nome: "Workshop React", data: "15/01/2027", vendidos: 500, total: 500, status: "Esgotado" },
-            { id: 3, nome: "Show de Rock", data: "20/02/2027", vendidos: 0, total: 300, status: "Rascunho" }
-        ]);
+    async function carregarDados() {
+        try {
+            setLoading(true);
+            setErro(null);
+
+            const resp = await apiRequest(ROTA_EVENTOS, { method: "GET" });
+            const listaBruta = extrairListaEventos(resp);
+
+            let totalReceita = 0;
+            let totalIngressos = 0;
+            let totalAtivos = 0;
+
+            const eventosFormatados = listaBruta.map((ev) => {
+                const statusBanco = String(ev.status || "RASCUNHO").toUpperCase();
+                if (statusBanco === "PUBLICADO" || statusBanco === "ATIVO") {
+                    totalAtivos += 1;
+                }
+
+                // Se o evento vier com tipos de ingresso aninhados, calcula a partir deles;
+                // caso contrário, usa os campos diretos do objeto do evento
+                const tipos = Array.isArray(ev.tiposIngresso)
+                    ? ev.tiposIngresso
+                    : Array.isArray(ev.tipo_ingresso)
+                        ? ev.tipo_ingresso
+                        : [];
+
+                const totalEvento =
+                    tipos.length > 0
+                        ? tipos.reduce((acc, t) => acc + Number(t.quant_total ?? t.quantTotal ?? 0), 0)
+                        : Number(ev.capacidade_maxima ?? ev.capacidadeMaxima ?? ev.total ?? 0);
+
+                const vendidosEvento =
+                    tipos.length > 0
+                        ? tipos.reduce((acc, t) => acc + Number(t.quant_vendida ?? t.quantVendida ?? 0), 0)
+                        : Number(ev.vendidos ?? ev.quant_vendida ?? 0);
+
+                const receitaEvento =
+                    tipos.length > 0
+                        ? tipos.reduce(
+                            (acc, t) =>
+                                acc + Number(t.preco ?? 0) * Number(t.quant_vendida ?? t.quantVendida ?? 0),
+                            0
+                        )
+                        : Number(ev.receita_total ?? ev.receitaTotal ?? 0);
+
+                totalIngressos += vendidosEvento;
+                totalReceita += receitaEvento;
+
+                const esgotado =
+                    statusBanco === "PUBLICADO" &&
+                    totalEvento > 0 &&
+                    vendidosEvento >= totalEvento;
+
+                const chaveStatus = esgotado ? "ESGOTADO" : statusBanco;
+                const cfg = CONFIG_STATUS[chaveStatus] || {
+                    label: ev.status || "Indefinido",
+                    cor: "black",
+                };
+
+                return {
+                    id: ev.id,
+                    nome: ev.titulo || ev.nome || "Sem título",
+                    data: ev.data_inicio || ev.dataInicio || ev.data,
+                    vendidos: vendidosEvento,
+                    total: totalEvento,
+                    statusBanco,
+                    statusLabel: cfg.label,
+                    statusCor: cfg.cor,
+                };
+            });
+
+            setEventos(eventosFormatados);
+
+            setMetricas({
+                receita: totalReceita.toLocaleString("pt-BR", {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                }),
+                ingressos: totalIngressos.toLocaleString("pt-BR"),
+                ativos: totalAtivos.toString(),
+                clientes: Number(resp?.totalClientes ?? totalIngressos).toLocaleString("pt-BR"),
+            });
+        } catch (err) {
+            console.error("Erro ao carregar painel do organizador:", err);
+            setErro(`Erro (${err?.message || "404/403"}) ao acessar "${ROTA_EVENTOS}".`);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        carregarDados();
     }, []);
+
+    async function handlePublicarEvento(id) {
+        try {
+            await apiRequest(rotaPublicarEvento(id), { method: "PATCH" });
+            await carregarDados();
+        } catch (err) {
+            console.error("Erro ao publicar evento:", err);
+            alert("Erro ao publicar o evento. Tente novamente.");
+        }
+    }
+
+    function formatarData(dataString) {
+        if (!dataString) return "-";
+        if (String(dataString).includes("/")) return dataString;
+        const data = new Date(dataString);
+        if (Number.isNaN(data.getTime())) return String(dataString);
+        return data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+    }
 
     return (
         <>
             <h1 className="title-organizador">Painel Organizador</h1>
             <p className="suborganizador">Visão geral dos seus eventos e vendas</p>
 
+            {erro && <p style={{ color: "red", marginBottom: "1rem" }}>{erro}</p>}
+
             <div className="dashboard-grid-organizador">
                 <div className="card-metrica-organizador">
-                    <h3>R$ {metricas.receita}</h3>
+                    <h3>R$ {loading ? "..." : metricas.receita}</h3>
                     <p>Receita do mês</p>
                 </div>
 
                 <div className="card-metrica-organizador">
-                    <h3>{metricas.ingressos}</h3>
+                    <h3>{loading ? "..." : metricas.ingressos}</h3>
                     <p>Ingressos vendidos</p>
                 </div>
 
                 <div className="card-metrica-organizador">
-                    <h3>{metricas.ativos}</h3>
+                    <h3>{loading ? "..." : metricas.ativos}</h3>
                     <p>Eventos ativos</p>
                 </div>
 
                 <div className="card-metrica-organizador">
-                    <h3>{metricas.clientes}</h3>
+                    <h3>{loading ? "..." : metricas.clientes}</h3>
                     <p>Novos clientes</p>
                 </div>
             </div>
@@ -68,6 +186,7 @@ export default function organizador() {
                     + Criar evento
                 </Link>
             </div>
+
             <div className="lista-eventos">
                 <div className="linha-grid cabecalho">
                     <div>Evento</div>
@@ -77,39 +196,51 @@ export default function organizador() {
                     <div>Ações</div>
                 </div>
 
-                {eventos.map((evento) => (
-                    <div key={evento.id} className="linha-grid item">
-                        <div>{evento.nome}</div>
-                        <div>{evento.data}</div>
-                        <div>{evento.vendidos} / {evento.total}</div>
-
-                        <div style={{ color: coresStatus[evento.status], fontWeight: "bold" }}>
-                            {evento.status}
-                        </div>
-
-                        <div className="acoes">
-                            <Link href={`/organizador/eventos/${evento.id}/editar`} className="acao-link">
-                                Editar
-                            </Link>
-
-                            {' | '}
-
-                            {evento.status === "Rascunho" ? (
-                                <span
-                                    className="acao-link"
-                                    onClick={() => alert(`Vai publicar o evento ID: ${evento.id}`)}
-                                >
-                                    {/* QUANDO CLICAR AQUI TEM QUE PUBLICAR O EVENTO */}
-                                    Publicar
-                                </span>
-                            ) : (
-                                <Link href={`/organizador/eventos/${evento.id}/vendas`} className="acao-link">
-                                    Ver vendas
-                                </Link>
-                            )}
-                        </div>
+                {loading ? (
+                    <div style={{ padding: "20px", textAlign: "center" }}>
+                        Carregando eventos...
                     </div>
-                ))}
+                ) : eventos.length === 0 ? (
+                    <div style={{ padding: "20px", textAlign: "center" }}>
+                        Nenhum evento encontrado.
+                    </div>
+                ) : (
+                    eventos.map((evento) => (
+                        <div key={evento.id} className="linha-grid item">
+                            <div>{evento.nome}</div>
+                            <div>{formatarData(evento.data)}</div>
+                            <div>
+                                {evento.vendidos} / {evento.total}
+                            </div>
+
+                            <div style={{ color: evento.statusCor, fontWeight: "bold" }}>
+                                {evento.statusLabel}
+                            </div>
+
+                            <div className="acoes">
+                                <Link href={`/organizador/eventos/${evento.id}/editar`} className="acao-link">
+                                    Editar
+                                </Link>
+
+                                {" | "}
+
+                                {evento.statusBanco === "RASCUNHO" ? (
+                                    <span
+                                        className="acao-link"
+                                        style={{ cursor: "pointer" }}
+                                        onClick={() => handlePublicarEvento(evento.id)}
+                                    >
+                                        Publicar
+                                    </span>
+                                ) : (
+                                    <Link href={`/organizador/eventos/${evento.id}/vendas`} className="acao-link">
+                                        Ver vendas
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                    ))
+                )}
             </div>
         </>
     );
