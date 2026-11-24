@@ -1,10 +1,13 @@
 
-const express = require('express');
-const router = express.Router();
-const AdminController = require('../controllers/AdminController');
-const AuthMiddleware = require('../middlewares/AuthMiddleware'); 
-const AdminMiddleware = require('../middlewares/AdminMiddleware'); 
+import { Router } from "express";
+import { obterDashboard } from "../controllers/AdminController.js";
+import {
+  autenticar,
+  autorizarAdmin,
+} from "../middlewares/AuthMiddleware.js";
 
-router.get('/dashboard', AuthMiddleware, AdminMiddleware, AdminController.getDashboard);
+const router = Router();
 
-module.exports = router;
+router.get("/dashboard", autenticar, autorizarAdmin, obterDashboard);
+
+export default router;
