@@ -172,13 +172,22 @@ VALUES
 SET FOREIGN_KEY_CHECKS = 0;
 DELETE FROM eventos WHERE categoria_id = 2;
 
-select * from categorias;
+
+SELECT id, titulo, status FROM eventos;
+
+
+UPDATE eventos
+SET status = 'PUBLICADO'
+WHERE id IN (13, 14);
+
+select * from eventos;
 
 DELETE c1 FROM categorias c1
 INNER JOIN categorias c2 
 WHERE c1.id > c2.id 
   AND c1.nome = c2.nome;
 
+select * from eventos;
 insert into categorias (nome, descricao) values
 ('Tecnologia', 'Eventos sobre programação, IA, segurança digital, robótica e inovação');
 
@@ -245,3 +254,5 @@ ALTER TABLE eventos
   ADD COLUMN IF NOT EXISTS playlist_url VARCHAR(255) NULL AFTER imagem_capa_url;
 
 ALTER TABLE itens_pedido ADD COLUMN categoria VARCHAR(100) NULL;
+
+SELECT * FROM eventos;
