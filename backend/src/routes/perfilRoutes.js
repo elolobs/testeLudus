@@ -7,5 +7,6 @@ const router = Router();
 router.use(autenticar);
 router.get("/", PerfilController.buscar);
 router.put("/", PerfilController.atualizar);
+router.patch("/senha", PerfilController.alterarSenha);
 
 export default router;

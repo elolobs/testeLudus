@@ -47,6 +47,12 @@ export default function Detalha() {
 
   const disponibilidade = (ingresso) => {
     const restantes = Math.max(0, Number(ingresso.quant_total) - Number(ingresso.quant_vendida || 0));
+    const agora = Date.now();
+    const inicio = ingresso.venda_inicio ? Date.parse(ingresso.venda_inicio) : null;
+    const fim = ingresso.venda_final ? Date.parse(ingresso.venda_final) : null;
+    if ((inicio !== null && agora < inicio) || (fim !== null && agora > fim)) {
+      return { texto: "Venda encerrada", classe: "bolinha-vermelha", restantes };
+    }
     if (restantes === 0) return { texto: "Esgotado", classe: "bolinha-vermelha", restantes };
     if (restantes <= 10) return { texto: "Baixa disponibilidade", classe: "bolinha-amarela", restantes };
     return { texto: "Disponível", classe: "bolinha-verde", restantes };
@@ -55,6 +61,35 @@ export default function Detalha() {
   const enderecoMapa = encodeURIComponent(
     [evento.local_nome, evento.local_endereco].filter(Boolean).join(", "),
   );
+
+  function obterEmbedPlaylist(url) {
+    if (!url) return "";
+    let endereco;
+    try {
+      endereco = new URL(url);
+    } catch {
+      return "";
+    }
+
+    if (["open.spotify.com", "www.open.spotify.com"].includes(endereco.hostname)) {
+      const partes = endereco.pathname.split("/").filter(Boolean);
+      if (partes.length < 2 || !["playlist", "album", "artist"].includes(partes[0])) {
+        return "";
+      }
+      return `https://open.spotify.com/embed/${partes[0]}/${encodeURIComponent(partes[1])}`;
+    }
+
+    if (["youtube.com", "www.youtube.com", "music.youtube.com"].includes(endereco.hostname)) {
+      const playlistId = endereco.searchParams.get("list");
+      if (playlistId) return `https://www.youtube.com/embed/videoseries?list=${encodeURIComponent(playlistId)}`;
+      const videoId = endereco.searchParams.get("v");
+      if (videoId) return `https://www.youtube.com/embed/${encodeURIComponent(videoId)}`;
+    }
+
+    return "";
+  }
+
+  const playlistEmbed = obterEmbedPlaylist(evento.playlist_url);
 
   return (
     <>
@@ -118,7 +153,7 @@ export default function Detalha() {
                     if (estado.restantes === 0) event.preventDefault();
                   }}
                 >
-                  {estado.restantes === 0 ? "Esgotado" : "Adquirir ingresso"}
+                  {estado.restantes === 0 || estado.texto === "Venda encerrada" ? estado.texto : "Adquirir ingresso"}
                 </Link>
               </div>
             );
@@ -192,10 +227,10 @@ export default function Detalha() {
             </div>
             <div className="wrapper-iframe">
               <iframe
-                title="Playlist do evento"
+                title={`Playlist do artista do evento ${evento.titulo}`}
                 data-testid="embed-iframe"
                 style={{ borderRadius: "12px", border: 0 }}
-                src="https://open.spotify.com/embed/album/3ZN01xzenGMhWHdC5kfAe9?utm_source=generator&si=c7c3c24088914a17"
+                src={playlistEmbed || "https://open.spotify.com/embed/album/3ZN01xzenGMhWHdC5kfAe9?utm_source=generator&si=c7c3c24088914a17"}
                 width="100%"
                 height="100%"
                 allowFullScreen

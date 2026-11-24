@@ -67,6 +67,9 @@ export default function Perfil() {
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const [campoEditando, setCampoEditando] = useState("");
+  const [senhaAtual, setSenhaAtual] = useState("");
+  const [novaSenha, setNovaSenha] = useState("");
 
   useEffect(() => {
     let ativo = true;
@@ -129,7 +132,31 @@ export default function Perfil() {
         body: perfil,
       });
       setPerfil(normalizarPerfil(resposta.dados));
+      setCampoEditando("");
       setMensagem("Alterações salvas com sucesso.");
+    } catch (erroApi) {
+      setErro(erroApi.message);
+    } finally {
+      setSalvando(false);
+    }
+  }
+
+  async function alterarSenha(event) {
+    event.preventDefault();
+    if (!sessao) return;
+    setErro("");
+    setMensagem("");
+    setSalvando(true);
+    try {
+      await apiRequest("perfil/senha", {
+        method: "PATCH",
+        token: sessao.token,
+        body: { senhaAtual, novaSenha },
+      });
+      setSenhaAtual("");
+      setNovaSenha("");
+      setCampoEditando("");
+      setMensagem("Senha alterada com sucesso.");
     } catch (erroApi) {
       setErro(erroApi.message);
     } finally {
@@ -173,31 +200,54 @@ export default function Perfil() {
           <div className="list-item">
             <div className="item-content">
               <label>E-mail</label>
-              <p>{perfil.email}</p>
+              {campoEditando === "email" ? (
+                <input
+                  className="item-input"
+                  name="email"
+                  type="email"
+                  value={perfil.email}
+                  onChange={alterarCampo}
+                  autoFocus
+                />
+              ) : (
+                <p>{perfil.email}</p>
+              )}
               <span className="badge-validado">
                 <i className="fa-solid fa-circle-check"></i>
                 VALIDADO
               </span>
             </div>
-            <button className="btn-edit" type="button" aria-label="Editar e-mail">
-              <i className="fa-solid fa-pen"></i>
+            <button className="btn-edit" type="button" aria-label="Editar e-mail" onClick={(event) => campoEditando === "email" ? salvarPerfil(event) : setCampoEditando("email")}>
+              <i className={`fa-solid ${campoEditando === "email" ? "fa-check" : "fa-pen"}`}></i>
             </button>
           </div>
 
           <div className="list-item">
             <div className="item-content">
               <label>Senha</label>
-              <p>••••••••</p>
+              {campoEditando === "senha" ? (
+                <form className="senha-edicao" onSubmit={alterarSenha}>
+                  <input className="item-input" type="password" placeholder="Senha atual" value={senhaAtual} onChange={(event) => setSenhaAtual(event.target.value)} autoComplete="current-password" required />
+                  <input className="item-input" type="password" placeholder="Nova senha" value={novaSenha} onChange={(event) => setNovaSenha(event.target.value)} autoComplete="new-password" minLength={8} required />
+                  <button className="btn-senha" type="submit" disabled={salvando}>Alterar senha</button>
+                </form>
+              ) : (
+                <p>••••••••</p>
+              )}
             </div>
-            <button className="btn-edit" type="button" aria-label="Editar senha">
-              <i className="fa-solid fa-pen"></i>
+            <button className="btn-edit" type="button" aria-label="Editar senha" onClick={() => setCampoEditando(campoEditando === "senha" ? "" : "senha")}>
+              <i className={`fa-solid ${campoEditando === "senha" ? "fa-xmark" : "fa-pen"}`}></i>
             </button>
           </div>
 
           <div className="list-item">
             <div className="item-content">
               <label>Celular</label>
-              <p>{perfil.telefone || "Não informado"}</p>
+              {campoEditando === "telefone" ? (
+                <input className="item-input" name="telefone" type="tel" value={perfil.telefone || ""} onChange={alterarCampo} placeholder="(11) 99999-9999" autoFocus />
+              ) : (
+                <p>{perfil.telefone || "Não informado"}</p>
+              )}
               {perfil.telefone && (
                 <span className="badge-validado">
                   <i className="fa-solid fa-circle-check"></i>
@@ -205,8 +255,8 @@ export default function Perfil() {
                 </span>
               )}
             </div>
-            <button className="btn-edit" type="button" aria-label="Editar celular">
-              <i className="fa-solid fa-pen"></i>
+            <button className="btn-edit" type="button" aria-label="Editar celular" onClick={(event) => campoEditando === "telefone" ? salvarPerfil(event) : setCampoEditando("telefone")}>
+              <i className={`fa-solid ${campoEditando === "telefone" ? "fa-check" : "fa-pen"}`}></i>
             </button>
           </div>
         </div>
@@ -220,29 +270,69 @@ export default function Perfil() {
         <div className="card-grid-2">
           <div className="grid-field">
             <label>Nome</label>
-            <p>{nome || "Não informado"}</p>
+            {campoEditando === "pessoais" ? (
+              <input className="item-input" name="nome_completo" value={perfil.nome_completo} onChange={alterarCampo} />
+            ) : (
+              <p>{nome || "Não informado"}</p>
+            )}
           </div>
           <div className="grid-field">
             <label>Sobrenome</label>
-            <p>{sobrenomes.join(" ") || "Não informado"}</p>
+            {campoEditando === "pessoais" ? (
+              <p className="campo-descricao">Parte do nome completo</p>
+            ) : (
+              <p>{sobrenomes.join(" ") || "Não informado"}</p>
+            )}
           </div>
           <div className="grid-field">
             <label>Nacionalidade</label>
-            <p>{perfil.nacionalidade || "Não informado"}</p>
+            {campoEditando === "pessoais" ? (
+              <input className="item-input" name="nacionalidade" value={perfil.nacionalidade || ""} onChange={alterarCampo} />
+            ) : (
+              <p>{perfil.nacionalidade || "Não informado"}</p>
+            )}
           </div>
           <div className="grid-field">
             <label>Sexo</label>
-            <p>{perfil.sexo || "Não informado"}</p>
+            {campoEditando === "pessoais" ? (
+              <select className="item-input" name="sexo" value={perfil.sexo || ""} onChange={alterarCampo}>
+                <option value="">Não informado</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Outro">Outro</option>
+                <option value="Prefiro não informar">Prefiro não informar</option>
+              </select>
+            ) : (
+              <p>{perfil.sexo || "Não informado"}</p>
+            )}
           </div>
           <div className="grid-field">
             <label>CPF</label>
-            <p>{formatarCpf(perfil.cpf)}</p>
+            {campoEditando === "pessoais" ? (
+              <input className="item-input" name="cpf" value={perfil.cpf || ""} onChange={alterarCampo} />
+            ) : (
+              <p>{formatarCpf(perfil.cpf)}</p>
+            )}
           </div>
           <div className="grid-field">
             <label>Data de nascimento</label>
-            <p>{formatarDataNascimento(perfil.data_nascimento)}</p>
+            {campoEditando === "pessoais" ? (
+              <input className="item-input" name="data_nascimento" type="date" value={perfil.data_nascimento || ""} onChange={alterarCampo} />
+            ) : (
+              <p>{formatarDataNascimento(perfil.data_nascimento)}</p>
+            )}
           </div>
         </div>
+        {campoEditando === "pessoais" ? (
+          <div className="grid-actions">
+            <button className="btn-salvar-pequeno" type="button" onClick={(event) => salvarPerfil(event)}>Salvar dados pessoais</button>
+            <button className="btn-cancelar" type="button" onClick={() => setCampoEditando("")}>Cancelar</button>
+          </div>
+        ) : (
+          <button className="btn-edit-pessoais" type="button" onClick={() => setCampoEditando("pessoais")}>
+            <i className="fa-solid fa-pen"></i> Editar dados pessoais
+          </button>
+        )}
       </div>
 
       <form onSubmit={salvarPerfil}>

@@ -17,6 +17,7 @@ const eventoInicial = {
   localNome: "",
   localEndereco: "",
   imagemCapaUrl: "",
+  playlistUrl: "",
 };
 
 const ingressoInicial = () => ({
@@ -124,6 +125,7 @@ export default function CriarEvento() {
         local_nome: evento.localNome,
         local_endereco: evento.localEndereco,
         imagem_capa_url: evento.imagemCapaUrl || null,
+        playlist_url: evento.playlistUrl.trim() || null,
         tipos_ingresso: ingressos.map((ingresso) => ({
           nome: ingresso.nome,
           preco: Number(ingresso.preco),
@@ -370,6 +372,20 @@ export default function CriarEvento() {
                 value={evento.imagemCapaUrl}
                 onChange={handleEventoChange}
                 placeholder="https://..."
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-group-label" htmlFor="playlist-artista">Playlist do artista</label>
+              <input
+                className="form-group-links"
+                id="playlist-artista"
+                type="url"
+                name="playlistUrl"
+                maxLength={255}
+                value={evento.playlistUrl}
+                onChange={handleEventoChange}
+                placeholder="https://open.spotify.com/playlist/..."
               />
             </div>
           </section>

@@ -21,6 +21,13 @@ function precoEmCentavos(preco) {
   return Math.round(Number(preco) * 100);
 }
 
+function vendaDisponivel(tipo) {
+  const agora = Date.now();
+  const inicio = tipo.venda_inicio ? Date.parse(tipo.venda_inicio) : null;
+  const fim = tipo.venda_final ? Date.parse(tipo.venda_final) : null;
+  return (inicio === null || agora >= inicio) && (fim === null || agora <= fim);
+}
+
 export default function ContadorIngresso() {
   const { id } = useParams();
   const router = useRouter();
@@ -279,7 +286,7 @@ export default function ContadorIngresso() {
               0,
               Number(tipo.quant_total) - Number(tipo.quant_vendida || 0),
             );
-            const disponivel = restantes > 0 && tipo.preco !== null;
+            const disponivel = restantes > 0 && tipo.preco !== null && vendaDisponivel(tipo);
             const quantidadePorCategoria = quantidades[tipo.id] || {};
             const quantidade = quantidadeDoTipo(quantidades, tipo.id);
             const setorAberto = Boolean(setoresAbertos[tipo.id]);

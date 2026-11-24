@@ -60,11 +60,16 @@ export async function buscarPerfilPorId(id) {
 export async function atualizarPerfil(id, perfil) {
   await pool.query(
     `UPDATE usuarios
-     SET nacionalidade = ?, sexo = ?, data_nascimento = ?, cep = ?,
+     SET nome_completo = ?, email = ?, cpf = ?, telefone = ?,
+         nacionalidade = ?, sexo = ?, data_nascimento = ?, cep = ?,
          logradouro = ?, numero = ?, complemento = ?, bairro = ?, estado = ?,
          cidade = ?, receber_sms_whatsapp = ?, receber_newsletter = ?
      WHERE id = ?`,
     [
+      perfil.nome_completo,
+      perfil.email,
+      perfil.cpf,
+      perfil.telefone,
       perfil.nacionalidade,
       perfil.sexo,
       perfil.data_nascimento,
@@ -81,4 +86,19 @@ export async function atualizarPerfil(id, perfil) {
     ],
   );
   return buscarPerfilPorId(id);
+}
+
+export async function buscarSenhaHashPorId(id) {
+  const [linhas] = await pool.query(
+    "SELECT senha_hash FROM usuarios WHERE id = ? LIMIT 1",
+    [id],
+  );
+  return linhas[0]?.senha_hash || null;
+}
+
+export async function atualizarSenha(id, senhaHash) {
+  await pool.query(
+    "UPDATE usuarios SET senha_hash = ?, atualizado_em = CURRENT_TIMESTAMP WHERE id = ?",
+    [senhaHash, id],
+  );
 }

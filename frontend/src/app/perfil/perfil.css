@@ -143,6 +143,64 @@
   color: #714ab4;
 }
 
+.item-input {
+  width: 100%;
+  min-width: 220px;
+  padding: 10px 12px;
+  border: 1px solid #714ab4;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.senha-edicao,
+.grid-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.senha-edicao {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.btn-senha,
+.btn-salvar-pequeno,
+.btn-cancelar,
+.btn-edit-pessoais {
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-senha,
+.btn-salvar-pequeno {
+  background: #714ab4;
+  color: #fff;
+}
+
+.btn-cancelar,
+.btn-edit-pessoais {
+  background: #f1edf7;
+  color: #714ab4;
+}
+
+.btn-edit-pessoais {
+  margin-top: 24px;
+}
+
+.campo-descricao {
+  color: #888;
+  font-size: 0.85rem;
+  margin: 10px 0;
+}
+
 .card-grid-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;

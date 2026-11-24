@@ -162,6 +162,13 @@ export async function criarPedido(usuarioId, itensInformados) {
       );
     }
 
+    for (const [tipoId, quantidade] of quantidadePorTipo) {
+      await conexao.query(
+        "UPDATE tipo_ingresso SET quant_vendida = quant_vendida + ? WHERE id = ?",
+        [quantidade, tipoId],
+      );
+    }
+
     await conexao.commit();
     transacaoAberta = false;
 

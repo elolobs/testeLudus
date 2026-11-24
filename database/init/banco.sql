@@ -48,6 +48,7 @@ CREATE TABLE IF NOT EXISTS eventos (
   local_nome VARCHAR(150) NOT NULL,
   local_endereco TEXT NOT NULL,
   imagem_capa_url VARCHAR(255),
+  playlist_url VARCHAR(255),
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (organizador_id) REFERENCES usuarios(id),
@@ -105,6 +106,7 @@ CREATE TABLE IF NOT EXISTS itens_pedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
   pedido_id INT NOT NULL,
   tipo_ingresso_id INT NOT NULL,
+  categoria ENUM('inteira', 'meia') NOT NULL DEFAULT 'inteira',
   quantidade INT NOT NULL,
   preco_unitario DECIMAL(10,2) NOT NULL,
   FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
@@ -160,8 +162,8 @@ VALUES
 
 INSERT INTO tipo_ingresso (evento_id, nome, preco, quant_total, quant_vendida, venda_inicio, venda_final) 
 VALUES 
-(1, 'Ingresso VIP', 150.00, 100, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59'),
-(1, 'Ingresso Padrão', 75.00, 400, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59');
+(1, 'Ingresso VIP', 150.00, 100, 0, DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 60 DAY)),
+(1, 'Ingresso Padrão', 75.00, 400, 0, DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 60 DAY));
 
 INSERT INTO pedidos (usuario_id, valor_total, status) 
 VALUES 

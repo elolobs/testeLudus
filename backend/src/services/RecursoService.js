@@ -56,7 +56,7 @@ const recursos = {
     colunas: [
       "id", "organizador_id", "categoria_id", "titulo", "descricao",
       "capacidade_maxima", "status", "data_inicio", "data_fim", "local_nome",
-      "local_endereco", "imagem_capa_url", "criado_em", "atualizado_em",
+      "local_endereco", "imagem_capa_url", "playlist_url", "criado_em", "atualizado_em",
     ],
     campos: {
       organizador_id: campos.inteiro(),
@@ -70,6 +70,7 @@ const recursos = {
       local_nome: campos.texto(150),
       local_endereco: campos.texto(65535),
       imagem_capa_url: campos.texto(255, { nullable: true }),
+      playlist_url: campos.texto(255, { nullable: true }),
     },
     obrigatorios: [
       "organizador_id", "categoria_id", "titulo", "descricao", "capacidade_maxima",
@@ -80,11 +81,11 @@ const recursos = {
     escrita: {
       ADMIN: [
         "organizador_id", "categoria_id", "titulo", "descricao", "capacidade_maxima",
-        "status", "data_inicio", "data_fim", "local_nome", "local_endereco", "imagem_capa_url",
+        "status", "data_inicio", "data_fim", "local_nome", "local_endereco", "imagem_capa_url", "playlist_url",
       ],
       ORGANIZADOR: [
         "categoria_id", "titulo", "descricao", "capacidade_maxima", "status",
-        "data_inicio", "data_fim", "local_nome", "local_endereco", "imagem_capa_url",
+        "data_inicio", "data_fim", "local_nome", "local_endereco", "imagem_capa_url", "playlist_url",
       ],
     },
     escopoPublico: { sql: "status = 'PUBLICADO'" },

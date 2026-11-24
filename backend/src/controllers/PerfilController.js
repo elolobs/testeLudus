@@ -30,3 +30,12 @@ export async function atualizar(req, res, next) {
     return responderErro(erro, res, next);
   }
 }
+
+export async function alterarSenha(req, res, next) {
+  try {
+    await PerfilService.alterarSenha(req.usuario.id, req.body);
+    return res.status(200).json({ sucesso: true, mensagem: "Senha alterada com sucesso." });
+  } catch (erro) {
+    return responderErro(erro, res, next);
+  }
+}
