@@ -9,18 +9,6 @@ CREATE TABLE IF NOT EXISTS usuarios (
   senha_hash VARCHAR(255) NOT NULL,
   cpf VARCHAR(14) UNIQUE NOT NULL,
   telefone VARCHAR(20),
-  nacionalidade VARCHAR(80),
-  sexo VARCHAR(30),
-  data_nascimento DATE,
-  cep VARCHAR(9),
-  logradouro VARCHAR(150),
-  numero VARCHAR(20),
-  complemento VARCHAR(100),
-  bairro VARCHAR(100),
-  estado CHAR(2),
-  cidade VARCHAR(100),
-  receber_sms_whatsapp BOOLEAN NOT NULL DEFAULT FALSE,
-  receber_newsletter BOOLEAN NOT NULL DEFAULT FALSE,
   cargo ENUM('ADMIN', 'ORGANIZADOR', 'USUARIO') DEFAULT 'USUARIO',
   ativo BOOLEAN DEFAULT TRUE,
   termo_lgpd_aceito BOOLEAN NOT NULL DEFAULT FALSE,
@@ -48,7 +36,6 @@ CREATE TABLE IF NOT EXISTS eventos (
   local_nome VARCHAR(150) NOT NULL,
   local_endereco TEXT NOT NULL,
   imagem_capa_url VARCHAR(255),
-  playlist_url VARCHAR(255),
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   FOREIGN KEY (organizador_id) REFERENCES usuarios(id),
@@ -106,7 +93,6 @@ CREATE TABLE IF NOT EXISTS itens_pedido (
   id INT AUTO_INCREMENT PRIMARY KEY,
   pedido_id INT NOT NULL,
   tipo_ingresso_id INT NOT NULL,
-  categoria ENUM('inteira', 'meia') NOT NULL DEFAULT 'inteira',
   quantidade INT NOT NULL,
   preco_unitario DECIMAL(10,2) NOT NULL,
   FOREIGN KEY (pedido_id) REFERENCES pedidos(id) ON DELETE CASCADE,
@@ -145,7 +131,7 @@ INSERT INTO usuarios (nome_completo, email, senha_hash, cpf, telefone, cargo, at
 VALUES 
 ('Mylena Lima Pacheco', 'mylenacheco@gmail.com', 'hash_senha_123', '15583527080', '11943546087', 'ADMIN', TRUE, TRUE, CURRENT_TIMESTAMP),
 ('Eloah Lourenço', 'eloah@email.com', 'hash_senha_456', '12345678901', '11987654321', 'ORGANIZADOR', TRUE, TRUE, CURRENT_TIMESTAMP),
-('João Silva', 'joao@email.com', '$2b$10$Qt8QMrPodbCXIONxQqoqv.O666Vt/4bsrxbQ4vhfNYTFVajaceGPq ', '98765432100', '11911112222', 'USUARIO', TRUE, TRUE, CURRENT_TIMESTAMP);
+('João Silva', 'joao@email.com', 'hash_senha_789', '98765432100', '11911112222', 'USUARIO', TRUE, TRUE, CURRENT_TIMESTAMP);
 
 INSERT INTO categorias (nome, descricao) 
 VALUES 
@@ -162,8 +148,8 @@ VALUES
 
 INSERT INTO tipo_ingresso (evento_id, nome, preco, quant_total, quant_vendida, venda_inicio, venda_final) 
 VALUES 
-(1, 'Ingresso VIP', 150.00, 100, 0, DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 60 DAY)),
-(1, 'Ingresso Padrão', 75.00, 400, 0, DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 60 DAY));
+(1, 'Ingresso VIP', 150.00, 100, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59'),
+(1, 'Ingresso Padrão', 75.00, 400, 0, '2024-01-01 00:00:00', '2024-10-14 23:59:59');
 
 INSERT INTO pedidos (usuario_id, valor_total, status) 
 VALUES 
@@ -177,9 +163,18 @@ INSERT INTO ingressos (pedido_id, tipo_ingresso_id, usuario_id, quantidade, stat
 VALUES 
 (1, 2, 3, 1, 'valido', 75.00);
 
-update categorias 
-set nome = 'Musica'
-where descricao = 'Shows, festivais e workshops musicais';
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM eventos WHERE categoria_id = 2;
+
+select * from categorias;
+
+DELETE c1 FROM categorias c1
+INNER JOIN categorias c2 
+WHERE c1.id > c2.id 
+  AND c1.nome = c2.nome;
+
+insert into categorias (nome, descricao) values
+('Tecnologia', 'Eventos sobre programação, IA, segurança digital, robótica e inovação');
 
 INSERT INTO categorias (nome, descricao) 
 VALUES 
@@ -187,21 +182,13 @@ VALUES
 ('Música', 'Shows, festivais, concertos, rodas de samba e workshops musicais'),
 ('Gastronomia', 'Festivais gastronômicos, feiras de food trucks, degustações e aulas de culinária'),
 ('Negócios e Empreendedorismo', 'Networking, palestras de liderança, feiras de franquias e encontros de startups'),
-('Educação e Carreira', 'Workshops, cursos intensivos, mentorias, feiras de profissões e congressos acadêmicos'),
 ('Artes Cênicas', 'Peças de teatro, espetáculos de dança, stand-up comedy, ópera, circo e musicais'),
 ('Cinema e Audiovisual', 'Mostras de cinema, pré-estreias, festivais de curtas e exibições ao ar livre'),
 ('Artes Visuais e Exposições', 'Galerias de arte, museus, fotografia, escultura e instalações imersivas'),
-('Literatura e Poesia', 'Feiras do livro, lançamentos, saraus, clubes de leitura e batalhas de rima'),
-('Festas e Vida Noturna', 'Baladas, festas temáticas, blocos de carnaval e eventos em rooftops'),
-('Marketing e Comunicação', 'Eventos sobre mídias sociais, branding, vendas e criação de conteúdo'),
 ('Esportes e Fitness', 'Corridas de rua, campeonatos amadores, aulas ao ar livre, trilhas e e-sports'),
-('Saúde e Bem-Estar', 'Retiros de yoga, meditação, terapias holísticas, saúde mental e nutrição'),
 ('Moda e Beleza', 'Desfiles, bazares, brechós coletivos, workshops de maquiagem e feiras de cosméticos'),
 ('Geek e Cultura Pop', 'Convenções de quadrinhos, encontros de cosplay, jogos de tabuleiro e RPG'),
 ('Família e Infantil', 'Espetáculos infantis, oficinas criativas para crianças e contação de histórias'),
-('Sustentabilidade e Meio Ambiente', 'Feiras orgânicas, mutirões de limpeza, reciclagem e ativismo climático'),
-('Causa Social e Voluntariado', 'Eventos beneficentes, bazares solidários, doações e fóruns comunitários'),
-('Religião e Espiritualidade', 'Retiros espirituais, encontros de jovens, celebrações e palestras filosóficas');
 
 INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
 VALUES
@@ -209,3 +196,33 @@ VALUES
 (2, 2, 'Olivia Rodrigo - The Unraveled Tour', 'The Unraveled Tour é a terceira turnê de shows de Olivia Rodrigo, criada para promover seu terceiro álbum de estúdio, You Seem Pretty Sad for a Girl So in Love (2026)', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), 'Estádio Nilton Santos (Engenhão)', 'Rua José dos Reis, 425 - Rio de Janeiro', './olivia.png'),
 (2, 2, 'BTS - Arirang', 'Espetáculo grandioso do grupo sul-coreano com coreografias icônicas e efeitos pirotécnicos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 75 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 76 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', './bts.png'),
 (2, 2, 'Marina Sena - Turnê Coisas Naturais', 'Show vibrante misturando pop brasileiro, MPB e coreografias marcantes.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', './marina.png');
+
+ALTER TABLE usuarios
+  ADD COLUMN nacionalidade VARCHAR(80) NULL,
+  ADD COLUMN sexo VARCHAR(30) NULL,
+  ADD COLUMN data_nascimento DATE NULL,
+  ADD COLUMN cep VARCHAR(9) NULL,
+  ADD COLUMN logradouro VARCHAR(150) NULL,
+  ADD COLUMN numero VARCHAR(20) NULL,
+  ADD COLUMN complemento VARCHAR(100) NULL,
+  ADD COLUMN bairro VARCHAR(100) NULL,
+  ADD COLUMN estado CHAR(2) NULL,
+  ADD COLUMN cidade VARCHAR(100) NULL,
+  ADD COLUMN receber_sms_whatsapp BOOLEAN NOT NULL DEFAULT FALSE,
+  ADD COLUMN receber_newsletter BOOLEAN NOT NULL DEFAULT FALSE;
+
+select * from usuarios;
+
+UPDATE tipo_ingresso
+SET venda_inicio = CASE
+        WHEN venda_inicio IS NULL OR venda_inicio < CURRENT_TIMESTAMP
+        THEN DATE_SUB(CURRENT_TIMESTAMP, INTERVAL 1 DAY)
+        ELSE venda_inicio
+    END,
+    venda_final = CASE
+        WHEN venda_final IS NULL OR venda_final < CURRENT_TIMESTAMP
+        THEN DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 60 DAY)
+        ELSE venda_final
+    END
+WHERE venda_final IS NULL OR venda_final < CURRENT_TIMESTAMP;
+
