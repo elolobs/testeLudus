@@ -13,20 +13,20 @@
 }
 
 .suporte-hero {
-    background: #030e38; 
+     background: linear-gradient(135deg, #01061a 0%, #1a1549 40%, #4b3bb0 100%);
     color: white;
     padding: 120px 20px 160px;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-radius: 0 0 40px 40px; 
+    
 }
 
 .suporte-hero-kicker {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #ffffff;
+    color:#9a8cde; 
     text-transform: uppercase;
     letter-spacing: 3px;
     margin-bottom: 24px;

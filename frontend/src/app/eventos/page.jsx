@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import "./eventos.css";
+import "./eventos.css"; 
 import CardEvento from "@/components/cardEvento";
 import { apiRequest, obterDataCard } from "@/lib/api.mjs";
 
@@ -80,8 +80,8 @@ export default function Eventos() {
         </div>
       </section>
 
-      <section className="busca-simples-section">
-        <form className="busca-input-container" onSubmit={(e) => e.preventDefault()}>
+      <section className="busca-simples-section-v2">
+        <form className="busca-input-container-v2" onSubmit={(e) => e.preventDefault()}>
           <i className="fa-solid fa-magnifying-glass"></i>
           <input
             type="text"
@@ -89,7 +89,7 @@ export default function Eventos() {
             value={busca}
             onChange={(event) => setBusca(event.target.value)}
           />
-          <button type="submit" className="btn-pesquisar-interno">Buscar<i className="fa-solid fa-arrow-right"></i></button>
+          <button type="submit" className="btn-pesquisar-interno-v2">Buscar<i className="fa-solid fa-arrow-right"></i></button>
         </form>
       </section>
 

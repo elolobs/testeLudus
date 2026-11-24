@@ -145,7 +145,7 @@ INSERT INTO usuarios (nome_completo, email, senha_hash, cpf, telefone, cargo, at
 VALUES 
 ('Mylena Lima Pacheco', 'mylenacheco@gmail.com', 'hash_senha_123', '15583527080', '11943546087', 'ADMIN', TRUE, TRUE, CURRENT_TIMESTAMP),
 ('Eloah Lourenço', 'eloah@email.com', 'hash_senha_456', '12345678901', '11987654321', 'ORGANIZADOR', TRUE, TRUE, CURRENT_TIMESTAMP),
-('João Silva', 'joao@email.com', 'hash_senha_789', '98765432100', '11911112222', 'USUARIO', TRUE, TRUE, CURRENT_TIMESTAMP);
+('João Silva', 'joao@email.com', '$2b$10$Qt8QMrPodbCXIONxQqoqv.O666Vt/4bsrxbQ4vhfNYTFVajaceGPq ', '98765432100', '11911112222', 'USUARIO', TRUE, TRUE, CURRENT_TIMESTAMP);
 
 INSERT INTO categorias (nome, descricao) 
 VALUES 
@@ -205,7 +205,7 @@ VALUES
 
 INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
 VALUES
-(2, 2, 'Lana Del Rey - Did You Know That There''s a Tunnel Under Ocean Blvd Tour', 'Show único no Brasil trazendo os maiores sucessos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), 'Allianz Parque', 'Av. Francisco Matarazzo, 1705 - São Paulo', 'lana.png'),
-(2, 2, 'Olivia Rodrigo - The Unraveled Tour', 'The Unraveled Tour é a terceira turnê de shows de Olivia Rodrigo, criada para promover seu terceiro álbum de estúdio, You Seem Pretty Sad for a Girl So in Love (2026)', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), 'Estádio Nilton Santos (Engenhão)', 'Rua José dos Reis, 425 - Rio de Janeiro', 'olivia.png'),
-(2, 2, 'BTS - Arirang', 'Espetáculo grandioso do grupo sul-coreano com coreografias icônicas e efeitos pirotécnicos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 75 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 76 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', 'bts.png'),
-(2, 2, 'Marina Sena - Turnê Coisas Naturais', 'Show vibrante misturando pop brasileiro, MPB e coreografias marcantes.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', 'marina.png');
+(2, 2, 'Lana Del Rey - Did You Know That There''s a Tunnel Under Ocean Blvd Tour', 'Show único no Brasil trazendo os maiores sucessos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), 'Allianz Parque', 'Av. Francisco Matarazzo, 1705 - São Paulo', './lana.png'),
+(2, 2, 'Olivia Rodrigo - The Unraveled Tour', 'The Unraveled Tour é a terceira turnê de shows de Olivia Rodrigo, criada para promover seu terceiro álbum de estúdio, You Seem Pretty Sad for a Girl So in Love (2026)', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 55 DAY), 'Estádio Nilton Santos (Engenhão)', 'Rua José dos Reis, 425 - Rio de Janeiro', './olivia.png'),
+(2, 2, 'BTS - Arirang', 'Espetáculo grandioso do grupo sul-coreano com coreografias icônicas e efeitos pirotécnicos.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 75 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 76 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', './bts.png'),
+(2, 2, 'Marina Sena - Turnê Coisas Naturais', 'Show vibrante misturando pop brasileiro, MPB e coreografias marcantes.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', './marina.png');

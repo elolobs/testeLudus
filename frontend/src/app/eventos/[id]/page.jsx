@@ -57,7 +57,7 @@ export default function Detalha() {
     if (restantes <= 10) return { texto: "Baixa disponibilidade", classe: "bolinha-amarela", restantes };
     return { texto: "Disponível", classe: "bolinha-verde", restantes };
   };
-  
+
   const enderecoMapa = encodeURIComponent(
     [evento.local_nome, evento.local_endereco].filter(Boolean).join(", "),
   );
@@ -117,7 +117,7 @@ export default function Detalha() {
       </div>
 
       <div className="conteudo-principal">
-        
+
         <div className="secao-header">
           <span className="secao-kicker">INGRESSOS</span>
           <h2 className="secao-titulo">Garanta seu lugar.</h2>
@@ -130,7 +130,7 @@ export default function Detalha() {
             return (
               <div className="boxs" key={ingresso.id}>
                 <div className="container-box-detalhes">
-                  <span style={{ color: 'white', fontWeight: 'bold', fontSize: '1.2rem'}}>LD</span>
+                  <img src="/img/logo.png" alt="Logo Ludus" />
                 </div>
                 <div className="Linha" />
                 <div className="colluns">
@@ -163,7 +163,7 @@ export default function Detalha() {
         <div className="secao-resumo">
           <div className="resumo-texto-lado">
             <span className="secao-kicker">RESUMO DO EVENTO</span>
-            <h2>Sobre a <br/>experiência.</h2>
+            <h2>Sobre a <br />experiência.</h2>
           </div>
           <div className="resumo-conteudo">
             <p>{evento.descricao}</p>
@@ -192,7 +192,7 @@ export default function Detalha() {
         </div>
 
         <div className="secao-midia">
-          
+
           <div className="card-midia">
             <div className="card-midia-header">
               <div className="card-midia-header-textos">
@@ -203,7 +203,7 @@ export default function Detalha() {
                 <i className="fa-solid fa-location-dot"></i>
               </div>
             </div>
-            
+
             <div className="wrapper-iframe">
               <iframe
                 title={`Mapa para ${evento.local_nome}`}
@@ -239,7 +239,7 @@ export default function Detalha() {
               />
             </div>
           </div>
-          
+
         </div>
 
       </div>
