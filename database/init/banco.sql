@@ -256,3 +256,59 @@ ALTER TABLE eventos
 ALTER TABLE itens_pedido ADD COLUMN categoria VARCHAR(100) NULL;
 
 SELECT * FROM eventos;
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'Billie Eilish - Hit Me Hard and Soft: The Tour', 'Apresentação imersiva com palco em 360 graus, sucessos do novo álbum e clássicos da carreira.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), 'Autódromo de Interlagos', 'Av. Sen. Teotônio Vilela, 261 - São Paulo', '../../img/billie.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'The Weeknd - After Hours Til Dawn (Encore)', 'Superprodução futurista com iluminação de estádio e setlist repleto de hits mundiais.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 48 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 49 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', '../../img/theweeknd.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'Sabrina Carpenter - Short n'' Sweet Tour', 'Show pop teatral e bem-humorado trazendo os maiores sucessos das paradas globais.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 62 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 62 DAY), 'Espaço Unimed', 'Rua Tagipuru, 795 - São Paulo', '../../img/sabrina.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'Liniker - Caju Tour', 'Espetáculo emocionante celebrando o álbum Caju, unindo MPB, soul e arranjos orquestrais.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 15 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 15 DAY), 'Vivo Rio', 'Av. Infante Dom Henrique, 85 - Rio de Janeiro', '../../img/liniker.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'Travis Scott - Circus Maximus Tour', 'Experiência audiovisual intensa com cenografia monumental e os maiores hits do trap.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 90 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 90 DAY), 'Allianz Parque', 'Av. Francisco Matarazzo, 1705 - São Paulo', '../../img/travis.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'Charli XCX - BRAT Arena Tour', 'Festa eletropop de alta energia com estética clubber e batidas marcantes.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 35 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 35 DAY), 'Farmasi Arena', 'Av. Embaixador Abelardo Bueno, 3401 - Rio de Janeiro', '../../img/charli.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'Jão - Supernova: O Último Ato', 'Encerramento épico da era Super com pirotecnia, passarela gigante e grandes sucessos do pop nacional.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 18 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 18 DAY), 'Pedreira Paulo Leminski', 'Rua João Gava, 970 - Curitiba', '../../img/jao.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'Chappell Roan - The Midwest Princess Tour', 'Show vibrante com estética drag, figurinos extravagantes e hinos pop cantados em coro.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 82 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 82 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', '../../img/chappell.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 1, 'DevSummit Brasil: Inteligência Artificial e Arquitetura Cloud', 'Dois dias intensivos de palestras técnicas, hackathons e workshops práticos focados em modelos de linguagem, cibersegurança ofensiva e escalabilidade de sistemas. Ideal para desenvolvedores e líderes técnicos que buscam atualização e networking com especialistas do mercado.', 800, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 18 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 19 DAY), 'Expo Center Norte', 'Rua José Bernardo Pinto, 333 - São Paulo', '../../img/devsummit.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 2, 'Festival Aurora Sonora: Edição Especial', 'Uma celebração da música independente e do pop alternativo brasileiro reunindo mais de doze artistas em dois palcos simultâneos. O evento conta ainda com praça de alimentação variada, áreas de descanso ao ar livre e ativações culturais durante todo o dia.', 1500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 32 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 32 DAY), 'Parque Villa-Lobos', 'Av. Prof. Fonseca Rodrigues, 2001 - São Paulo', '../../img/aurora_sonora.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 3, 'Sabor & Brasa: Festival de Gastronomia Artesanal', 'Encontro gastronômico ao ar livre que reúne chefs renomados, estações de churrasco fogo de chão, cervejarias artesanais e opções vegetarianas autorais. Inclui aulas-show gratuitas ao longo da tarde e espaço dedicado a produtores locais de queijos e doces.', 600, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 12 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 13 DAY), 'Memorial da América Latina', 'Av. Mário de Andrade, 664 - São Paulo', '../../img/sabor_brasa.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 4, 'Conexão Startup & Liderança 2027', 'Evento voltado para fundadores, investidores e gestores que desejam escalar seus negócios. A programação oferece painéis sobre captação de recursos, rodadas de pitch ao vivo, mentorias individuais e espaços estruturados para geração de parcerias estratégicas.', 400, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 45 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 45 DAY), 'Cubo Itaú', 'Alameda Vicente Pinzon, 54 - São Paulo', '../../img/conexao_startup.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 5, 'O Fantasma da Ópera - Temporada Nacional', 'Superprodução teatral com orquestra ao vivo, figurinos elaborados e cenografia monumental que dá vida a um dos maiores clássicos dos musicais mundiais. Uma experiência emocionante que combina drama, romance e interpretações vocais marcantes.', 900, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 25 DAY), 'Teatro Renault', 'Av. Brigadeiro Luís Antônio, 411 - São Paulo', '../../img/fantasma_opera.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 6, 'Mostra Cine Horizonte: Curtas e Cinema ao Ar Livre', 'Exibição gratuita de curtas-metragens premiados do cinema nacional e latino-americano em telão de alta definição sob as estrelas. Após as sessões, o público poderá participar de debates abertos com diretores, roteiristas e produtores independentes.', 350, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 20 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 22 DAY), 'Cinemateca Brasileira', 'Largo Sen. Raul Cardoso, 207 - São Paulo', '../../img/cine_horizonte.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 7, 'Imersão Luz & Forma: Arte Digital Interativa', 'Exposição sensorial que transforma obras clássicas e contemporâneas em projeções mapeadas de 360 graus responsivas ao movimento dos visitantes. O percurso reúne instalações sonoras, realidade aumentada e esculturas luminosas de artistas brasileiros.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 10 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 40 DAY), 'Farol Santander', 'Rua João Brícola, 24 - São Paulo', '../../img/luz_forma.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 8, 'Night Run Urbano 10K & Arena Fitness', 'Corrida noturna pelas principais avenidas iluminadas da cidade com percursos de 5 km e 10 km para iniciantes e atletas experientes. A arena pós-prova oferece DJ ao vivo, massagem esportiva, hidratação e aulas coletivas de alongamento funcional.', 2000, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 28 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 28 DAY), 'Praça Charles Miller', 'Praça Charles Miller, s/n - São Paulo', '../../img/night_run.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 9, 'Coletivo Criativo: Bazar de Moda Autoral e Brechó', 'Curadoria especial com mais de sessenta marcas independentes de vestuário sustentável, acessórios artesanais e brechós selecionados. O evento também promove oficinas de customização de peças e consultoria gratuita de coloração pessoal.', 450, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 15 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 16 DAY), 'Casa das Caldeiras', 'Av. Francisco Matarazzo, 2000 - São Paulo', '../../img/coletivo_criativo.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 10, 'Pixel & Dados: Convenção Geek e RPG de Mesa', 'Ponto de encontro para fãs de cultura pop, quadrinhos, jogos de tabuleiro e universo geek. Conta com campeonatos de card games, mesas abertas de RPG narradas por mestres convidados, concurso de cosplay com premiação e beco dos artistas independentes.', 1000, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 50 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 51 DAY), 'Centro de Convenções Frei Caneca', 'Rua Frei Caneca, 569 - São Paulo', '../../img/pixel_dados.png');
+
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+VALUES (2, 11, 'Fábrica de Histórias: Teatro e Oficinas Criativas', 'Programação cultural pensada para toda a família com espetáculo musical lúdico sobre preservação da natureza, seguido de oficinas de pintura, construção de fantoches com materiais recicláveis e contação de histórias interativa no jardim.', 300, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 14 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 14 DAY), 'Sesc Pinheiros', 'Rua Paes Leme, 195 - São Paulo', '../../img/fabrica_historias.png');
