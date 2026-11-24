@@ -13,7 +13,7 @@ export default function Suporte() {
           <span className="destaque-roxo">ajudar?</span>
         </h1>
         <p>
-          Conte-nos sobre o problema que você está enfrentando. Nossa equipe de especialistas está pronta para resolver qualquer questão na plataforma.
+          Conte-nos sobre o problema que você está enfrentando. Nossa equipe de especialistas <br></br>está pronta para resolver qualquer questão na plataforma.
         </p>
       </section>
 

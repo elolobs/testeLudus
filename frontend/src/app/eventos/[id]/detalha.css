@@ -126,7 +126,7 @@
 .container-box-detalhes {
     width: 64px;
     height: 64px;
-    background-color: #030e38;
+    background-color: #9ba8e000;
     border-radius: 12px; 
     display: flex;
     align-items: center;
@@ -135,7 +135,7 @@
 }
 
 .container-box-detalhes img {
-    width: 32px;
+    width: 62px;
     height: auto;
 }
 

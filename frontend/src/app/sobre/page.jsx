@@ -4,18 +4,18 @@ import "./sobre.css";
 export default function SobreNos() {
   return (
     <div className="sobre-container">
-      
-      {/* Hero Section */}
       <section className="sobre-hero">
         <span className="sobre-hero-kicker">Nossa Essência</span>
-        <h1>Muito mais que ingressos.</h1>
+        <h1 className="sobre-hero-title">
+          Muito mais que <br />
+          <span className="sobre-destaque">ingressos.</span>
+        </h1>
         <p>
           Nascemos para conectar pessoas apaixonadas por cultura, tecnologia e entretenimento 
           a experiências que ficam para sempre na memória.
         </p>
       </section>
 
-      {/* Estatísticas */}
       <div className="sobre-stats-wrapper">
         <div className="sobre-stats">
           <div className="stat-item">
@@ -35,14 +35,13 @@ export default function SobreNos() {
         </div>
       </div>
 
-      {/* Quem Somos */}
       <section className="sobre-historia">
         <div className="historia-texto">
           <span className="secao-kicker">QUEM SOMOS</span>
           <h2>A ponte entre a ideia e o aplauso.</h2>
           <p>
             Tudo começou com uma frustração comum: organizar e participar de eventos era burocrático, 
-            lento e sem personalidade. Nós decidimos mudar o jogo. A <span className="destaque">LD</span> foi 
+            lento e sem personalidade. Nós decidimos mudar o jogo. A <span className="destaque">Ludus</span> foi 
             criada para ser uma plataforma fluida, bonita e intuitiva.
           </p>
           <p>
@@ -60,7 +59,6 @@ export default function SobreNos() {
         </div>
       </section>
 
-      {/* Valores */}
       <section className="sobre-valores">
         <div className="secao-header texto-centralizado">
           <span className="secao-kicker">O QUE NOS MOVE</span>
@@ -94,7 +92,6 @@ export default function SobreNos() {
         </div>
       </section>
 
-      {/* NOVA SEÇÃO: O QUE OFERECEMOS (Layout Alternado) */}
       <section className="sobre-features">
         <div className="features-header">
           <div className="kicker-linha-centro"></div>
@@ -102,9 +99,8 @@ export default function SobreNos() {
           <p>Ferramentas modernas que acompanham o evento do primeiro clique ao relatório final.</p>
         </div>
 
-        {/* Feature 1: Imagem na esquerda, texto na direita */}
         <div className="feature-row">
-          <div className="feature-imagem"></div>
+          <div className="feature-imagem img-detalhes"></div>
           <div className="feature-texto">
             <div className="kicker-linha-esquerda"></div>
             <h3>Detalhes completos de cada evento</h3>
@@ -117,9 +113,8 @@ export default function SobreNos() {
           </div>
         </div>
 
-        {/* Feature 2: Texto na esquerda, imagem na direita */}
         <div className="feature-row reverse">
-          <div className="feature-imagem"></div>
+          <div className="feature-imagem img-organizador"></div>
           <div className="feature-texto">
             <div className="kicker-linha-esquerda"></div>
             <h3>Dashboard do organizador</h3>
@@ -132,9 +127,8 @@ export default function SobreNos() {
           </div>
         </div>
 
-        {/* Feature 3: Imagem na esquerda, texto na direita */}
         <div className="feature-row">
-          <div className="feature-imagem"></div>
+          <div className="feature-imagem img-ingresso"></div>
           <div className="feature-texto">
             <div className="kicker-linha-esquerda"></div>
             <h3>Área do ingresso</h3>
@@ -148,7 +142,6 @@ export default function SobreNos() {
         </div>
       </section>
 
-      {/* Depoimentos */}
       <section className="sobre-depoimentos">
         <div className="secao-header texto-centralizado">
           <span className="secao-kicker">O IMPACTO</span>
@@ -186,7 +179,6 @@ export default function SobreNos() {
         </div>
       </section>
 
-      {/* CTA Final */}
       <section className="sobre-cta">
         <h2>Pronto para a próxima experiência?</h2>
         <p>Explore nosso catálogo e garanta seu lugar nos melhores eventos da cidade.</p>
@@ -194,7 +186,6 @@ export default function SobreNos() {
           Ver Eventos Disponíveis
         </Link>
       </section>
-
     </div>
   );
 }
