@@ -7,49 +7,6 @@ import "./suporte.css";
 import { apiRequest } from "@/lib/api.mjs";
 import { obterSessao } from "@/lib/sessao.mjs";
 
-const MENSAGENS_FAKE = [
-  {
-    id: 101,
-    nome: "Mariana Costa",
-    email: "mariana.costa@email.com",
-    telefone: "(11) 98765-4321",
-    mensagem:
-      "Olá! Comprei dois ingressos para o Festival de Verão ontem pelo Pix, o valor já foi debitado da minha conta, mas eles ainda não aparecem na aba 'Meus Ingressos'. Podem verificar?",
-    status: "PENDENTE",
-    criado_em: "2026-11-24T14:20:00Z",
-    respostas: [],
-  },
-  {
-    id: 102,
-    nome: "Carlos Eduardo Mendes",
-    email: "carlos.produtor@eventossp.com.br",
-    telefone: "(11) 99123-4567",
-    mensagem:
-      "Boa tarde, sou organizador do evento 'Noite do Rock Indie'. Preciso alterar a data do lote promocional, mas o botão de salvar está desabilitado para mim.",
-    status: "EM_ANDAMENTO",
-    criado_em: "2026-11-23T18:45:00Z",
-    respostas: [],
-  },
-  {
-    id: 103,
-    nome: "Fernanda Oliveira",
-    email: "fernanda.oli@email.com",
-    telefone: "(11) 97412-8890",
-    mensagem:
-      "Gostaria de solicitar o cancelamento e reembolso do pedido #4589, pois não poderei comparecer na nova data do show.",
-    status: "RESOLVIDO",
-    criado_em: "2026-11-22T10:15:00Z",
-    respostas: [
-      {
-        id: 1,
-        texto:
-          "Olá Fernanda! Seu reembolso referente ao pedido #4589 já foi processado e o estorno constará na sua fatura em até 5 dias úteis.",
-        criado_em: "2026-11-22T11:02:00Z",
-      },
-    ],
-  },
-];
-
 export default function AdminSuportePage() {
   const router = useRouter();
   const [mensagens, setMensagens] = useState([]);
@@ -59,6 +16,7 @@ export default function AdminSuportePage() {
   const [respostaTexto, setRespostaTexto] = useState("");
   const [enviandoResposta, setEnviandoResposta] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     let ativo = true;
@@ -81,15 +39,15 @@ export default function AdminSuportePage() {
     apiRequest("admin/suporte", { token: sessao.token })
       .then((resultado) => {
         if (!ativo) return;
-        const lista = resultado?.mensagens || resultado;
-        const inicial = lista && lista.length > 0 ? lista : MENSAGENS_FAKE;
-        setMensagens(inicial);
-        setMensagemSelecionada(inicial[0] || null);
+        const lista = Array.isArray(resultado)
+          ? resultado
+          : resultado?.mensagens || [];
+        setMensagens(lista);
+        setMensagemSelecionada(lista[0] || null);
       })
-      .catch(() => {
+      .catch((erroApi) => {
         if (!ativo) return;
-        setMensagens(MENSAGENS_FAKE);
-        setMensagemSelecionada(MENSAGENS_FAKE[0]);
+        setError(erroApi.message || "Erro ao carregar mensagens do suporte.");
       })
       .finally(() => {
         if (ativo) setLoading(false);
@@ -115,15 +73,15 @@ export default function AdminSuportePage() {
         token: sessao.token,
         body: { status: "RESOLVIDO" },
       });
-    } catch {
-      // Atualiza localmente mesmo se a API ainda não estiver conectada
-    }
 
-    setMensagens((prev) =>
-      prev.map((msg) => (msg.id === id ? { ...msg, status: "RESOLVIDO" } : msg))
-    );
-    if (mensagemSelecionada?.id === id) {
-      setMensagemSelecionada((prev) => ({ ...prev, status: "RESOLVIDO" }));
+      setMensagens((prev) =>
+        prev.map((msg) => (msg.id === id ? { ...msg, status: "RESOLVIDO" } : msg))
+      );
+      if (mensagemSelecionada?.id === id) {
+        setMensagemSelecionada((prev) => ({ ...prev, status: "RESOLVIDO" }));
+      }
+    } catch (err) {
+      alert(err.message || "Não foi possível atualizar o status.");
     }
   };
 
@@ -136,9 +94,8 @@ export default function AdminSuportePage() {
 
     setEnviandoResposta(true);
 
-    let atualizado = null;
     try {
-      atualizado = await apiRequest(
+      const atualizado = await apiRequest(
         `admin/suporte/${mensagemSelecionada.id}/responder`,
         {
           method: "POST",
@@ -146,40 +103,41 @@ export default function AdminSuportePage() {
           body: { resposta: respostaTexto },
         }
       );
-    } catch {
-      // Fallback local enquanto a API não está conectada
+
+      const respostasAnteriores = Array.isArray(mensagemSelecionada.respostas)
+        ? mensagemSelecionada.respostas
+        : mensagemSelecionada.resposta
+        ? [
+            {
+              id: "antiga",
+              texto: mensagemSelecionada.resposta,
+              criado_em: mensagemSelecionada.respondido_em,
+            },
+          ]
+        : [];
+
+      const novaResposta = {
+        id: atualizado?.id || Date.now(),
+        texto: atualizado?.texto || atualizado?.resposta || respostaTexto,
+        criado_em: atualizado?.criado_em || new Date().toISOString(),
+      };
+
+      const novaMensagem = {
+        ...mensagemSelecionada,
+        respostas: [...respostasAnteriores, novaResposta],
+        status: atualizado?.status || "RESOLVIDO",
+      };
+
+      setMensagens((prev) =>
+        prev.map((msg) => (msg.id === novaMensagem.id ? novaMensagem : msg))
+      );
+      setMensagemSelecionada(novaMensagem);
+      setRespostaTexto("");
+    } catch (err) {
+      alert(err.message || "Erro ao enviar resposta.");
+    } finally {
+      setEnviandoResposta(false);
     }
-
-    const respostasAnteriores = Array.isArray(mensagemSelecionada.respostas)
-      ? mensagemSelecionada.respostas
-      : mensagemSelecionada.resposta
-      ? [
-          {
-            id: "antiga",
-            texto: mensagemSelecionada.resposta,
-            criado_em: mensagemSelecionada.respondido_em,
-          },
-        ]
-      : [];
-
-    const novaResposta = {
-      id: atualizado?.id || Date.now(),
-      texto: atualizado?.texto || respostaTexto,
-      criado_em: atualizado?.criado_em || new Date().toISOString(),
-    };
-
-    const novaMensagem = {
-      ...mensagemSelecionada,
-      respostas: [...respostasAnteriores, novaResposta],
-      status: "RESOLVIDO",
-    };
-
-    setMensagens((prev) =>
-      prev.map((msg) => (msg.id === novaMensagem.id ? novaMensagem : msg))
-    );
-    setMensagemSelecionada(novaMensagem);
-    setRespostaTexto("");
-    setEnviandoResposta(false);
   };
 
   const formatarStatus = (status) => {
@@ -211,6 +169,14 @@ export default function AdminSuportePage() {
     return (
       <div className="suporte-admin-loading">
         <p>Carregando mensagens do suporte...</p>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="suporte-admin-loading">
+        <p>{error}</p>
       </div>
     );
   }
@@ -306,7 +272,7 @@ export default function AdminSuportePage() {
 
             {mensagensFiltradas.length === 0 && (
               <div className="suporte-vazio">
-                Nenhuma mensagem encontrada para este filtro.
+                Nenhuma mensagem encontrada.
               </div>
             )}
           </aside>
