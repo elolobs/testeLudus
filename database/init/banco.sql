@@ -226,3 +226,6 @@ SET venda_inicio = CASE
     END
 WHERE venda_final IS NULL OR venda_final < CURRENT_TIMESTAMP;
 
+ALTER TABLE eventos
+  ADD COLUMN IF NOT EXISTS playlist_url VARCHAR(255) NULL AFTER imagem_capa_url;
+
