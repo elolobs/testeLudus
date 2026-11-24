@@ -1,6 +1,21 @@
+"use client";
+
+import { usePathname } from "next/navigation";
 import "./footer.css";
 
 export default function Footer() {
+    const pathname = usePathname();
+
+    const rotasSemFooter = ["/perfil", "/login", "/cadastro"];
+    const caminhoAtual = (pathname || "").toLowerCase();
+
+    const deveEsconder = rotasSemFooter.some(
+        (rota) => caminhoAtual === rota || caminhoAtual.startsWith(`${rota}/`)
+    );
+
+    if (deveEsconder) {
+        return null;
+    }
     return (
         <footer className="footer-container">
             <div className="footer-content">

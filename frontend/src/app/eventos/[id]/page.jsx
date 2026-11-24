@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import "./detalha.css";
-import { apiRequest, formatarData, formatarPreco } from "@/lib/api.mjs";
+import { apiRequest, formatarData, formatarPreco, obterUrlImagemEvento } from "@/lib/api.mjs";
 
 export default function Detalha() {
   const { id } = useParams();
@@ -60,7 +60,7 @@ export default function Detalha() {
     <>
       <div className="container-detalhes">
         <img
-          src={evento.imagem_capa_url || "/img/fundocadastro.png"}
+          src={obterUrlImagemEvento(evento.imagem_capa_url)}
           alt={`Imagem do evento ${evento.titulo}`}
         />
         <div className="imgblur">

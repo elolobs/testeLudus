@@ -1,5 +1,6 @@
 import "./cardEvento.css"
 import Link from "next/link";
+import { obterUrlImagemEvento } from "@/lib/api.mjs";
 
 export default function CardEvento({
     id,
@@ -15,7 +16,7 @@ export default function CardEvento({
             <div className="card-evento">
                 <div className="card-imagem-wrapper">
                     <span className="tag-categoria">{categoria}</span>
-                    <img src={imagem} alt={`Imagem do evento ${titulo}`} className="imagem-evento" />
+                    <img src={obterUrlImagemEvento(imagem)} alt={`Imagem do evento ${titulo}`} className="imagem-evento" />
                 </div>
 
                 <div className="card-info-wrapper">

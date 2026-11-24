@@ -9,20 +9,6 @@
   background: #fee2e2;
 }
 
-.criar-evento-mensagem.aviso {
-  color: #854d0e;
-  background: #fef9c3;
-}
-
-.criar-evento-mensagem.aviso p {
-  margin: 0 0 8px;
-}
-
-.criar-evento-mensagem.aviso a {
-  color: inherit;
-  font-weight: 600;
-}
-
 .container-editar select.form-group-links {
   background-color: #fff;
 }

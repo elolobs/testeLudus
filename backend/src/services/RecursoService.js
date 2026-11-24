@@ -440,6 +440,50 @@ export function validarConsistencia(recurso, dados) {
   }
 }
 
+export function validarTiposIngresso(tipos, cargo, capacidadeMaxima) {
+  if (!Array.isArray(tipos) || tipos.length === 0) {
+    throw erroValidacao("Cadastre ao menos um tipo de ingresso para o evento.");
+  }
+
+  const recurso = obterRecurso("tipos-ingresso");
+  const camposDeIngresso = new Set(["nome", "preco", "quant_total"]);
+  let quantidadeTotal = 0;
+
+  const ingressosValidados = tipos.map((ingresso) => {
+    if (
+      !ingresso ||
+      typeof ingresso !== "object" ||
+      Array.isArray(ingresso) ||
+      Object.keys(ingresso).some((campo) => !camposDeIngresso.has(campo)) ||
+      ingresso.preco === undefined ||
+      ingresso.preco === null ||
+      ingresso.preco === ""
+    ) {
+      throw erroValidacao("Os dados dos tipos de ingresso são inválidos.");
+    }
+
+    const dados = validarDados(
+      recurso,
+      { ...ingresso, evento_id: 1 },
+      cargo,
+      { completo: true },
+    );
+    validarConsistencia(recurso, dados);
+    quantidadeTotal += dados.quant_total;
+    const dadosIngresso = { ...dados };
+    delete dadosIngresso.evento_id;
+    return dadosIngresso;
+  });
+
+  if (quantidadeTotal > capacidadeMaxima) {
+    throw erroValidacao(
+      "A quantidade total de ingressos não pode exceder a capacidade máxima do evento.",
+    );
+  }
+
+  return ingressosValidados;
+}
+
 function montarWhere(recurso, filtros, escopo) {
   const condicoes = [];
   const valores = [];
@@ -503,15 +547,53 @@ export async function buscarPorId(caminho, id, escopo) {
   return linhas[0] || null;
 }
 
-export async function criar(caminho, dados) {
-  const recurso = obterRecurso(caminho);
+async function inserirRegistro(conexao, recurso, dados) {
   const nomes = Object.keys(dados);
   const placeholders = nomes.map(() => "?").join(", ");
-  const [resultado] = await pool.query(
+  const [resultado] = await conexao.query(
     `INSERT INTO ${recurso.tabela} (${nomes.join(", ")}) VALUES (${placeholders})`,
     nomes.map((nome) => dados[nome]),
   );
-  return buscarPorId(caminho, resultado.insertId);
+  return resultado.insertId;
+}
+
+export async function criar(caminho, dados) {
+  const recurso = obterRecurso(caminho);
+  const id = await inserirRegistro(pool, recurso, dados);
+  return buscarPorId(caminho, id);
+}
+
+export async function criarEventoComIngressos(dadosEvento, tiposIngresso) {
+  const recursoEvento = obterRecurso("eventos");
+  const recursoIngresso = obterRecurso("tipos-ingresso");
+  const conexao = await pool.getConnection();
+  let transacaoAberta = false;
+
+  try {
+    await conexao.beginTransaction();
+    transacaoAberta = true;
+
+    const eventoId = await inserirRegistro(conexao, recursoEvento, dadosEvento);
+    for (const ingresso of tiposIngresso) {
+      await inserirRegistro(conexao, recursoIngresso, {
+        evento_id: eventoId,
+        ...ingresso,
+      });
+    }
+
+    const [registros] = await conexao.query(
+      `SELECT ${recursoEvento.colunas.join(", ")} FROM ${recursoEvento.tabela} WHERE id = ? LIMIT 1`,
+      [eventoId],
+    );
+    await conexao.commit();
+    transacaoAberta = false;
+    return registros[0];
+  } catch (erro) {
+    if (transacaoAberta) await conexao.rollback();
+    throw erro;
+  } finally {
+    conexao.release();
+  }
 }
 
 export async function atualizar(caminho, id, dados, escopo) {
