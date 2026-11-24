@@ -119,7 +119,7 @@ export default function CriarEvento() {
         titulo: evento.titulo,
         descricao: evento.descricao,
         capacidade_maxima: Number(evento.capacidadeMaxima),
-        status: "RASCUNHO",
+        status: "PUBLICADO",
         data_inicio: evento.dataInicio,
         data_fim: evento.dataFim,
         local_nome: evento.localNome,
