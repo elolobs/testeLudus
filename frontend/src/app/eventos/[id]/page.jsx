@@ -66,27 +66,28 @@ export default function Detalha() {
     if (!url) return "";
     let endereco;
     try {
-      endereco = new URL(url);
+      endereco = new URL(url.trim());
     } catch {
       return "";
     }
 
-    if (["open.spotify.com", "www.open.spotify.com"].includes(endereco.hostname)) {
-      const partes = endereco.pathname.split("/").filter(Boolean);
-      if (partes.length < 2 || !["playlist", "album", "artist"].includes(partes[0])) {
-        return "";
-      }
-      return `https://open.spotify.com/embed/${partes[0]}/${encodeURIComponent(partes[1])}`;
+    if (!["open.spotify.com", "www.open.spotify.com"].includes(endereco.hostname)) {
+      return "";
     }
 
-    if (["youtube.com", "www.youtube.com", "music.youtube.com"].includes(endereco.hostname)) {
-      const playlistId = endereco.searchParams.get("list");
-      if (playlistId) return `https://www.youtube.com/embed/videoseries?list=${encodeURIComponent(playlistId)}`;
-      const videoId = endereco.searchParams.get("v");
-      if (videoId) return `https://www.youtube.com/embed/${encodeURIComponent(videoId)}`;
+    const partes = endereco.pathname.split("/").filter(Boolean);
+    const filtradas = partes.filter(
+      (parte) => parte !== "embed" && !parte.startsWith("intl-")
+    );
+
+    if (
+      filtradas.length < 2 ||
+      !["playlist", "album", "artist", "track"].includes(filtradas[0])
+    ) {
+      return "";
     }
 
-    return "";
+    return `https://open.spotify.com/embed/${filtradas[0]}/${encodeURIComponent(filtradas[1])}?utm_source=generator`;
   }
 
   const playlistEmbed = obterEmbedPlaylist(evento.playlist_url);
@@ -218,31 +219,33 @@ export default function Detalha() {
             </div>
           </div>
 
-          <div className="card-midia dark">
-            <div className="card-midia-header">
-              <div className="card-midia-header-textos">
-                <h2>PLAYLIST OFICIAL</h2>
-                <h3>Entre no clima.</h3>
+          {playlistEmbed && (
+            <div className="card-midia dark">
+              <div className="card-midia-header">
+                <div className="card-midia-header-textos">
+                  <h2>PLAYLIST OFICIAL</h2>
+                  <h3>Entre no clima.</h3>
+                </div>
+              </div>
+              <div className="wrapper-iframe">
+                <iframe
+                  title={`Playlist do artista do evento ${evento.titulo}`}
+                  data-testid="embed-iframe"
+                  style={{ borderRadius: "12px", border: 0 }}
+                  src={playlistEmbed}
+                  width="100%"
+                  height="100%"
+                  allowFullScreen
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy"
+                />
               </div>
             </div>
-            <div className="wrapper-iframe">
-              <iframe
-                title={`Playlist do artista do evento ${evento.titulo}`}
-                data-testid="embed-iframe"
-                style={{ borderRadius: "12px", border: 0 }}
-                src={playlistEmbed || "https://open.spotify.com/embed/album/3ZN01xzenGMhWHdC5kfAe9?utm_source=generator&si=c7c3c24088914a17"}
-                width="100%"
-                height="100%"
-                allowFullScreen
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"
-              />
-            </div>
-          </div>
-
+          )}
         </div>
-
       </div>
+
+
     </>
   );
 }

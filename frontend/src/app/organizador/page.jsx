@@ -64,7 +64,7 @@ export default function organizador() {
 
             <div className="eventos-organizador-heading">
                 <h3 className="title-organizador">Eventos</h3>
-                <Link href="/organizador/eventos/criar" className="btn-criar-evento">
+                <Link href="./organizador/eventos/criar" className="btn-criar-evento">
                     + Criar evento
                 </Link>
             </div>
