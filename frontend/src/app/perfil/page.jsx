@@ -174,10 +174,6 @@ export default function Perfil() {
             <div className="item-content">
               <label>E-mail</label>
               <p>{perfil.email}</p>
-              <span className="badge-validado">
-                <i className="fa-solid fa-circle-check"></i>
-                VALIDADO
-              </span>
             </div>
             <button className="btn-edit" type="button" aria-label="Editar e-mail">
               <i className="fa-solid fa-pen"></i>
