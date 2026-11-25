@@ -1,13 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import "./detalha.css";
 import {
   apiRequest,
   formatarData,
-  formatarPreco,
   obterUrlImagemEvento,
 } from "@/lib/api.mjs";
 
@@ -46,25 +45,229 @@ export default function Detalha() {
     };
   }, [id]);
 
+  // Agrupa todos os dias do evento vindos do banco para montar os cards de ingressos
+  const diasDeVenda = useMemo(() => {
+    if (!evento) return [];
+
+    const mapa = new Map();
+
+    const extrairChaveLocal = (dataStr) => {
+      if (!dataStr) return null;
+      const d = new Date(dataStr);
+      if (Number.isNaN(d.getTime())) return null;
+      const ano = d.getFullYear();
+      const mes = String(d.getMonth() + 1).padStart(2, "0");
+      const dia = String(d.getDate()).padStart(2, "0");
+      return `${ano}-${mes}-${dia}`;
+    };
+
+    const capitalizar = (texto) =>
+      texto ? texto.charAt(0).toUpperCase() + texto.slice(1) : "";
+
+    const formatarDiaSemana = (dataObj) =>
+      capitalizar(dataObj.toLocaleDateString("pt-BR", { weekday: "long" }));
+
+    const formatarExtenso = (dataObj) =>
+      capitalizar(
+        dataObj.toLocaleDateString("pt-BR", {
+          weekday: "long",
+          day: "2-digit",
+          month: "long",
+        })
+      );
+
+    const avaliarStatusDia = (listaIngressos) => {
+      if (!listaIngressos || listaIngressos.length === 0) {
+        return { texto: "Disponível", classe: "bolinha-verde", esgotado: false };
+      }
+
+      const agora = Date.now();
+      let totalRestantes = 0;
+      let algumAtivo = false;
+
+      listaIngressos.forEach((ing) => {
+        const restantes = Math.max(
+          0,
+          Number(ing.quant_total) - Number(ing.quant_vendida || 0)
+        );
+        const inicio = ing.venda_inicio ? Date.parse(ing.venda_inicio) : null;
+        const fim = ing.venda_final ? Date.parse(ing.venda_final) : null;
+        const dentroDoPrazo =
+          (inicio === null || agora >= inicio) && (fim === null || agora <= fim);
+
+        if (dentroDoPrazo) {
+          algumAtivo = true;
+          totalRestantes += restantes;
+        }
+      });
+
+      if (!algumAtivo) {
+        return { texto: "Venda encerrada", classe: "bolinha-vermelha", esgotado: true };
+      }
+      if (totalRestantes === 0) {
+        return { texto: "Esgotado", classe: "bolinha-vermelha", esgotado: true };
+      }
+      if (totalRestantes <= 10) {
+        return { texto: "Baixa disponibilidade", classe: "bolinha-amarela", esgotado: false };
+      }
+      return { texto: "Disponível", classe: "bolinha-verde", esgotado: false };
+    };
+
+    // 1. Gera todos os dias do intervalo data_inicio até data_fim do evento
+    if (evento.data_inicio && evento.data_fim) {
+      const inicio = new Date(evento.data_inicio);
+      const fim = new Date(evento.data_fim);
+      if (!Number.isNaN(inicio.getTime()) && !Number.isNaN(fim.getTime())) {
+        const cursor = new Date(
+          inicio.getFullYear(),
+          inicio.getMonth(),
+          inicio.getDate(),
+          12,
+          0,
+          0
+        );
+        const limite = new Date(
+          fim.getFullYear(),
+          fim.getMonth(),
+          fim.getDate(),
+          12,
+          0,
+          0
+        );
+
+        let contadorDia = 1;
+        while (cursor <= limite) {
+          const chave = extrairChaveLocal(cursor);
+          if (chave && !mapa.has(chave)) {
+            mapa.set(chave, {
+              chave,
+              numeroDia: contadorDia,
+              diaSemana: formatarDiaSemana(cursor),
+              dataPorExtenso: formatarExtenso(cursor),
+              dataFormatada: formatarData(cursor, { dateStyle: "short" }),
+              ordem: cursor.getTime(),
+              ehPacote: false,
+              ingressos: [],
+            });
+            contadorDia++;
+          }
+          cursor.setDate(cursor.getDate() + 1);
+        }
+      }
+    }
+
+    // 2. Verifica dias extras na programação (atividades)
+    atividades.forEach((atividade) => {
+      if (!atividade.data_hora_inicio) return;
+      const chave = extrairChaveLocal(atividade.data_hora_inicio);
+      if (chave && !mapa.has(chave)) {
+        const d = new Date(`${chave}T12:00:00`);
+        mapa.set(chave, {
+          chave,
+          numeroDia: mapa.size + 1,
+          diaSemana: formatarDiaSemana(d),
+          dataPorExtenso: formatarExtenso(d),
+          dataFormatada: formatarData(d, { dateStyle: "short" }),
+          ordem: d.getTime(),
+          ehPacote: false,
+          ingressos: [],
+        });
+      }
+    });
+
+    // 3. Distribui os tipos de ingresso nos respectivos dias (ou cria o card de Pacote)
+    ingressos.forEach((ingresso) => {
+      const ehPacote =
+        ingresso.is_pacote === true ||
+        String(ingresso.nome || "").toLowerCase().includes("pacote") ||
+        String(ingresso.nome || "").toLowerCase().includes("passaporte");
+
+      if (ehPacote) {
+        if (!mapa.has("pacote")) {
+          mapa.set("pacote", {
+            chave: "pacote",
+            tituloCustom: "Passaporte Todos os Dias",
+            dataFormatada: "Acesso completo",
+            ordem: 0,
+            ehPacote: true,
+            ingressos: [],
+          });
+        }
+        mapa.get("pacote").ingressos.push(ingresso);
+        return;
+      }
+
+      const dataIngresso =
+        ingresso.data_evento || ingresso.data_inicio || ingresso.data;
+      const chaveIngresso = extrairChaveLocal(dataIngresso);
+
+      if (chaveIngresso) {
+        if (!mapa.has(chaveIngresso)) {
+          const d = new Date(`${chaveIngresso}T12:00:00`);
+          mapa.set(chaveIngresso, {
+            chave: chaveIngresso,
+            numeroDia: mapa.size + 1,
+            diaSemana: formatarDiaSemana(d),
+            dataPorExtenso: formatarExtenso(d),
+            dataFormatada: formatarData(d, { dateStyle: "short" }),
+            ordem: d.getTime(),
+            ehPacote: false,
+            ingressos: [],
+          });
+        }
+        mapa.get(chaveIngresso).ingressos.push(ingresso);
+      } else {
+        // Se o ingresso não tem data específica, vincula a todos os dias do evento
+        if (mapa.size === 0) {
+          const dataFallback = evento.data_inicio || evento.data_fim;
+          const chaveFallback = extrairChaveLocal(dataFallback) || "geral";
+          const d = dataFallback ? new Date(dataFallback) : new Date();
+          mapa.set(chaveFallback, {
+            chave: chaveFallback,
+            numeroDia: 1,
+            diaSemana: formatarDiaSemana(d),
+            dataPorExtenso: formatarExtenso(d),
+            dataFormatada: formatarData(d, { dateStyle: "short" }),
+            ordem: d.getTime(),
+            ehPacote: false,
+            ingressos: [],
+          });
+        }
+
+        mapa.forEach((diaObj, key) => {
+          if (key !== "pacote") {
+            diaObj.ingressos.push(ingresso);
+          }
+        });
+      }
+    });
+
+    const listaOrdenada = Array.from(mapa.values()).sort(
+      (a, b) => a.ordem - b.ordem
+    );
+    const totalDiasComuns = listaOrdenada.filter((d) => !d.ehPacote).length;
+
+    return listaOrdenada.map((item, idx) => {
+      const titulo = item.ehPacote
+        ? item.tituloCustom
+        : totalDiasComuns > 1
+        ? `Dia ${idx + 1} · ${item.diaSemana}`
+        : item.dataPorExtenso;
+
+      return {
+        ...item,
+        titulo,
+        status: avaliarStatusDia(item.ingressos),
+      };
+    });
+  }, [evento, ingressos, atividades]);
+
   if (carregando) return <p role="status">Carregando evento...</p>;
   if (erro) return <p role="alert">{erro}</p>;
   if (!evento) return <p>Evento não encontrado.</p>;
 
-  const disponibilidade = (ingresso) => {
-    const restantes = Math.max(0, Number(ingresso.quant_total) - Number(ingresso.quant_vendida || 0));
-    const agora = Date.now();
-    const inicio = ingresso.venda_inicio ? Date.parse(ingresso.venda_inicio) : null;
-    const fim = ingresso.venda_final ? Date.parse(ingresso.venda_final) : null;
-    if ((inicio !== null && agora < inicio) || (fim !== null && agora > fim)) {
-      return { texto: "Venda encerrada", classe: "bolinha-vermelha", restantes };
-    }
-    if (restantes === 0) return { texto: "Esgotado", classe: "bolinha-vermelha", restantes };
-    if (restantes <= 10) return { texto: "Baixa disponibilidade", classe: "bolinha-amarela", restantes };
-    return { texto: "Disponível", classe: "bolinha-verde", restantes };
-  };
-
   const enderecoMapa = encodeURIComponent(
-    [evento.local_nome, evento.local_endereco].filter(Boolean).join(", "),
+    [evento.local_nome, evento.local_endereco].filter(Boolean).join(", ")
   );
 
   function obterEmbedPlaylist(url) {
@@ -126,47 +329,45 @@ export default function Detalha() {
       </div>
 
       <div className="conteudo-principal">
-
         <div className="secao-header">
           <span className="secao-kicker">INGRESSOS</span>
           <h2 className="secao-titulo">Garanta seu lugar.</h2>
         </div>
 
         <div className="Container-env-detalhes">
-          {ingressos.length === 0 && <p>Ingressos ainda não disponíveis.</p>}
-          {ingressos.map((ingresso) => {
-            const estado = disponibilidade(ingresso);
-            return (
-              <div className="boxs" key={ingresso.id}>
-                <div className="container-box-detalhes">
-                  <img src="/img/logo.png" alt="Logo Ludus" />
-                </div>
-                <div className="Linha" />
-                <div className="colluns">
-                  <h2>{ingresso.nome}</h2>
-                  <span className="badge-disponibilidade">
-                    <span className={estado.classe} /> {estado.texto}
-                  </span>
-                  <p className="data-local">
-                    Lote único · {estado.restantes} de {ingresso.quant_total} disponíveis
-                  </p>
-                </div>
-                <div className="preco-ingresso">
-                  {formatarPreco(ingresso.preco)}
-                </div>
-                <Link
-                  className={estado.restantes === 0 ? "botao-ingresso desabilitado" : "botao-ingresso"}
-                  href={`/eventos/${id}/ingresso?tipo=${ingresso.id}`}
-                  aria-disabled={estado.restantes === 0}
-                  onClick={(event) => {
-                    if (estado.restantes === 0) event.preventDefault();
-                  }}
-                >
-                  {estado.restantes === 0 || estado.texto === "Venda encerrada" ? estado.texto : "Adquirir ingresso"}
-                </Link>
+          {diasDeVenda.length === 0 && <p>Ingressos ainda não disponíveis.</p>}
+
+          {diasDeVenda.map((dia) => (
+            <div className="boxs" key={dia.chave}>
+              <div className="container-box-detalhes">
+                <img src="/img/logo.png" alt="Logo Ludus" />
               </div>
-            );
-          })}
+              <div className="Linha" />
+              <div className="colluns">
+                <h2>{dia.titulo}</h2>
+                <span className="badge-disponibilidade">
+                  <span className={dia.status.classe} /> {dia.status.texto}
+                </span>
+                <p className="data-local">
+                  {dia.dataFormatada} | {evento.local_nome}
+                </p>
+              </div>
+              <Link
+                className={
+                  dia.status.esgotado
+                    ? "botao-ingresso desabilitado"
+                    : "botao-ingresso"
+                }
+                href={`/eventos/${id}/ingresso?dia=${encodeURIComponent(dia.chave)}`}
+                aria-disabled={dia.status.esgotado}
+                onClick={(event) => {
+                  if (dia.status.esgotado) event.preventDefault();
+                }}
+              >
+                {dia.status.esgotado ? dia.status.texto : "Adquirir Ingresso"}
+              </Link>
+            </div>
+          ))}
         </div>
 
         <div className="secao-resumo">
@@ -201,7 +402,6 @@ export default function Detalha() {
         </div>
 
         <div className="secao-midia">
-
           <div className="card-midia">
             <div className="card-midia-header">
               <div className="card-midia-header-textos">
@@ -252,8 +452,6 @@ export default function Detalha() {
           )}
         </div>
       </div>
-
-
     </>
   );
 }

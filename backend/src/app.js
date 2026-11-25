@@ -9,6 +9,8 @@ import pedidoRoutes from "./routes/pedidoRoutes.js";
 import perfilRoutes from "./routes/perfilRoutes.js";
 import recursoRoutes from "./routes/recursoRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import suporteRoutes from "./routes/suporteRoutes.js";
+import adminSuporteRoutes from "./routes/adminSuporteRoutes.js";
 
 export const app = express();
 
@@ -31,6 +33,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/pedidos", pedidoRoutes);
 app.use("/api/perfil", perfilRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/admin/suporte", adminSuporteRoutes);
+app.use("/api/suporte", suporteRoutes);
 app.use("/api", recursoRoutes);
 
 app.use(errorHandler);

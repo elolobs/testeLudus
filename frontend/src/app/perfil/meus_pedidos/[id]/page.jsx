@@ -77,14 +77,14 @@ export default function InfoPedidos() {
           <>
             <div className="pedido-header-info">
               <h2>{pedido.evento_titulo || "Pedido de ingresso"}</h2>
-              
+
               <div className={`pedido-status-badge ${statusPedido[pedido.status]?.classe || ""}`}>
                 {statusPedido[pedido.status]?.texto || pedido.status}
               </div>
 
               <p className="pedido-meta"><strong>Pedido:</strong> #{pedido.id}</p>
               <p className="pedido-meta"><strong>Realizado em:</strong> {formatarData(pedido.criado_em)}</p>
-              
+
               {pedido.data_inicio && (
                 <p className="pedido-meta">
                   <strong>Evento:</strong> {formatarData(pedido.data_inicio, {
@@ -97,7 +97,10 @@ export default function InfoPedidos() {
             </div>
 
             <div className="pedido-header-info">
-              <img src="../../img/qringresso.png" alt="QR Ingresso"  className="qr-code" />
+              <img src="../../img/qringresso.png" alt="QR Ingresso" className="qr-code" />
+              <p className="pedido-qr-info">
+                Ingresso individual e intransferível. Apresente este código na portaria junto com um documento com foto. Inválido após a primeira leitura.
+              </p>
             </div>
 
             <div className="secao-ingressos">

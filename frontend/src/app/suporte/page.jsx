@@ -17,7 +17,6 @@ export default function Suporte() {
   const [feedback, setFeedback] = useState({ tipo: "", texto: "" });
   const [logado, setLogado] = useState(false);
 
-  // Preenche automaticamente nome e e-mail se o cliente já estiver logado
   useEffect(() => {
     const sessao = obterSessao();
     if (sessao?.usuario) {
