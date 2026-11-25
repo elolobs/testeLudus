@@ -96,6 +96,10 @@ export default function InfoPedidos() {
               )}
             </div>
 
+            <div className="pedido-header-info">
+              <img src="../../img/qringresso.png" alt="QR Ingresso"  width={250}/>
+            </div>
+
             <div className="secao-ingressos">
               <h3>Ingressos adquiridos</h3>
               <ul className="itens-pedido">
