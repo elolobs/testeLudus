@@ -75,13 +75,11 @@ export default function Header() {
               Sobre Nós
             </Link>
           </li>
-           <li>
+          <li>
             <Link href="/suporte" className={pathname === "/suporte" ? "active" : ""}>
               Suporte ao fã
             </Link>
           </li>
-
-
         </ul>
       </nav>
 
@@ -123,18 +121,54 @@ export default function Header() {
                   <div className="dropdown-body">
                     <span className="dropdown-section-title">ATIVIDADE</span>
                     <ul className="dropdown-links">
-                      <li>
-                        <Link href="/perfil/meus_pedidos" onClick={() => setMenuAberto(false)}>
-                          <i className="fa-solid fa-box"></i>
-                          Meus Pedidos
-                        </Link>
-                      </li>
+
+                   
+                      {sessao.usuario.cargo === 'ADMIN' && (
+                        <>
+                          <li>
+                            <Link href="/admin" onClick={() => setMenuAberto(false)}>
+                              <i className="fa-solid fa-chart-line"></i>
+                              Dashboard
+                            </Link>
+                          </li>
+                          <li>
+                            <Link href="/admin/suporte" onClick={() => setMenuAberto(false)}>
+                              <i className="fa-solid fa-headset"></i>
+                              Mensagens do suporte
+                            </Link>
+                          </li>
+                        </>
+                      )}
+
+                   
+                      {sessao.usuario.cargo === 'ORGANIZADOR' && (
+                        <li>
+                          <Link href="/organizador" onClick={() => setMenuAberto(false)}>
+                            <i className="fa-solid fa-chart-line"></i>
+                            Dashboard
+                          </Link>
+                        </li>
+                      )}
+
+                
+                      {(!sessao.usuario.cargo || sessao.usuario.cargo === 'USER') && (
+                        <li>
+                          <Link href="/perfil/meus_pedidos" onClick={() => setMenuAberto(false)}>
+                            <i className="fa-solid fa-box"></i>
+                            Meus Pedidos
+                          </Link>
+                        </li>
+                      )}
+
+                      
                       <li>
                         <Link href="/perfil" onClick={() => setMenuAberto(false)}>
                           <i className="fa-solid fa-user"></i>
                           Minha Conta
                         </Link>
                       </li>
+
+
                     </ul>
                   </div>
                 </div>

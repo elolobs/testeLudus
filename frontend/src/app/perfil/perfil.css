@@ -106,22 +106,7 @@
   color: #111;
 }
 
-.badge-validado {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background-color: #e6f6f4;
-  color: #0e9f6e;
-  font-size: 0.7rem;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 4px;
-  letter-spacing: 0.5px;
-}
 
-.badge-validado svg {
-  font-size: 0.8rem;
-}
 
 .btn-edit {
   background: #f4f4f5;

@@ -47,6 +47,36 @@ export default function AdminDashboard() {
     };
   }, [router]);
 
+  const handleExportarCSV = () => {
+    if (!data?.eventosRecentes || data.eventosRecentes.length === 0) {
+      alert("Não há dados para exportar.");
+      return;
+    }
+
+    const headers = ["Evento", "Organizador", "Data", "Status"];
+    
+    const rows = data.eventosRecentes.map((evento) => [
+      `"${evento.titulo}"`, 
+      `"${evento.organizador}"`,
+      new Date(evento.criado_em).toLocaleDateString("pt-BR"),
+      evento.status
+    ]);
+
+    const csvContent = [
+      headers.join(","),
+      ...rows.map(e => e.join(","))
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "eventos_admin.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   if (loading) {
     return (
       <div className="admin-estado-tela">
@@ -85,13 +115,16 @@ export default function AdminDashboard() {
   return (
     <div className="admin-container">
       <div className="admin-content">
-        {/* Cabeçalho */}
         <header className="admin-header">
-          <h1>Painel Administrador</h1>
+          <div className="admin-header-title-row">
+            <h1>Painel Administrador</h1>
+            <button onClick={handleExportarCSV} className="admin-btn-exportar">
+              Exportar CSV
+            </button>
+          </div>
           <p>Visão geral da plataforma, usuários e eventos</p>
         </header>
 
-        {/* Cards de Métricas */}
         <section className="admin-metrics-grid">
           <div className="admin-metric-card">
             <p className="admin-metric-value">

@@ -11,6 +11,9 @@ export default function Home() {
   const [categorias, setCategorias] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
+  
+  const [indiceAtual, setIndiceAtual] = useState(0);
+  const itensPorPagina = 3;
 
   useEffect(() => {
     let ativo = true;
@@ -24,7 +27,7 @@ export default function Home() {
         const destaques = [...respostaEventos.dados].sort(
           (a, b) => new Date(a.data_inicio) - new Date(b.data_inicio),
         );
-        setEventos(destaques.slice(0, 3));
+        setEventos(destaques.slice(0, 12));
         setCategorias(respostaCategorias.dados);
       })
       .catch((erroApi) => {
@@ -42,6 +45,7 @@ export default function Home() {
   const categoriaPorId = new Map(
     categorias.map((categoria) => [categoria.id, categoria.nome]),
   );
+  
   const categoriasAgrupadas = new Map();
   categorias.forEach((categoria) => {
     const chave = categoria.nome.trim().toLocaleLowerCase("pt-BR");
@@ -56,6 +60,20 @@ export default function Home() {
     }
   });
   const categoriasExibidas = [...categoriasAgrupadas.values()].slice(0, 7);
+
+  const irParaProximo = () => {
+    if (indiceAtual + itensPorPagina < eventos.length) {
+      setIndiceAtual(indiceAtual + itensPorPagina); 
+    }
+  };
+
+  const irParaAnterior = () => {
+    if (indiceAtual - itensPorPagina >= 0) {
+      setIndiceAtual(indiceAtual - itensPorPagina); 
+    }
+  };
+
+  const eventosExibidos = eventos.slice(indiceAtual, indiceAtual + itensPorPagina);
 
   return (
     <div className="home-page-container">
@@ -102,25 +120,46 @@ export default function Home() {
             <p>Nenhum evento publicado no momento.</p>
           )}
           <div className="home-carousel-container">
-            <button className="home-nav-arrow home-prev-arrow" aria-label="Anterior" type="button">❮</button>
-            <div className="home-grid-eventos">
-              {eventos.map((evento) => {
+            <button 
+              className="home-nav-arrow home-prev-arrow" 
+              aria-label="Anterior" 
+              type="button"
+              onClick={irParaAnterior}
+              disabled={indiceAtual === 0}
+              style={{ opacity: indiceAtual === 0 ? 0.3 : 1, cursor: indiceAtual === 0 ? 'default' : 'pointer' }}
+            >
+              ❮
+            </button>
+            
+            <div className="home-grid-eventos" key={indiceAtual}>
+              {eventosExibidos.map((evento) => {
                 const { dia, mes } = obterDataCard(evento.data_inicio);
                 return (
-                  <CardEvento
-                    key={evento.id}
-                    id={evento.id}
-                    categoria={categoriaPorId.get(evento.categoria_id) || "EVENTO"}
-                    dia={dia}
-                    mes={mes}
-                    titulo={evento.titulo}
-                    local={evento.local_nome}
-                    imagem={evento.imagem_capa_url}
-                  />
+                  <div className="card-evento-wrapper" key={evento.id}>
+                    <CardEvento
+                      id={evento.id}
+                      categoria={categoriaPorId.get(evento.categoria_id) || "EVENTO"}
+                      dia={dia}
+                      mes={mes}
+                      titulo={evento.titulo}
+                      local={evento.local_nome}
+                      imagem={evento.imagem_capa_url}
+                    />
+                  </div>
                 );
               })}
             </div>
-            <button className="home-nav-arrow home-next-arrow" aria-label="Próximo" type="button">❯</button>
+
+            <button 
+              className="home-nav-arrow home-next-arrow" 
+              aria-label="Próximo" 
+              type="button"
+              onClick={irParaProximo}
+              disabled={indiceAtual + itensPorPagina >= eventos.length}
+              style={{ opacity: indiceAtual + itensPorPagina >= eventos.length ? 0.3 : 1, cursor: indiceAtual + itensPorPagina >= eventos.length ? 'default' : 'pointer' }}
+            >
+              ❯
+            </button>
           </div>
         </section>
 

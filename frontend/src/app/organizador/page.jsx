@@ -139,7 +139,6 @@ export default function Organizador() {
             })
             .catch((err) => {
                 if (!ativo) return;
-                console.error("Erro ao carregar painel do organizador:", err);
                 setErro(`Erro (${err?.message || "404/403"}) ao acessar "/api/${ROTA_EVENTOS}".`);
             })
             .finally(() => {
@@ -159,7 +158,6 @@ export default function Organizador() {
             setMetricas(dados.metricas);
             setErro(null);
         } catch (err) {
-            console.error("Erro ao publicar evento:", err);
             alert("Erro ao publicar o evento. Tente novamente.");
         }
     }
@@ -172,9 +170,46 @@ export default function Organizador() {
         return data.toLocaleDateString("pt-BR", { timeZone: "UTC" });
     }
 
+    const handleExportarCSV = () => {
+        if (!eventos || eventos.length === 0) {
+            alert("Não há dados para exportar.");
+            return;
+        }
+
+        const headers = ["Evento", "Data", "Vendidos", "Total", "Status"];
+        
+        const rows = eventos.map((evento) => [
+            `"${evento.nome}"`,
+            formatarData(evento.data),
+            evento.vendidos,
+            evento.total,
+            evento.statusLabel
+        ]);
+
+        const csvContent = [
+            headers.join(","),
+            ...rows.map(e => e.join(","))
+        ].join("\n");
+
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "eventos_organizador.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <>
-            <h1 className="title-organizador">Painel Organizador</h1>
+            <div className="organizador-header">
+                <h1 className="title-organizador">Painel Organizador</h1>
+                <button onClick={handleExportarCSV} className="btn-exportar-csv">
+                    Exportar CSV
+                </button>
+            </div>
+            
             <p className="suborganizador">Visão geral dos seus eventos e vendas</p>
 
             {erro && <p style={{ color: "red", marginBottom: "1rem" }}>{erro}</p>}

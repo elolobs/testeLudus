@@ -212,10 +212,7 @@ export default function Perfil() {
               ) : (
                 <p>{perfil.email}</p>
               )}
-              <span className="badge-validado">
-                <i className="fa-solid fa-circle-check"></i>
-                VALIDADO
-              </span>
+            
             </div>
             <button className="btn-edit" type="button" aria-label="Editar e-mail" onClick={(event) => campoEditando === "email" ? salvarPerfil(event) : setCampoEditando("email")}>
               <i className={`fa-solid ${campoEditando === "email" ? "fa-check" : "fa-pen"}`}></i>
@@ -248,12 +245,7 @@ export default function Perfil() {
               ) : (
                 <p>{perfil.telefone || "Não informado"}</p>
               )}
-              {perfil.telefone && (
-                <span className="badge-validado">
-                  <i className="fa-solid fa-circle-check"></i>
-                  VALIDADO
-                </span>
-              )}
+    
             </div>
             <button className="btn-edit" type="button" aria-label="Editar celular" onClick={(event) => campoEditando === "telefone" ? salvarPerfil(event) : setCampoEditando("telefone")}>
               <i className={`fa-solid ${campoEditando === "telefone" ? "fa-check" : "fa-pen"}`}></i>
