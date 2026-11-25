@@ -97,7 +97,7 @@ export default function InfoPedidos() {
             </div>
 
             <div className="pedido-header-info">
-              <img src="../../img/qringresso.png" alt="QR Ingresso"  width={500}/>
+              <img src="../../img/qringresso.png" alt="QR Ingresso"  className="qr-code" />
             </div>
 
             <div className="secao-ingressos">
