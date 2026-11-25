@@ -7,11 +7,11 @@ import { obterSessao } from "@/lib/sessao.mjs";
 import "./pedidos.css";
 
 const statusPedido = {
-  pendente: "Pendente de pagamento",
-  pago: "Pago",
-  cancelado: "Cancelado",
-  reservado: "Reservado",
-  reembolsado: "Reembolsado",
+  pendente: { texto: "Pendente de pagamento", classe: "status-pendente" },
+  pago: { texto: "Pago", classe: "status-pago" },
+  cancelado: { texto: "Cancelado", classe: "status-cancelado" },
+  reservado: { texto: "Reservado", classe: "status-reservado" },
+  reembolsado: { texto: "Reembolsado", classe: "status-cancelado" },
 };
 
 export default function Pedidos() {
@@ -56,27 +56,27 @@ export default function Pedidos() {
     };
   }, []);
 
-  if (carregando) return <p role="status">Carregando pedidos...</p>;
+  if (carregando) return <p className="estado-tela">Carregando pedidos...</p>;
 
   return (
-    <>
-      <h1 className="title">Meus pedidos</h1>
-      <p className="subtitle">Consulte suas compras e acompanhe seus pedidos.</p>
+    <div className="pedidos-wrapper">
+      <h1 className="title-pedidos">Meus pedidos</h1>
+      <p className="subtitle-pedidos">Acompanhe suas compras e o status de cada pedido.</p>
 
       {!sessao ? (
-        <div className="pedidos-container">
+        <div className="pedidos-estado-vazio">
           <p>Entre na sua conta para consultar seus pedidos.</p>
-          <Link href="/login">Fazer login</Link>
+          <Link href="/login" className="btn-pedidos-primario">Fazer login</Link>
         </div>
       ) : erro ? (
         <p className="erro-pedidos" role="alert">Erro: {erro}</p>
       ) : pedidos.length === 0 ? (
-        <div className="pedidos-container">
-          <p>Você ainda não tem pedidos.</p>
-          <Link href="/eventos">Explorar eventos</Link>
+        <div className="pedidos-estado-vazio">
+          <p>Você ainda não tem pedidos nos últimos 24 meses.</p>
+          <Link href="/eventos" className="btn-pedidos-secundario">Explorar eventos</Link>
         </div>
       ) : (
-        <div className="pedidos-container">
+        <div className="pedidos-mural">
           <div className="pedidos-lista">
             {pedidos.map((pedido) => (
               <Link
@@ -84,25 +84,41 @@ export default function Pedidos() {
                 className="pedido-card"
                 key={pedido.id}
               >
-                <h2>{pedido.evento_titulo || "Pedido de ingresso"}</h2>
-                <p>
-                  {formatarData(pedido.data_inicio, { dateStyle: "long", timeStyle: "short" })}
-                  {pedido.local_nome ? ` · ${pedido.local_nome}` : ""}
-                </p>
-                <p>Pedido #{pedido.id} · {formatarData(pedido.criado_em)}</p>
-                <p>
-                  {pedido.itens.reduce((total, item) => total + Number(item.quantidade), 0)}
-                  {" ingresso(s) · "}
-                  {formatarPreco(pedido.valor_total)}
-                </p>
-                <span className={`status-pedido status-${pedido.status}`}>
-                  {statusPedido[pedido.status] || pedido.status}
-                </span>
+                <div className="pedido-card-header">
+                  <h2>{pedido.evento_titulo || "Pedido de ingresso"}</h2>
+                  <span className={`status-pedido ${statusPedido[pedido.status]?.classe || "status-padrao"}`}>
+                    {statusPedido[pedido.status]?.texto || pedido.status}
+                  </span>
+                </div>
+                
+                <div className="pedido-card-body">
+                  <div className="pedido-info-linha">
+                    <strong>Evento:</strong>
+                    <span>
+                      {formatarData(pedido.data_inicio, { dateStyle: "long", timeStyle: "short" })}
+                      {pedido.local_nome ? ` · ${pedido.local_nome}` : ""}
+                    </span>
+                  </div>
+                  
+                  <div className="pedido-info-linha">
+                    <strong>Pedido:</strong>
+                    <span>#{pedido.id} realizado em {formatarData(pedido.criado_em)}</span>
+                  </div>
+                </div>
+
+                <div className="pedido-card-footer">
+                  <span className="pedido-ingressos">
+                    {pedido.itens.reduce((total, item) => total + Number(item.quantidade), 0)} ingresso(s)
+                  </span>
+                  <span className="pedido-valor">
+                    {formatarPreco(pedido.valor_total)}
+                  </span>
+                </div>
               </Link>
             ))}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }

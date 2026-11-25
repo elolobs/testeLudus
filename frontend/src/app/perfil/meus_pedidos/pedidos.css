@@ -1,64 +1,248 @@
-.pedidos-container {
+.pedidos-wrapper {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 80px 20px 40px 20px;
+    font-family: 'Montserrat', sans-serif;
+    color: #111827;
 }
 
-.title{
-    margin: 30px auto 0;
-    max-width: 1160px;
+.title-pedidos {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+    letter-spacing: -0.5px;
 }
 
-.subtitle{
-    max-width: 1160px;
-    margin: 10px auto;
-    font-size: 20px;
+.subtitle-pedidos {
+    font-size: 1.05rem;
+    color: #6b7280;
+    margin: 0 0 40px 0;
+}
+
+.pedidos-estado-vazio {
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 80px 40px;
+    max-width: 700px;
+    margin: 40px auto;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+}
+
+.pedidos-estado-vazio p {
+    color: #4b5563;
+    font-size: 1.15rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.btn-pedidos-primario, .btn-pedidos-secundario {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 32px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-pedidos-primario {
+    background-color: #2D1E80;
+    color: #ffffff;
+    box-shadow: 0 2px 6px rgba(45, 30, 128, 0.2);
+}
+
+.btn-pedidos-primario:hover {
+    background-color: #1f145c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(45, 30, 128, 0.3);
+}
+
+.btn-pedidos-secundario {
+    background-color: #ffffff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.btn-pedidos-secundario:hover {
+    background-color: #f9fafb;
+    color: #111827;
+    border-color: #9ca3af;
+    transform: translateY(-2px);
+}
+
+.pedidos-mural {
+    background-color: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+    margin-top: 20px;
 }
 
 .pedidos-lista {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    gap: 24px;
 }
 
 .pedido-card {
-    display: block;
-    padding: 22px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #fff;
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+    background: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 12px;
     color: inherit;
     text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .pedido-card:hover {
-    border-color: #2D1E80;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+    border-color: #d1d5db;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+    transform: translateY(-3px);
 }
 
-.pedido-card h2 {
-    font-size: 19px;
+.pedido-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 16px;
+}
+
+.pedido-card-header h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    color: #1a1a1a;
+    line-height: 1.3;
 }
 
 .status-pedido {
     display: inline-block;
-    padding: 5px 10px;
-    border-radius: 14px;
-    background: #eee;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
-.status-pendente,
-.status-reservado {
-    background: #fff3cd;
+.status-pendente {
+    background-color: #fffbeb;
+    color: #d97706;
+    border: 1px solid #fde68a;
 }
 
 .status-pago {
-    background: #d1e7dd;
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.status-reservado {
+    background-color: #eff6ff;
+    color: #2563eb;
+    border: 1px solid #bfdbfe;
+}
+
+.status-cancelado {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.status-padrao {
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+}
+
+.pedido-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.pedido-info-linha {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 0.9rem;
+}
+
+.pedido-info-linha strong {
+    color: #111827;
+    font-weight: 600;
+}
+
+.pedido-info-linha span {
+    color: #4b5563;
+}
+
+.pedido-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #eaeaea;
+    margin-top: auto;
+}
+
+.pedido-ingressos {
+    color: #6b7280;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
+.pedido-valor {
+    color: #2D1E80;
+    font-size: 1.2rem;
+    font-weight: 800;
+}
+
+.estado-tela {
+    text-align: center;
+    color: #6b7280;
+    font-size: 1.1rem;
+    padding: 80px 0;
 }
 
 .erro-pedidos {
-    max-width: 1200px;
-    margin: 20px auto;
-    color: #b71c1c;
+    background-color: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    padding: 16px;
+    border-radius: 8px;
+    font-weight: 500;
+    text-align: center;
 }
 
+@media (max-width: 768px) {
+    .pedidos-wrapper {
+        padding-top: 60px;
+    }
+    
+    .pedidos-lista {
+        grid-template-columns: 1fr;
+    }
+    
+    .pedidos-mural {
+        padding: 20px;
+    }
+}

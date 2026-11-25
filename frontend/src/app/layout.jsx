@@ -4,6 +4,9 @@ import LayoutWrapper from "@/components/LayoutWrapper";
 export const metadata = {
   title: "Ludus - Site de Eventos",
   description: "Encontre seus eventos e experiências favoritas na Ludus. Descubra shows, festivais, peças de teatro e muito mais. Compre ingressos online de forma rápida e segura.",
+  icons: {
+    icon: "/img/headicon.png",
+  },
 };
 
 export default function RootLayout({ children }) {
