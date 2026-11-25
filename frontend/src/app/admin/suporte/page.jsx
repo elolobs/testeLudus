@@ -144,6 +144,8 @@ export default function AdminSuportePage() {
     switch (status) {
       case "RESOLVIDO":
         return { texto: "Resolvido", classe: "badge-resolvido" };
+      case "RESPONDIDO":
+        return { texto: "Respondido", classe: "badge-andamento" };
       case "EM_ANDAMENTO":
         return { texto: "Em andamento", classe: "badge-andamento" };
       case "PENDENTE":
@@ -219,6 +221,7 @@ export default function AdminSuportePage() {
             {[
               { id: "TODOS", label: "Todas" },
               { id: "PENDENTE", label: "Pendentes" },
+              { id: "RESPONDIDO", label: "Respondidas" },
               { id: "EM_ANDAMENTO", label: "Em andamento" },
               { id: "RESOLVIDO", label: "Resolvidas" },
             ].map((tab) => (

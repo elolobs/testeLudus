@@ -29,6 +29,23 @@ login. Para desenvolvimento, cadastre uma conta e atribua o cargo `ADMIN` a
 ela por uma operação administrativa confiável no banco antes de usar as rotas
 restritas a administradores.
 
+## Suporte
+
+- `POST /api/suporte` abre uma solicitação. Recebe `nome`, `email`, `telefone`
+  e `mensagem`; pode ser usado sem login. Se enviado com token, o chamado fica
+  vinculado à conta autenticada.
+- `GET /api/suporte/meus-chamados` lista chamados do usuário autenticado.
+- `POST /api/suporte/meus-chamados/:id/mensagens` recebe `{ "texto": "..." }`
+  e adiciona uma mensagem ao próprio chamado.
+- `GET /api/admin/suporte`, `PATCH /api/admin/suporte/:id` e
+  `POST /api/admin/suporte/:id/responder` são restritos a administradores.
+  A resposta recebe `{ "resposta": "..." }`; a atualização de status recebe
+  `{ "status": "RESOLVIDO" }`.
+
+Para bancos já existentes, aplique uma única vez
+`../database/migrations/005_suporte.sql`. Bancos novos recebem as tabelas de
+suporte pela definição em `database/init/banco.sql`.
+
 ## Recursos do banco
 
 Cada recurso abaixo possui `GET /`, `GET /:id`, `POST /`, `PUT /:id`,
