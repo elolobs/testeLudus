@@ -292,28 +292,28 @@ ALTER TABLE eventos
 ALTER TABLE itens_pedido ADD COLUMN categoria VARCHAR(100) NULL;
 
 SELECT * FROM eventos;
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url,playlist_url) 
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url, playlist_url) 
 VALUES (2, 2, 'Billie Eilish - Hit Me Hard and Soft: The Tour', 'Apresentação imersiva com palco em 360 graus, sucessos do novo álbum e clássicos da carreira.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 30 DAY), 'Autódromo de Interlagos', 'Av. Sen. Teotônio Vilela, 261 - São Paulo', '../../img/billie.png', 'https://open.spotify.com/playlist/42oqJaJWDG8N351uKLqpjl?si=yTn5fWpZRCyEIZkZbxu56Q');
 
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url, playlist_url) 
 VALUES (2, 2, 'The Weeknd - After Hours Til Dawn (Encore)', 'Superprodução futurista com iluminação de estádio e setlist repleto de hits mundiais.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 48 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 49 DAY), 'Estádio do MorumBIS', 'Praça Roberto Gomes Pedrosa, 1 - São Paulo', '../../img/theweeknd.png', 'https://open.spotify.com/playlist/257yy74d75KsYkrU7DoFmT?si=yy22p0unTOudSRi-MVsijA');
 
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url, playlist_url) 
 VALUES (2, 2, 'Sabrina Carpenter - Short n'' Sweet Tour', 'Show pop teatral e bem-humorado trazendo os maiores sucessos das paradas globais.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 62 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 62 DAY), 'Espaço Unimed', 'Rua Tagipuru, 795 - São Paulo', '../../img/sabrina.png', 'https://open.spotify.com/playlist/37i9dQZF1DXchqrcYVfAQC?si=_4vaWUb8TNiMdrFCNLiolg');
 
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url, playlist_url) 
 VALUES (2, 2, 'Liniker - Caju Tour', 'Espetáculo emocionante celebrando o álbum Caju, unindo MPB, soul e arranjos orquestrais.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 15 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 15 DAY), 'Vivo Rio', 'Av. Infante Dom Henrique, 85 - Rio de Janeiro', '../../img/liniker.png', 'https://open.spotify.com/playlist/42zURFykuOwhnR7KLEhPzL?si=B3oqLh3QTJyOuJzSu2KbnQ');
 
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url, playlist_url) 
 VALUES (2, 2, 'Travis Scott - Circus Maximus Tour', 'Experiência audiovisual intensa com cenografia monumental e os maiores hits do trap.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 90 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 90 DAY), 'Allianz Parque', 'Av. Francisco Matarazzo, 1705 - São Paulo', '../../img/travis.png', 'https://open.spotify.com/playlist/2CvbMi6sOixfSuDTs3keu7?si=tvWH0jKAQGewL1_wNrMDpw');
 
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url, playlist_url) 
 VALUES (2, 2, 'Charli XCX - BRAT Arena Tour', 'Festa eletropop de alta energia com estética clubber e batidas marcantes.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 35 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 35 DAY), 'Farmasi Arena', 'Av. Embaixador Abelardo Bueno, 3401 - Rio de Janeiro', '../../img/charli.png', 'https://open.spotify.com/playlist/0nO82yJhXb3zoiOurO5mQL?si=ePk4ON6WT1-Sp2Cdc8KGmQ');
 
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url, playlist_url) 
 VALUES (2, 2, 'Jão - Supernova: O Último Ato', 'Encerramento épico da era Super com pirotecnia, passarela gigante e grandes sucessos do pop nacional.', 500, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 18 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 18 DAY), 'Pedreira Paulo Leminski', 'Rua João Gava, 970 - Curitiba', '../../img/jao.png', 'https://open.spotify.com/playlist/1ppFAV7DJfkzhoxzBa3xOm?si=qPhQteHIRROHyLLnf0ZclQ');
 
-INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
+INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url, playlist_url) 
 VALUES (2, 2, 'Chappell Roan - The Midwest Princess Tour', 'Show vibrante com estética drag, figurinos extravagantes e hinos pop cantados em coro.', 500, 'RASCUNHO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 82 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 82 DAY), 'Audio', 'Av. Francisco Matarazzo, 694 - São Paulo', '../../img/chappell.png', 'https://open.spotify.com/playlist/2j8D22k7Vr6bsnZ44bLJ3T?si=q-Hm4vlqSDyzX9flYhVZyA');
 
 INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
