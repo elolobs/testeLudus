@@ -319,6 +319,18 @@ button {
   border-bottom: 1px solid #d8ceeb;
 }
 
+.home-category-link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  text-decoration: none;
+}
+
+.home-category-link:focus-visible {
+  outline: 2px solid #312782;
+  outline-offset: 4px;
+}
+
 .home-category-number {
   color: #9ca3af;
   font-size: 0.9rem;

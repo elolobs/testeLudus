@@ -30,8 +30,10 @@ const atividadeInicial = () => ({
   titulo: "",
   tipo: "",
   palestrante: "",
-  data_hora: "",
-  local: "",
+  data_hora_inicio: "",
+  data_hora_fim: "",
+  local_sala: "",
+  vagas_maximas: "",
 });
 
 export default function CriarEvento() {
@@ -62,7 +64,7 @@ export default function CriarEvento() {
       };
     }
 
-    if (!["ORGANIZADOR", "ADMIN"].includes(sessao.usuario.cargo)) {
+    if (sessao.usuario.cargo !== "ORGANIZADOR") {
       router.replace("/");
       return () => {
         ativo = false;
@@ -159,19 +161,16 @@ export default function CriarEvento() {
           preco: Number(ingresso.preco),
           quant_total: Number(ingresso.quant_total),
         })),
-        // Ajuste o nome da chave abaixo ("programacao" ou "atividades") conforme esperado pela sua API
-        programacao: programacao.map((atividade) => ({
+        atividades: programacao.map((atividade) => ({
           titulo: atividade.titulo,
           tipo: atividade.tipo,
           palestrante: atividade.palestrante,
-          data_hora: atividade.data_hora,
-          local: atividade.local,
+          data_hora_inicio: atividade.data_hora_inicio,
+          data_hora_fim: atividade.data_hora_fim,
+          local_sala: atividade.local_sala.trim() || null,
+          vagas_maximas: Number(atividade.vagas_maximas),
         })),
       };
-
-      if (sessao.usuario.cargo === "ADMIN") {
-        dadosEvento.organizador_id = Number(sessao.usuario.id);
-      }
 
       await apiRequest("eventos", {
         method: "POST",
@@ -318,7 +317,7 @@ export default function CriarEvento() {
                       className="form-group-input"
                       id={`prog-tipo-${index}`}
                       type="text"
-                      maxLength={80}
+                      maxLength={50}
                       placeholder="Ex: Workshop, Palestra"
                       value={atividade.tipo}
                       onChange={(event) => handleProgramacaoChange(index, "tipo", event.target.value)}
@@ -346,16 +345,32 @@ export default function CriarEvento() {
                 <div className="form-row">
                   <div className="form-group">
                     <label className="form-group-label" htmlFor={`prog-data-${index}`}>
-                      Data e Hora
+                      Início
                     </label>
                     <input
                       className="form-group-input"
                       id={`prog-data-${index}`}
                       type="datetime-local"
                       min={evento.dataInicio}
+                      max={atividade.data_hora_fim || evento.dataFim}
+                      value={atividade.data_hora_inicio}
+                      onChange={(event) => handleProgramacaoChange(index, "data_hora_inicio", event.target.value)}
+                      required
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-group-label" htmlFor={`prog-fim-${index}`}>
+                      Fim
+                    </label>
+                    <input
+                      className="form-group-input"
+                      id={`prog-fim-${index}`}
+                      type="datetime-local"
+                      min={atividade.data_hora_inicio || evento.dataInicio}
                       max={evento.dataFim}
-                      value={atividade.data_hora}
-                      onChange={(event) => handleProgramacaoChange(index, "data_hora", event.target.value)}
+                      value={atividade.data_hora_fim}
+                      onChange={(event) => handleProgramacaoChange(index, "data_hora_fim", event.target.value)}
                       required
                     />
                   </div>
@@ -370,12 +385,28 @@ export default function CriarEvento() {
                       type="text"
                       maxLength={100}
                       placeholder="Ex: Sala A"
-                      value={atividade.local}
-                      onChange={(event) => handleProgramacaoChange(index, "local", event.target.value)}
+                      value={atividade.local_sala}
+                      onChange={(event) => handleProgramacaoChange(index, "local_sala", event.target.value)}
+                    />
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label className="form-group-label" htmlFor={`prog-vagas-${index}`}>
+                      Vagas disponíveis
+                    </label>
+                    <input
+                      className="form-group-input"
+                      id={`prog-vagas-${index}`}
+                      type="number"
+                      min="1"
+                      step="1"
+                      value={atividade.vagas_maximas}
+                      onChange={(event) => handleProgramacaoChange(index, "vagas_maximas", event.target.value)}
                       required
                     />
                   </div>
-
                   <div className="form-group acao-remover">
                     <button
                       type="button"

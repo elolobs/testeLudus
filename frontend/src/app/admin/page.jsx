@@ -123,7 +123,7 @@ export default function AdminDashboard() {
         </section>
 
         <div className="admin-section-header">
-          <h2>Últimos Eventos Criados</h2>
+          <h2>Todos os Eventos</h2>
         </div>
         <div className="admin-table-wrapper">
           <div className="admin-table-list">

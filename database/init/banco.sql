@@ -138,6 +138,10 @@ INSERT INTO usuarios (nome_completo, email, senha_hash, cpf, telefone, cargo, at
 values
 ('organizador', 'organizador@email.com', '$2b$10$2/Ix9rdFFYBJIv4T5MJaU.DvwHT6WXFN263NJhUP3Vx2kuO8R7y6O', '12345678905', '11987654322', 'ORGANIZADOR', TRUE, TRUE, CURRENT_TIMESTAMP);
 
+INSERT INTO usuarios (nome_completo, email, senha_hash, cpf, telefone, cargo, ativo, termo_lgpd_aceito, termo_lgpd_data) 
+values
+('organizador', 'adm@email.com', '$2b$10$2/Ix9rdFFYBJIv4T5MJaU.DvwHT6WXFN263NJhUP3Vx2kuO8R7y6O', '12345675905', '11987634322', 'ADMIN', TRUE, TRUE, CURRENT_TIMESTAMP);
+
 
 INSERT INTO categorias (nome, descricao) 
 VALUES 
@@ -312,3 +316,7 @@ VALUES (2, 10, 'Pixel & Dados: Convenção Geek e RPG de Mesa', 'Ponto de encont
 
 INSERT INTO eventos (organizador_id, categoria_id, titulo, descricao, capacidade_maxima, status, data_inicio, data_fim, local_nome, local_endereco, imagem_capa_url) 
 VALUES (2, 11, 'Fábrica de Histórias: Teatro e Oficinas Criativas', 'Programação cultural pensada para toda a família com espetáculo musical lúdico sobre preservação da natureza, seguido de oficinas de pintura, construção de fantoches com materiais recicláveis e contação de histórias interativa no jardim.', 300, 'PUBLICADO', DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 14 DAY), DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 14 DAY), 'Sesc Pinheiros', 'Rua Paes Leme, 195 - São Paulo', '../../img/fabrica_historias.png');
+
+UPDATE eventos 
+SET status = 'PUBLICADO' 
+WHERE titulo = 'Marina Sena - Turnê Coisas Naturais';

@@ -166,7 +166,13 @@ export function criarRecursoController(caminho) {
         const tiposIngressoInformados = incluiTiposIngresso
           ? corpo.tipos_ingresso
           : undefined;
-        if (caminho === "eventos") delete corpo.tipos_ingresso;
+        const incluiAtividades =
+          caminho === "eventos" && Object.hasOwn(corpo, "atividades");
+        const atividadesInformadas = incluiAtividades ? corpo.atividades : undefined;
+        if (caminho === "eventos") {
+          delete corpo.tipos_ingresso;
+          delete corpo.atividades;
+        }
 
         if (recurso.tabela === "eventos" && req.usuario.cargo === "ORGANIZADOR") {
           if (Object.hasOwn(corpo, "organizador_id")) {
@@ -182,14 +188,20 @@ export function criarRecursoController(caminho) {
         });
         RecursoService.validarConsistencia(recurso, dados);
         await validarVinculoOrganizador(recurso, dados, req.usuario);
-        const registro = incluiTiposIngresso
-          ? await RecursoService.criarEventoComIngressos(
+        const atividadesValidadas = incluiAtividades
+          ? RecursoService.validarAtividades(atividadesInformadas, req.usuario.cargo)
+          : [];
+        const registro = incluiTiposIngresso || incluiAtividades
+          ? await RecursoService.criarEventoComIngressosEAtividades(
             dados,
-            RecursoService.validarTiposIngresso(
-              tiposIngressoInformados,
-              req.usuario.cargo,
-              dados.capacidade_maxima,
-            ),
+            incluiTiposIngresso
+              ? RecursoService.validarTiposIngresso(
+                tiposIngressoInformados,
+                req.usuario.cargo,
+                dados.capacidade_maxima,
+              )
+              : [],
+            atividadesValidadas,
           )
           : await RecursoService.criar(caminho, dados);
         return res.status(201).json({ sucesso: true, dados: registro });

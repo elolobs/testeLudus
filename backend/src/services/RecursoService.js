@@ -485,6 +485,42 @@ export function validarTiposIngresso(tipos, cargo, capacidadeMaxima) {
   return ingressosValidados;
 }
 
+export function validarAtividades(atividades, cargo) {
+  if (!Array.isArray(atividades)) {
+    throw erroValidacao("Os dados da programação são inválidos.");
+  }
+
+  const recurso = obterRecurso("atividades");
+  const camposDeAtividade = new Set([
+    "titulo",
+    "descricao",
+    "tipo",
+    "palestrante",
+    "data_hora_inicio",
+    "data_hora_fim",
+    "local_sala",
+    "vagas_maximas",
+  ]);
+
+  return atividades.map((atividade) => {
+    if (
+      !atividade ||
+      typeof atividade !== "object" ||
+      Array.isArray(atividade) ||
+      Object.keys(atividade).some((campo) => !camposDeAtividade.has(campo))
+    ) {
+      throw erroValidacao("Os dados de uma atividade são inválidos.");
+    }
+
+    const dadosEntrada = { ...atividade, evento_id: 1 };
+    if (dadosEntrada.local_sala === "") dadosEntrada.local_sala = null;
+    const dados = validarDados(recurso, dadosEntrada, cargo, { completo: true });
+    validarConsistencia(recurso, dados);
+    delete dados.evento_id;
+    return dados;
+  });
+}
+
 function montarWhere(recurso, filtros, escopo) {
   const condicoes = [];
   const valores = [];
@@ -564,9 +600,14 @@ export async function criar(caminho, dados) {
   return buscarPorId(caminho, id);
 }
 
-export async function criarEventoComIngressos(dadosEvento, tiposIngresso) {
+export async function criarEventoComIngressosEAtividades(
+  dadosEvento,
+  tiposIngresso,
+  atividades = [],
+) {
   const recursoEvento = obterRecurso("eventos");
   const recursoIngresso = obterRecurso("tipos-ingresso");
+  const recursoAtividade = obterRecurso("atividades");
   const conexao = await pool.getConnection();
   let transacaoAberta = false;
 
@@ -579,6 +620,12 @@ export async function criarEventoComIngressos(dadosEvento, tiposIngresso) {
       await inserirRegistro(conexao, recursoIngresso, {
         evento_id: eventoId,
         ...ingresso,
+      });
+    }
+    for (const atividade of atividades) {
+      await inserirRegistro(conexao, recursoAtividade, {
+        evento_id: eventoId,
+        ...atividade,
       });
     }
 

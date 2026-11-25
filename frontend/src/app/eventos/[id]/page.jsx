@@ -4,7 +4,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import "./detalha.css";
-import { apiRequest, formatarData, formatarPreco, obterUrlImagemEvento } from "@/lib/api.mjs";
+import {
+  apiRequest,
+  formatarData,
+  formatarPreco,
+  obterUrlImagemEvento,
+} from "@/lib/api.mjs";
 
 export default function Detalha() {
   const { id } = useParams();
@@ -91,14 +96,17 @@ export default function Detalha() {
   }
 
   const playlistEmbed = obterEmbedPlaylist(evento.playlist_url);
+  const imagemEvento = obterUrlImagemEvento(evento.imagem_capa_url);
 
   return (
     <>
       <div className="container-detalhes">
-        <img
-          src={obterUrlImagemEvento(evento.imagem_capa_url)}
-          alt={`Imagem do evento ${evento.titulo}`}
-        />
+        {imagemEvento && (
+          <img
+            src={imagemEvento}
+            alt={`Imagem do evento ${evento.titulo}`}
+          />
+        )}
         <div className="imgblur">
           <div className="left-side">
             <div className="texto-sobreposto">

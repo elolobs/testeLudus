@@ -77,6 +77,9 @@ test("formata datas, datas de cartão e preços", () => {
 test("resolve nomes locais de capas para a pasta pública de imagens", () => {
   assert.equal(obterUrlImagemEvento("lana.png"), "/img/lana.png");
   assert.equal(obterUrlImagemEvento("/img/lana.png"), "/img/lana.png");
+  assert.equal(obterUrlImagemEvento("./bts.png"), "/img/bts.png");
+  assert.equal(obterUrlImagemEvento("../../img/billie.png"), "/img/billie.png");
+  assert.equal(obterUrlImagemEvento("public/img/olivia.png"), "/img/olivia.png");
   assert.equal(obterUrlImagemEvento("https://exemplo.com/lana.png"), "https://exemplo.com/lana.png");
-  assert.equal(obterUrlImagemEvento(null), "/img/tech.png");
+  assert.equal(obterUrlImagemEvento(null), "");
 });

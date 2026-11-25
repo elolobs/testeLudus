@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import "./organizador.css";
 import { apiRequest } from "@/lib/api.mjs";
+import { obterSessao } from "@/lib/sessao.mjs";
 
 const CONFIG_STATUS = {
     PUBLICADO: { label: "Ativo", cor: "green" },
@@ -14,8 +15,7 @@ const CONFIG_STATUS = {
     CONCLUIDO: { label: "Concluído", cor: "gray" },
 };
 
-// Altere aqui para a rota exata que funciona no seu back-end (apiRequest já adiciona /api)[cite: 1]
-const ROTA_EVENTOS = "/api/eventos";
+const ROTA_EVENTOS = "eventos";
 const rotaPublicarEvento = (id) => `/eventos/${id}/publicar`;
 
 export default function Organizador() {
@@ -34,85 +34,88 @@ export default function Organizador() {
         if (Array.isArray(payload)) return payload;
         if (!payload || typeof payload !== "object") return [];
         if (Array.isArray(payload.eventos)) return payload.eventos;
+        if (Array.isArray(payload.dados)) return payload.dados;
         if (Array.isArray(payload.data)) return payload.data;
         if (Array.isArray(payload.content)) return payload.content;
         return [];
     }
 
-    async function carregarDados() {
-        try {
-            setLoading(true);
-            setErro(null);
+    const carregarDados = useCallback(async () => {
+        const sessao = obterSessao();
+        const [resp, respTipos] = await Promise.all([
+            apiRequest(ROTA_EVENTOS, { method: "GET", token: sessao?.token }),
+            apiRequest("tipos-ingresso?limite=100", { token: sessao?.token }),
+        ]);
+        const listaBruta = extrairListaEventos(resp);
+        const todosTipos = extrairListaEventos(respTipos);
 
-            const resp = await apiRequest(ROTA_EVENTOS, { method: "GET" });
-            const listaBruta = extrairListaEventos(resp);
+        let totalReceita = 0;
+        let totalIngressos = 0;
+        let totalAtivos = 0;
 
-            let totalReceita = 0;
-            let totalIngressos = 0;
-            let totalAtivos = 0;
+        const eventosFormatados = listaBruta.map((ev) => {
+            const statusBanco = String(ev.status || "RASCUNHO").toUpperCase();
+            if (statusBanco === "PUBLICADO" || statusBanco === "ATIVO") {
+                totalAtivos += 1;
+            }
 
-            const eventosFormatados = listaBruta.map((ev) => {
-                const statusBanco = String(ev.status || "RASCUNHO").toUpperCase();
-                if (statusBanco === "PUBLICADO" || statusBanco === "ATIVO") {
-                    totalAtivos += 1;
-                }
+            const tiposAninhados = Array.isArray(ev.tiposIngresso)
+                ? ev.tiposIngresso
+                : Array.isArray(ev.tipo_ingresso)
+                    ? ev.tipo_ingresso
+                    : null;
+            const tipos = tiposAninhados || todosTipos.filter(
+                (tipo) => Number(tipo.evento_id) === Number(ev.id)
+            );
 
-                // Se o evento vier com tipos de ingresso aninhados, calcula a partir deles;
-                // caso contrário, usa os campos diretos do objeto do evento
-                const tipos = Array.isArray(ev.tiposIngresso)
-                    ? ev.tiposIngresso
-                    : Array.isArray(ev.tipo_ingresso)
-                        ? ev.tipo_ingresso
-                        : [];
+            const totalEvento =
+                tipos.length > 0
+                    ? tipos.reduce((acc, t) => acc + Number(t.quant_total ?? t.quantTotal ?? 0), 0)
+                    : Number(ev.capacidade_maxima ?? ev.capacidadeMaxima ?? ev.total ?? 0);
 
-                const totalEvento =
-                    tipos.length > 0
-                        ? tipos.reduce((acc, t) => acc + Number(t.quant_total ?? t.quantTotal ?? 0), 0)
-                        : Number(ev.capacidade_maxima ?? ev.capacidadeMaxima ?? ev.total ?? 0);
+            const vendidosEvento =
+                tipos.length > 0
+                    ? tipos.reduce((acc, t) => acc + Number(t.quant_vendida ?? t.quantVendida ?? 0), 0)
+                    : Number(ev.vendidos ?? ev.quant_vendida ?? 0);
 
-                const vendidosEvento =
-                    tipos.length > 0
-                        ? tipos.reduce((acc, t) => acc + Number(t.quant_vendida ?? t.quantVendida ?? 0), 0)
-                        : Number(ev.vendidos ?? ev.quant_vendida ?? 0);
+            const receitaEvento =
+                tipos.length > 0
+                    ? tipos.reduce(
+                        (acc, t) =>
+                            acc + Number(t.preco ?? 0) * Number(t.quant_vendida ?? t.quantVendida ?? 0),
+                        0
+                    )
+                    : Number(ev.receita_total ?? ev.receitaTotal ?? 0);
 
-                const receitaEvento =
-                    tipos.length > 0
-                        ? tipos.reduce(
-                            (acc, t) =>
-                                acc + Number(t.preco ?? 0) * Number(t.quant_vendida ?? t.quantVendida ?? 0),
-                            0
-                        )
-                        : Number(ev.receita_total ?? ev.receitaTotal ?? 0);
+            totalIngressos += vendidosEvento;
+            totalReceita += receitaEvento;
 
-                totalIngressos += vendidosEvento;
-                totalReceita += receitaEvento;
+            const esgotado =
+                statusBanco === "PUBLICADO" &&
+                totalEvento > 0 &&
+                vendidosEvento >= totalEvento;
 
-                const esgotado =
-                    statusBanco === "PUBLICADO" &&
-                    totalEvento > 0 &&
-                    vendidosEvento >= totalEvento;
+            const chaveStatus = esgotado ? "ESGOTADO" : statusBanco;
+            const cfg = CONFIG_STATUS[chaveStatus] || {
+                label: ev.status || "Indefinido",
+                cor: "black",
+            };
 
-                const chaveStatus = esgotado ? "ESGOTADO" : statusBanco;
-                const cfg = CONFIG_STATUS[chaveStatus] || {
-                    label: ev.status || "Indefinido",
-                    cor: "black",
-                };
+            return {
+                id: ev.id,
+                nome: ev.titulo || ev.nome || "Sem título",
+                data: ev.data_inicio || ev.dataInicio || ev.data,
+                vendidos: vendidosEvento,
+                total: totalEvento,
+                statusBanco,
+                statusLabel: cfg.label,
+                statusCor: cfg.cor,
+            };
+        });
 
-                return {
-                    id: ev.id,
-                    nome: ev.titulo || ev.nome || "Sem título",
-                    data: ev.data_inicio || ev.dataInicio || ev.data,
-                    vendidos: vendidosEvento,
-                    total: totalEvento,
-                    statusBanco,
-                    statusLabel: cfg.label,
-                    statusCor: cfg.cor,
-                };
-            });
-
-            setEventos(eventosFormatados);
-
-            setMetricas({
+        return {
+            eventos: eventosFormatados,
+            metricas: {
                 receita: totalReceita.toLocaleString("pt-BR", {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
@@ -120,23 +123,41 @@ export default function Organizador() {
                 ingressos: totalIngressos.toLocaleString("pt-BR"),
                 ativos: totalAtivos.toString(),
                 clientes: Number(resp?.totalClientes ?? totalIngressos).toLocaleString("pt-BR"),
-            });
-        } catch (err) {
-            console.error("Erro ao carregar painel do organizador:", err);
-            setErro(`Erro (${err?.message || "404/403"}) ao acessar "${ROTA_EVENTOS}".`);
-        } finally {
-            setLoading(false);
-        }
-    }
+            },
+        };
+    }, []);
 
     useEffect(() => {
-        carregarDados();
-    }, []);
+        let ativo = true;
+
+        carregarDados()
+            .then((dados) => {
+                if (!ativo) return;
+                setEventos(dados.eventos);
+                setMetricas(dados.metricas);
+                setErro(null);
+            })
+            .catch((err) => {
+                if (!ativo) return;
+                console.error("Erro ao carregar painel do organizador:", err);
+                setErro(`Erro (${err?.message || "404/403"}) ao acessar "/api/${ROTA_EVENTOS}".`);
+            })
+            .finally(() => {
+                if (ativo) setLoading(false);
+            });
+
+        return () => {
+            ativo = false;
+        };
+    }, [carregarDados]);
 
     async function handlePublicarEvento(id) {
         try {
             await apiRequest(rotaPublicarEvento(id), { method: "PATCH" });
-            await carregarDados();
+            const dados = await carregarDados();
+            setEventos(dados.eventos);
+            setMetricas(dados.metricas);
+            setErro(null);
         } catch (err) {
             console.error("Erro ao publicar evento:", err);
             alert("Erro ao publicar o evento. Tente novamente.");

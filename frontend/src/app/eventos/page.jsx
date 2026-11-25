@@ -25,6 +25,17 @@ export default function Eventos() {
         if (!ativo) return;
         setEventos(respostaEventos.dados);
         setCategorias(respostaCategorias.dados);
+
+        const categoriaSolicitada = new URLSearchParams(window.location.search).get("categoria");
+        if (categoriaSolicitada) {
+          const idsDisponiveis = new Set(
+            respostaCategorias.dados.map((categoria) => String(categoria.id)),
+          );
+          const idsSolicitados = categoriaSolicitada
+            .split(",")
+            .filter((id) => idsDisponiveis.has(id));
+          if (idsSolicitados.length > 0) setCategoriaAtiva(idsSolicitados.join(","));
+        }
       })
       .catch((erroApi) => {
         if (ativo) setErro(erroApi.message);
@@ -38,12 +49,30 @@ export default function Eventos() {
     };
   }, []);
 
-  const categoriaPorId = new Map(
-    categorias.map((categoria) => [categoria.id, categoria.nome]),
+  const categoriaPorId = useMemo(
+    () => new Map(categorias.map((categoria) => [categoria.id, categoria.nome])),
+    [categorias],
   );
+  const categoriasUnicas = useMemo(() => {
+    const categoriasAgrupadas = new Map();
+    categorias.forEach((categoria) => {
+      const chave = categoria.nome.trim().toLocaleLowerCase("pt-BR");
+      const categoriaExistente = categoriasAgrupadas.get(chave);
+      if (categoriaExistente) {
+        categoriaExistente.ids.push(String(categoria.id));
+      } else {
+        categoriasAgrupadas.set(chave, {
+          ...categoria,
+          ids: [String(categoria.id)],
+        });
+      }
+    });
+    return [...categoriasAgrupadas.values()];
+  }, [categorias]);
 
   const eventosFiltrados = useMemo(() => {
     const buscaNormalizada = busca.trim().toLocaleLowerCase("pt-BR");
+    const idsSelecionados = new Set(categoriaAtiva.split(",").filter(Boolean));
 
     return eventos.filter((evento) => {
       const texto = [
@@ -57,7 +86,7 @@ export default function Eventos() {
         return false;
       }
 
-      if (categoriaAtiva && String(evento.categoria_id) !== String(categoriaAtiva)) {
+      if (idsSelecionados.size > 0 && !idsSelecionados.has(String(evento.categoria_id))) {
         return false;
       }
 
@@ -111,11 +140,11 @@ export default function Eventos() {
           >
             Todos
           </button>
-          {categorias.map((cat) => (
+          {categoriasUnicas.map((cat) => (
             <button
               key={cat.id}
-              className={`btn-categoria ${categoriaAtiva === String(cat.id) ? "ativo" : ""}`}
-              onClick={() => setCategoriaAtiva(String(cat.id))}
+              className={`btn-categoria ${cat.ids.some((id) => categoriaAtiva.split(",").includes(id)) ? "ativo" : ""}`}
+              onClick={() => setCategoriaAtiva(cat.ids.join(","))}
             >
               {cat.nome}
             </button>
@@ -140,7 +169,7 @@ export default function Eventos() {
                 mes={mes}
                 titulo={evento.titulo}
                 local={evento.local_nome}
-                imagem={evento.imagem_capa_url || "/img/tech.png"}
+                imagem={evento.imagem_capa_url}
               />
             );
           })}

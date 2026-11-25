@@ -2,7 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
-import { apiRequest, formatarData, formatarPreco, obterUrlImagemEvento } from "@/lib/api.mjs";
+import {
+  apiRequest,
+  formatarData,
+  formatarPreco,
+  obterUrlImagemEvento,
+} from "@/lib/api.mjs";
 import { obterSessao } from "@/lib/sessao.mjs";
 import "./ingresso.css";
 
@@ -252,13 +257,17 @@ export default function ContadorIngresso() {
   if (erro && !evento) return <p>{erro}</p>;
   if (!evento) return <p>Evento não encontrado.</p>;
 
+  const imagemEvento = obterUrlImagemEvento(evento.imagem_capa_url);
+
   return (
     <>
       <section className="ingresso-evento-capa">
-        <img
-          src={obterUrlImagemEvento(evento.imagem_capa_url)}
-          alt={`Imagem do evento ${evento.titulo}`}
-        />
+        {imagemEvento && (
+          <img
+            src={imagemEvento}
+            alt={`Imagem do evento ${evento.titulo}`}
+          />
+        )}
         <div className="ingresso-evento-capa-overlay">
           <div>
             <h1>{evento.titulo}</h1>

@@ -42,6 +42,20 @@ export default function Home() {
   const categoriaPorId = new Map(
     categorias.map((categoria) => [categoria.id, categoria.nome]),
   );
+  const categoriasAgrupadas = new Map();
+  categorias.forEach((categoria) => {
+    const chave = categoria.nome.trim().toLocaleLowerCase("pt-BR");
+    const categoriaExistente = categoriasAgrupadas.get(chave);
+    if (categoriaExistente) {
+      categoriaExistente.ids.push(String(categoria.id));
+    } else {
+      categoriasAgrupadas.set(chave, {
+        ...categoria,
+        ids: [String(categoria.id)],
+      });
+    }
+  });
+  const categoriasExibidas = [...categoriasAgrupadas.values()].slice(0, 7);
 
   return (
     <div className="home-page-container">
@@ -101,7 +115,7 @@ export default function Home() {
                     mes={mes}
                     titulo={evento.titulo}
                     local={evento.local_nome}
-                    imagem={evento.imagem_capa_url || "/img/tech.png"}
+                    imagem={evento.imagem_capa_url}
                   />
                 );
               })}
@@ -117,13 +131,19 @@ export default function Home() {
               <h2>Explorar por<br />categoria</h2>
             </div>
             <ul className="home-categories-list">
-              {categorias.map((categoria, indice) => (
+              {categoriasExibidas.map((categoria, indice) => (
                 <li className="home-category-item" key={categoria.id}>
-                  <span className="home-category-number">
-                    {String(indice + 1).padStart(2, '0')}
-                  </span>
-                  <span className="home-category-name">{categoria.nome}</span>
-                  <i className="fa-solid fa-arrow-right home-category-arrow"></i>
+                  <Link
+                    className="home-category-link"
+                    href={`/eventos?categoria=${encodeURIComponent(categoria.ids.join(","))}`}
+                    aria-label={`Ver eventos de ${categoria.nome}`}
+                  >
+                    <span className="home-category-number">
+                      {String(indice + 1).padStart(2, '0')}
+                    </span>
+                    <span className="home-category-name">{categoria.nome}</span>
+                    <i className="fa-solid fa-arrow-right home-category-arrow" aria-hidden="true"></i>
+                  </Link>
                 </li>
               ))}
               {!carregando && !erro && categorias.length === 0 && (

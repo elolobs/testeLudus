@@ -18,7 +18,6 @@ export async function obterDashboard(request, response, next) {
       FROM eventos e
       JOIN usuarios u ON e.organizador_id = u.id
       ORDER BY e.criado_em DESC
-      LIMIT 5
     `);
 
     return response.json({ metricas, eventosRecentes });

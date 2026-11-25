@@ -11,12 +11,20 @@ export default function CardEvento({
     titulo,
     local
 }) {
+    const urlImagem = obterUrlImagemEvento(imagem);
+
     return (
         <Link href={`/eventos/${id}`} className="card-evento-link">
             <div className="card-evento">
                 <div className="card-imagem-wrapper">
                     <span className="tag-categoria">{categoria}</span>
-                    <img src={obterUrlImagemEvento(imagem)} alt={`Imagem do evento ${titulo}`} className="imagem-evento" />
+                    {urlImagem && (
+                        <img
+                            src={urlImagem}
+                            alt={`Imagem do evento ${titulo}`}
+                            className="imagem-evento"
+                        />
+                    )}
                 </div>
 
                 <div className="card-info-wrapper">

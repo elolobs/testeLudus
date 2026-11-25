@@ -37,9 +37,29 @@ export async function apiRequest(path, { token, ...options } = {}) {
 
 export function obterUrlImagemEvento(valor) {
   const imagem = typeof valor === "string" ? valor.trim() : "";
-  if (!imagem) return "/img/tech.png";
-  if (imagem.startsWith("/") || /^[a-z][a-z\d+.-]*:/i.test(imagem)) return imagem;
-  return `/img/${imagem}`;
+  if (!imagem) return "";
+
+  const caminhoWindows = /^[a-z]:[\\/]/i.test(imagem);
+  if (
+    !caminhoWindows &&
+    (imagem.startsWith("//") || /^[a-z][a-z\d+.-]*:/i.test(imagem))
+  ) {
+    return imagem;
+  }
+  if (imagem.startsWith("/") && !/^\/(?:public\/)?img\//i.test(imagem)) {
+    return imagem;
+  }
+
+  const partes = imagem
+    .replace(/\\/g, "/")
+    .split("/")
+    .filter((parte) => parte && parte !== "." && parte !== "..");
+  const indiceImg = partes.map((parte) => parte.toLowerCase()).lastIndexOf("img");
+  const caminhoLocal = indiceImg >= 0
+    ? partes.slice(indiceImg + 1).join("/")
+    : partes.join("/");
+
+  return caminhoLocal ? `/img/${caminhoLocal}` : "";
 }
 
 export function formatarData(valor, options = {}) {
