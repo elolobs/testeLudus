@@ -218,13 +218,6 @@ export default function Home() {
             </details>
             <details className="home-faq-item">
               <summary>
-                O que é a lista de espera?
-                <i className="fa-solid fa-chevron-down home-faq-icon"></i>
-              </summary>
-              <p>Quando um evento esgota, podes entrar na lista de espera e <br />recebes aviso assim que houver vagas ou devoluções.</p>
-            </details>
-            <details className="home-faq-item">
-              <summary>
                 Os organizadores podem gerir vários eventos?
                 <i className="fa-solid fa-chevron-down home-faq-icon"></i>
               </summary>
