@@ -98,7 +98,7 @@ export default function InfoPedidos() {
 
             <div className="pedido-header-info">
               <img src="../../img/qringresso.png" alt="QR Ingresso" className="qr-code" />
-              <p className="pedido-meta">
+              <p className="pedido-qr-info">
                 Ingresso individual e intransferível. Apresente este código na portaria junto com um documento com foto. Inválido após a primeira leitura.
               </p>
             </div>
