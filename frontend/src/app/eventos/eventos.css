@@ -182,17 +182,18 @@
   color: #312782;
 }
 
-.btn-categoria.ativo {
-  background-color: #312782;
-  color: #fff;
-  border-color: #312782;
-}
-
 .grid-eventos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
   gap: 24px; 
   width: 100%; 
+}
+
+
+@media (min-width: 1024px) {
+  .grid-eventos {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 .cta-organizador {
@@ -204,7 +205,6 @@
   display: flex;
   justify-content: center;
 }
-
 .cta-content {
   width: 100%;
   max-width: 1200px;

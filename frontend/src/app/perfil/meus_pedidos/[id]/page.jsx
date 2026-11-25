@@ -8,11 +8,11 @@ import { obterSessao } from "@/lib/sessao.mjs";
 import "./detalhepd.css";
 
 const statusPedido = {
-  pendente: "Pendente de pagamento",
-  pago: "Pago",
-  cancelado: "Cancelado",
-  reservado: "Reservado",
-  reembolsado: "Reembolsado",
+  pendente: { texto: "Pendente de pagamento", classe: "status-pendente" },
+  pago: { texto: "Pago", classe: "status-pago" },
+  cancelado: { texto: "Cancelado", classe: "status-cancelado" },
+  reservado: { texto: "Reservado", classe: "status-reservado" },
+  reembolsado: { texto: "Reembolsado", classe: "status-cancelado" },
 };
 
 export default function InfoPedidos() {
@@ -52,84 +52,93 @@ export default function InfoPedidos() {
     };
   }, [id]);
 
-  if (carregando) return <p role="status">Carregando pedido...</p>;
+  if (carregando) return <p className="estado-tela">Carregando detalhes do pedido...</p>;
 
   return (
-    <>
+    <div className="container-pedidosDetalhe">
       <h1 className="title-pedidosDetalhe">Detalhes do pedido</h1>
-      <p className="subtitle-pedidosDetalhe">Consulte os itens e o status da compra.</p>
+      <p className="subtitle-pedidosDetalhe">Consulte os itens e o status da sua compra.</p>
 
-      <div className="container-pedidosDetalhe">
-        <div className="pedidos-box-detalhe">
-          <Link href="/perfil/meus_pedidos" className="voltar-pedidos">
-            ← Voltar para meus pedidos
-          </Link>
+      <div className="pedidos-box-detalhe">
+        <Link href="/perfil/meus_pedidos" className="voltar-pedidos">
+          &larr; Voltar para meus pedidos
+        </Link>
 
-          {!sessao ? (
-            <p>
-              Entre na sua conta para consultar este pedido.{" "}
-              <Link href={`/login?redirect=${encodeURIComponent(`/perfil/meus_pedidos/${id}`)}`}>
-                Fazer login
-              </Link>
-            </p>
-          ) : erro ? (
-            <p role="alert" className="erro-pedidos">{erro}</p>
-          ) : pedido ? (
-            <>
+        {!sessao ? (
+          <p className="mensagem-aviso">
+            Entre na sua conta para consultar este pedido.{" "}
+            <Link href={`/login?redirect=${encodeURIComponent(`/perfil/meus_pedidos/${id}`)}`}>
+              Fazer login
+            </Link>
+          </p>
+        ) : erro ? (
+          <p role="alert" className="erro-pedidos">{erro}</p>
+        ) : pedido ? (
+          <>
+            <div className="pedido-header-info">
               <h2>{pedido.evento_titulo || "Pedido de ingresso"}</h2>
-              <p>Pedido #{pedido.id}</p>
-              <p>Realizado em {formatarData(pedido.criado_em)}</p>
-              <p>
-                Status: {statusPedido[pedido.status] || pedido.status}
-              </p>
+              
+              <div className={`pedido-status-badge ${statusPedido[pedido.status]?.classe || ""}`}>
+                {statusPedido[pedido.status]?.texto || pedido.status}
+              </div>
+
+              <p className="pedido-meta"><strong>Pedido:</strong> #{pedido.id}</p>
+              <p className="pedido-meta"><strong>Realizado em:</strong> {formatarData(pedido.criado_em)}</p>
+              
               {pedido.data_inicio && (
-                <p>
-                  Evento: {formatarData(pedido.data_inicio, {
+                <p className="pedido-meta">
+                  <strong>Evento:</strong> {formatarData(pedido.data_inicio, {
                     dateStyle: "long",
                     timeStyle: "short",
                   })}
                   {pedido.local_nome ? ` · ${pedido.local_nome}` : ""}
                 </p>
               )}
+            </div>
 
-              <h3>Ingressos</h3>
+            <div className="secao-ingressos">
+              <h3>Ingressos adquiridos</h3>
               <ul className="itens-pedido">
                 {pedido.itens.map((item) => (
                   <li key={item.id}>
-                    <span>
-                      {item.tipo_ingresso_nome} ·
-                      {" "}{item.categoria === "meia" ? "Meia-entrada" : "Inteira"} ·
-                      {" "}{item.quantidade}x
-                      {item.ingressos.length > 0 && (
-                        <small>
-                          {" "}({item.ingressos.map((ingresso) =>
-                            `Ingresso #${ingresso.id} — ${ingresso.status}`,
-                          ).join(", ")})
-                        </small>
-                      )}
-                    </span>
-                    <span>
+                    <div className="item-info">
+                      <span className="item-nome">
+                        {item.quantidade}x {item.tipo_ingresso_nome}
+                      </span>
+                      <span className="item-detalhes">
+                        {item.categoria === "meia" ? "Meia-entrada" : "Inteira"}
+                        {item.ingressos.length > 0 && (
+                          <>
+                            <br />
+                            Cod: {item.ingressos.map(ing => `#${ing.id}`).join(", ")}
+                          </>
+                        )}
+                      </span>
+                    </div>
+                    <span className="item-preco">
                       {formatarPreco(Number(item.preco_unitario) * Number(item.quantidade))}
                     </span>
                   </li>
                 ))}
               </ul>
+            </div>
 
-              <p className="total-pedido">
-                Total: {formatarPreco(pedido.valor_total)}
-              </p>
-              {pedido.status === "pendente" && (
-                <p className="obs-pedidos">
-                  O pagamento ainda não está integrado. Este pedido não confirma
-                  uma cobrança nem emite ingresso.
-                </p>
-              )}
-            </>
-          ) : (
-            <p>Pedido não encontrado.</p>
-          )}
-        </div>
+            <div className="total-pedido">
+              <span>Total pago</span>
+              <span>{formatarPreco(pedido.valor_total)}</span>
+            </div>
+
+            {pedido.status === "pendente" && (
+              <div className="obs-pedidos">
+                O pagamento ainda não está integrado. Este pedido não confirma
+                uma cobrança nem emite ingresso até que o pagamento seja processado.
+              </div>
+            )}
+          </>
+        ) : (
+          <p className="mensagem-aviso">Pedido não encontrado.</p>
+        )}
       </div>
-    </>
+    </div>
   );
 }

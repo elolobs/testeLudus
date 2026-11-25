@@ -151,7 +151,10 @@ export default function Header() {
                       )}
 
                 
-                      {(!sessao.usuario.cargo || sessao.usuario.cargo === 'USER') && (
+                      {(!sessao.usuario.cargo ||
+                        sessao.usuario.cargo === 'USER' ||
+                        sessao.usuario.cargo === 'USUARIO' ||
+                        sessao.usuario.cargo === 'CLIENTE') && (
                         <li>
                           <Link href="/perfil/meus_pedidos" onClick={() => setMenuAberto(false)}>
                             <i className="fa-solid fa-box"></i>
