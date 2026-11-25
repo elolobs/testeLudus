@@ -11,6 +11,7 @@ import recursoRoutes from "./routes/recursoRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
 import suporteRoutes from "./routes/suporteRoutes.js";
 import adminSuporteRoutes from "./routes/adminSuporteRoutes.js";
+import recomendacaoRoutes from "./routes/recomendacaoRoutes.js";
 
 export const app = express();
 
@@ -35,6 +36,7 @@ app.use("/api/perfil", perfilRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin/suporte", adminSuporteRoutes);
 app.use("/api/suporte", suporteRoutes);
+app.use("/api/recomendacoes", recomendacaoRoutes);
 app.use("/api", recursoRoutes);
 
 app.use(errorHandler);

@@ -46,6 +46,12 @@ Para bancos já existentes, aplique uma única vez
 `../database/migrations/005_suporte.sql`. Bancos novos recebem as tabelas de
 suporte pela definição em `database/init/banco.sql`.
 
+## Recomendações de eventos
+
+`GET /api/recomendacoes` exige autenticação e recomenda eventos publicados e
+futuros nas categorias dos pedidos pagos do usuário. Eventos já comprados não
+são repetidos; usuários sem compras pagas recebem uma lista vazia.
+
 ## Recursos do banco
 
 Cada recurso abaixo possui `GET /`, `GET /:id`, `POST /`, `PUT /:id`,

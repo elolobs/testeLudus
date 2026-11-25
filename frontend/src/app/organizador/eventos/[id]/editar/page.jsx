@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import "./editar.css";
 import { apiRequest } from "@/lib/api.mjs";
 import { obterSessao } from "@/lib/sessao.mjs";
@@ -49,8 +49,12 @@ function atividadeInicial() {
 
 export default function EditarEvento() {
     const params = useParams();
+    const pathname = usePathname();
     const router = useRouter();
     const idDoEvento = String(params.id);
+    const edicaoPeloAdmin = pathname.startsWith("/admin/");
+    const caminhoEdicao = `${edicaoPeloAdmin ? "/admin" : "/organizador"}/eventos/${idDoEvento}/editar`;
+    const caminhoPainel = edicaoPeloAdmin ? "/admin" : "/organizador";
 
     const [evento, setEvento] = useState(eventoInicial);
     const [categorias, setCategorias] = useState([]);
@@ -68,13 +72,13 @@ export default function EditarEvento() {
         const sessao = obterSessao();
 
         if (!sessao) {
-            router.replace(`/login?redirect=${encodeURIComponent(`/organizador/eventos/${idDoEvento}/editar`)}`);
+            router.replace(`/login?redirect=${encodeURIComponent(caminhoEdicao)}`);
             return () => {
                 ativo = false;
             };
         }
 
-        if (sessao.usuario.cargo !== "ORGANIZADOR") {
+        if (sessao.usuario.cargo !== "ORGANIZADOR" && sessao.usuario.cargo !== "ADMIN") {
             router.replace("/");
             return () => {
                 ativo = false;
@@ -145,7 +149,7 @@ export default function EditarEvento() {
         return () => {
             ativo = false;
         };
-    }, [idDoEvento, router]);
+    }, [caminhoEdicao, idDoEvento, router]);
 
     function handleEventoChange(event) {
         const { name, value } = event.target;
@@ -225,7 +229,7 @@ export default function EditarEvento() {
         try {
             const sessao = obterSessao();
             if (!sessao) {
-                router.replace(`/login?redirect=${encodeURIComponent(`/organizador/eventos/${idDoEvento}/editar`)}`);
+                router.replace(`/login?redirect=${encodeURIComponent(caminhoEdicao)}`);
                 return;
             }
 
@@ -317,7 +321,7 @@ export default function EditarEvento() {
                 }
             }
 
-            router.push("/organizador");
+            router.push(caminhoPainel);
         } catch (erroApi) {
             setErro(erroApi.message);
         } finally {
@@ -693,7 +697,7 @@ export default function EditarEvento() {
                     <div className="form-actions">
                         <button
                             type="button"
-                            onClick={() => router.push("/organizador")}
+                            onClick={() => router.push(caminhoPainel)}
                             className="btn-cancelar"
                             disabled={salvando}
                         >

@@ -180,9 +180,17 @@ export default function AdminDashboard() {
                   </div>
                   <div className="admin-col-acoes">
                     {evento.id ? (
-                      <Link href={`/eventos/${evento.id}`} className="admin-link-acao">
-                        Ver
-                      </Link>
+                      <>
+                        <Link href={`/eventos/${evento.id}`} className="admin-link-acao">
+                          Ver
+                        </Link>{" "}
+                        <Link
+                          href={`/admin/eventos/${evento.id}/editar`}
+                          className="admin-link-acao"
+                        >
+                          Editar
+                        </Link>
+                      </>
                     ) : (
                       "—"
                     )}

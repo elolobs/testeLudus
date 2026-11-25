@@ -5,10 +5,13 @@ import { useEffect, useState } from "react";
 import "./home.css";
 import CardEvento from "@/components/cardEvento";
 import { apiRequest, obterDataCard } from "@/lib/api.mjs";
+import { obterSessao } from "@/lib/sessao.mjs";
 
 export default function Home() {
   const [eventos, setEventos] = useState([]);
   const [categorias, setCategorias] = useState([]);
+  const [recomendacoes, setRecomendacoes] = useState([]);
+  const [erroRecomendacoes, setErroRecomendacoes] = useState("");
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   
@@ -35,6 +38,32 @@ export default function Home() {
       })
       .finally(() => {
         if (ativo) setCarregando(false);
+      });
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let ativo = true;
+    const sessao = obterSessao();
+    if (!sessao?.token) return () => {
+      ativo = false;
+    };
+
+    apiRequest("recomendacoes", { token: sessao.token })
+      .then((resposta) => {
+        if (ativo) {
+          setRecomendacoes(Array.isArray(resposta?.dados) ? resposta.dados : []);
+        }
+      })
+      .catch((erroApi) => {
+        if (ativo) {
+          setErroRecomendacoes(
+            erroApi.message || "Não foi possível carregar suas recomendações.",
+          );
+        }
       });
 
     return () => {
@@ -162,6 +191,35 @@ export default function Home() {
             </button>
           </div>
         </section>
+
+        {erroRecomendacoes && <p role="alert">{erroRecomendacoes}</p>}
+        {recomendacoes.length > 0 && (
+          <section className="home-experiences-section">
+            <div className="home-experiences-header">
+              <div className="home-experiences-title">
+                <span className="home-experiences-kicker">FEITO PARA VOCÊ</span>
+                <h2>Eventos que combinam com você</h2>
+              </div>
+            </div>
+            <div className="home-grid-eventos">
+              {recomendacoes.map((evento) => {
+                const { dia, mes } = obterDataCard(evento.data_inicio);
+                return (
+                  <CardEvento
+                    key={evento.id}
+                    id={evento.id}
+                    categoria={evento.categoria_nome || "EVENTO"}
+                    dia={dia}
+                    mes={mes}
+                    titulo={evento.titulo}
+                    local={evento.local_nome}
+                    imagem={evento.imagem_capa_url}
+                  />
+                );
+              })}
+            </div>
+          </section>
+        )}
 
        <div className="home-categories-wrapper">
           <section className="home-categories-section">
