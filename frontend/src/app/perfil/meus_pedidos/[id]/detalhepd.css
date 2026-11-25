@@ -182,7 +182,8 @@
     line-height: 1.5;
 }
 
-.estado-tela, .mensagem-aviso {
+.estado-tela,
+.mensagem-aviso {
     text-align: center;
     color: #6b7280;
     font-size: 1rem;
@@ -202,9 +203,19 @@
     .pedidos-box-detalhe {
         padding: 24px;
     }
-    
+
     .total-pedido {
         font-size: 1.1rem;
         padding: 16px;
     }
+}
+
+.qr-code {
+    width: 120px;
+    height: 120px;
+    margin: auto;
+    display: flex;
+    object-fit: contain;
+    margin-top: 16px;
+    border: 1px dashed black;
 }
